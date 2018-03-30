@@ -4,11 +4,7 @@ Resell v2 API.
 
 Example of getting all quotas for a domain
 
-<<<<<<< HEAD
   allQuotas, _, err := quotas.GetAll(ctx, resellClient)
-=======
-  allQuotas, _, err := quotas.GetAll(context, resellClient)
->>>>>>> Add Resell v2 quotas get all method
   if err != nil {
     log.Fatal(err)
   }
@@ -44,19 +40,29 @@ Example of getting projects quotas for a domain
     }
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 Example of getting quotas for a single project
 
   singleProjectQuotas, _, err := quotas.GetProjectQuotas(ctx, resellClient, updateProjectID)
+=======
+
+Example of getting quotas for a single project
+
+  singleProjectQuotas, _, err := quotas.GetProjectQuotas(context, resellClient, updateProjectID)
+>>>>>>> Add Resell v2 get quotas for a project method
   if err != nil {
     log.Fatal(err)
   }
   for _, singleProjectQuota := range singleProjectQuotas {
     fmt.Println(singleProjectQuota)
   }
+<<<<<<< HEAD
 =======
 >>>>>>> Add Resell v2 quotas get all method
 =======
 >>>>>>> Add Resell v2 get projects quotas method
+=======
+>>>>>>> Add Resell v2 get quotas for a project method
 */
 package quotas
