@@ -71,3 +71,24 @@ func GetProjectsQuotas(ctx context.Context, client *selvpc.ServiceClient) ([]*Pr
 
 	return result.ProjectQuotas, responseResult, nil
 }
+
+// GetProjectQuotas returns the quotas info for a single project referenced by id.
+func GetProjectQuotas(ctx context.Context, client *selvpc.ServiceClient, id string) ([]*Quota, *selvpc.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", id}, "/")
+	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract quotas from the response body.
+	var result ResourcesQuotas
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Quotas, responseResult, nil
+}
