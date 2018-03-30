@@ -2,7 +2,9 @@ package testing
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -224,5 +226,49 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	}
+}
+
+func TestUpdateProjectQuotas(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+		fmt.Fprintf(w, TestUpdateProjectQuotasResponseRaw)
+
+		b, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			t.Errorf("unable to read the request body: %v", err)
+		}
+
+		var actualRequest interface{}
+		err = json.Unmarshal(b, &actualRequest)
+		if err != nil {
+			t.Errorf("unable to unmarshal the request body: %v", err)
+		}
+
+		var expectedRequest interface{}
+		err = json.Unmarshal([]byte(TestUpdateQuotasOptsRaw), &expectedRequest)
+		if err != nil {
+			t.Errorf("unable to unmarshal expected raw response: %v", err)
+		}
+
+		if !reflect.DeepEqual(actualRequest, expectedRequest) {
+			t.Fatalf("expected %#v update options, but got %#v", expectedRequest, actualRequest)
+		}
+	})
+
+	ctx := context.Background()
+	updateOpts := TestUpdateQuotasOpts
+	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestUpdateProjectQuotasResponse
+
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }

@@ -254,3 +254,63 @@ var TestGetProjectQuotasResponseSingle = []*quotas.Quota{
 		},
 	},
 }
+
+// TestUpdateQuotasOpts represents options for the UpdateProjectQuotas request.
+var TestUpdateQuotasOpts = quotas.UpdateProjectQuotasOpts{
+	QuotasOpts: []quotas.QuotaOpts{
+		{
+			Name: "compute_ram",
+			ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+				{
+					Region: "ru-2",
+					Zone:   "ru-2a",
+					Value:  64000,
+				},
+			},
+		},
+	},
+}
+
+// TestUpdateQuotasOptsRaw represents unmarshalled options for the UpdateProjectQuotas request.
+const TestUpdateQuotasOptsRaw = `
+{
+    "quotas": {
+        "compute_ram": [
+            {
+                "region": "ru-2",
+                "value": 64000,
+                "zone": "ru-2a"
+            }
+        ]
+    }
+}
+`
+
+// TestUpdateProjectQuotasResponseRaw represents a raw response from the UpdateProjectQuotas request.
+const TestUpdateProjectQuotasResponseRaw = `
+{
+    "quotas": {
+        "compute_ram": [
+            {
+                "region": "ru-2",
+                "value": 64000,
+                "zone": "ru-2a"
+            }
+        ]
+    }
+}
+`
+
+// TestUpdateProjectQuotasResponse represents the unmarshalled TestUpdateProjectQuotasResponseRaw response.
+var TestUpdateProjectQuotasResponse = []*quotas.Quota{
+	{
+		Name: "compute_ram",
+		ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+			{
+				Region: "ru-2",
+				Zone:   "ru-2a",
+				Value:  64000,
+			},
+		},
+	},
+}
