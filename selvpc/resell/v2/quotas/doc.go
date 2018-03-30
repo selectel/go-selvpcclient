@@ -29,7 +29,11 @@ Example of getting free quotas for a domain
 
 Example of getting projects quotas for a domain
 
+<<<<<<< HEAD
   projectsQuotas, _, err := quotas.GetProjectsQuotas(ctx, resellClient)
+=======
+  projectsQuotas, _, err := quotas.GetProjectsQuotas(context, resellClient)
+>>>>>>> Add Resell v2 get projects quotas method
   if err != nil {
     log.Fatal(err)
   }
@@ -39,6 +43,7 @@ Example of getting projects quotas for a domain
       fmt.Println(resourceQuota)
     }
   }
+<<<<<<< HEAD
 
 Example of getting quotas for a single project
 
@@ -51,5 +56,7 @@ Example of getting quotas for a single project
   }
 =======
 >>>>>>> Add Resell v2 quotas get all method
+=======
+>>>>>>> Add Resell v2 get projects quotas method
 */
 package quotas
