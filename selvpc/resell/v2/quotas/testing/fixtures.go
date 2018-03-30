@@ -1,6 +1,6 @@
 package testing
 
-import "github.com/selectel/go-selvpc/selvpc/resell/v2/quotas"
+import "github.com/selectel/go-selvpcclient/selvpc/resell/v2/quotas"
 
 // TestGetAllQuotasResponseRaw represents a raw response from the GetAll request.
 const TestGetAllQuotasResponseRaw = `

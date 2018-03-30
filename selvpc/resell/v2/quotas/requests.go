@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/selectel/go-selvpc/selvpc"
+	"github.com/selectel/go-selvpcclient/selvpc"
 )
 
 const resourceURL = "quotas"

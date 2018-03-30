@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpc/selvpc/resell/v2/quotas"
-	"github.com/selectel/go-selvpc/selvpc/testutils"
+	"github.com/selectel/go-selvpcclient/selvpc/resell/v2/quotas"
+	"github.com/selectel/go-selvpcclient/selvpc/testutils"
 )
 
 func TestGetAllQuotas(t *testing.T) {
