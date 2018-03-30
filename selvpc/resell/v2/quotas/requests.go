@@ -50,3 +50,24 @@ func GetFree(ctx context.Context, client *selvpc.ServiceClient) ([]*Quota, *selv
 
 	return result.Quotas, responseResult, nil
 }
+
+// GetProjectsQuotas returns the quotas info for all domain projects.
+func GetProjectsQuotas(ctx context.Context, client *selvpc.ServiceClient) ([]*ProjectQuota, *selvpc.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL, "projects"}, "/")
+	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract quotas from the response body.
+	var result ProjectsQuotas
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.ProjectQuotas, responseResult, nil
+}
