@@ -40,7 +40,6 @@ UnmarshalJSON implements custom unmarshalling method for the ResourcesQuotas typ
 
 We need it to work with a JSON structure that the Resell v2 API responses with:
 
-
     "quotas": {
         "compute_cores": [
             {
