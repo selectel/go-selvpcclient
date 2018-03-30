@@ -1,18 +1,18 @@
-# Go-SelVPC: a Go library for the Selectel VPC API
+# go-selvpcclient: a Go library for the Selectel VPC API
 
-Package go-selvpc provides a Go library to work with the Selectel VPC API.
+Package go-selvpcclient provides a Go library to work with the Selectel VPC API.
 
 The API documentation is available at [knowledge base](https://kb.selectel.com/24381383.html).
-The Go library documentation is available at [godoc.org](https://godoc.org/github.com/selectel/go-selvpc/selvpc).
+The Go library documentation is available at [godoc.org](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc).
 
 ## Getting started
 
 ### Installation
 
-You can install `go-selvpc` as a Go package:
+You can install `go-selvpcclient` as a Go package:
 
 ```bash
-go get github.com/selectel/go-selvpc
+go get github.com/selectel/go-selvpcclient
 ```
 
 ### Authentication
@@ -32,10 +32,10 @@ import (
   "fmt"
   "log"
 
-  "github.com/selectel/goselvpc/selvpc/resell/v2/quotas"
+  "github.com/selectel/go-selvpcclient/selvpc/resell/v2/quotas"
 
-  resell "github.com/selectel/goselvpc/selvpc/resell/v2"
-  "github.com/selectel/goselvpc/selvpc/resell/v2/projects"
+  resell "github.com/selectel/go-selvpcclient/selvpc/resell/v2"
+  "github.com/selectel/go-selvpcclient/selvpc/resell/v2/projects"
 )
 
 // API token from the https://my.selectel.ru.
