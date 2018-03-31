@@ -11,7 +11,6 @@ import (
 	"testing"
 
 	"github.com/selectel/go-selvpcclient/selvpc"
-
 	"github.com/selectel/go-selvpcclient/selvpc/testutils"
 )
 
