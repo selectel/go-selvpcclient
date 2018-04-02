@@ -62,22 +62,27 @@ func (result *ResourcesQuotas) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	// Convert resource quota maps to the slice of Quota types.
-	// Here we're allocating memory in advance because we already know the length
-	// of a result slice from the JSON bytearray.
-	resourceQuotasSlice := make([]*Quota, len(s.ResourcesQuotas))
-	i := 0
-	for resourceName, resourceQuotas := range s.ResourcesQuotas {
-		resourceQuotasSlice[i] = &Quota{
-			Name: resourceName,
-			ResourceQuotasEntities: resourceQuotas,
-		}
-		i++
+	// Populate the result with an empty slice in case of empty quota list.
+	*result = ResourcesQuotas{
+		Quotas: []*Quota{},
 	}
 
-	// Populate the result with the unmarshalled data.
-	*result = ResourcesQuotas{
-		Quotas: resourceQuotasSlice,
+	if len(s.ResourcesQuotas) != 0 {
+		// Convert resource quota maps to the slice of Quota types.
+		// Here we're allocating memory in advance because we already know the length
+		// of a result slice from the JSON bytearray.
+		resourceQuotasSlice := make([]*Quota, len(s.ResourcesQuotas))
+		i := 0
+		for resourceName, resourceQuotas := range s.ResourcesQuotas {
+			resourceQuotasSlice[i] = &Quota{
+				Name: resourceName,
+				ResourceQuotasEntities: resourceQuotas,
+			}
+			i++
+		}
+
+		// Add the unmarshalled quotas slice to the result.
+		result.Quotas = resourceQuotasSlice
 	}
 
 	return nil
