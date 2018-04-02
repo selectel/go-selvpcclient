@@ -2,8 +2,10 @@
 
 Package go-selvpcclient provides a Go library to work with the Selectel VPC API.
 
-The API documentation is available at [knowledge base](https://kb.selectel.com/24381383.html).
 The Go library documentation is available at [godoc.org](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc).
+
+The API usage examples are available at [knowledge base](https://kb.selectel.com/24381383.html).  
+API documentation is also available at the [VPC page](https://my.selectel.ru/vpc/docs) (if you've created an account on the [registration page](https://my.selectel.ru/registration)).
 
 ## Getting started
 
@@ -12,7 +14,7 @@ The Go library documentation is available at [godoc.org](https://godoc.org/githu
 You can install `go-selvpcclient` as a Go package:
 
 ```bash
-go get github.com/selectel/go-selvpcclient
+go get github.com/selectel/go-selvpcclient/selvpc
 ```
 
 ### Authentication
@@ -32,8 +34,6 @@ import (
   "fmt"
   "log"
 
-  "github.com/selectel/go-selvpcclient/selvpc/resell/v2/quotas"
-
   resell "github.com/selectel/go-selvpcclient/selvpc/resell/v2"
   "github.com/selectel/go-selvpcclient/selvpc/resell/v2/projects"
 )
@@ -46,8 +46,8 @@ func main() {
   resellClient := resell.NewV2ResellClient(token)
 
   // Get and print all projects.
-  context := context.Background()
-  allProjects, _, err := projects.List(context, resellClient)
+  ctx := context.Background()
+  allProjects, _, err := projects.List(ctx, resellClient)
   if err != nil {
     log.Fatal(err)
   }
