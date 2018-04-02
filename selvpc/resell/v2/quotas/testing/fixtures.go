@@ -60,3 +60,64 @@ var TestGetAllQuotasResponseSingle = []*quotas.Quota{
 		},
 	},
 }
+
+// TestGetFreeQuotasResponseRaw represents a raw response from the GetFree request.
+const TestGetFreeQuotasResponseRaw = `
+{
+    "quotas": {
+        "compute_cores": [
+            {
+                "region": "ru-2",
+                "value": 40,
+                "zone": "ru-2a"
+            },
+            {
+                "region": "ru-3",
+                "value": 100,
+                "zone": "ru-3a"
+            }
+        ],
+        "compute_ram": [
+            {
+        		    "region": "ru-2",
+        		    "zone": "ru-2a",
+                "value": 2560
+            },
+            {
+        		    "region": "ru-3",
+        		    "zone": "ru-3a",
+                "value": 10240
+            }
+        ]
+    }
+}
+`
+
+// TestGetFreeQuotasResponseSingleRaw represents a raw response with a single quota from the GetFree request.
+const TestGetFreeQuotasResponseSingleRaw = `
+{
+    "quotas": {
+        "compute_cores": [
+            {
+                "region": "ru-2",
+                "value": 40,
+                "zone": "ru-2a"
+            }
+        ]
+    }
+}
+`
+
+// TestGetFreeQuotasResponseSingle represents the unmarshalled TestGetFreeQuotasResponseSingleRaw response.
+var TestGetFreeQuotasResponseSingle = []*quotas.Quota{
+	{
+		Name: "compute_cores",
+		ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+			{
+				Region: "ru-2",
+				Zone:   "ru-2a",
+				Value:  40,
+			},
+		},
+	},
+}

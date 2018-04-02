@@ -11,5 +11,15 @@ Example of getting all quotas for a domain
   for _, myQuota := range allQuotas {
     fmt.Println(myQuota)
   }
+
+Example of getting free quotas for a domain
+
+  freeQuotas, _, err := quotas.GetFree(context, resellClient)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, myQuota := range allQuotas {
+    fmt.Println(myQuota)
+  }
 */
 package quotas
