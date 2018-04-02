@@ -22,6 +22,7 @@ type ResourceQuotaEntity struct {
 	Zone string `json:"zone"`
 
 	// Value contans value of resource quota in the specific region and zone.
+	// It represents a free quota value if used with the GetFree request.
 	Value int `json:"value"`
 
 	// Used contains quantity of a used quota in the specific region and zone.
@@ -30,6 +31,7 @@ type ResourceQuotaEntity struct {
 
 // ResourcesQuotas represents quotas for different resources.
 type ResourcesQuotas struct {
+	// Quotas represents slice of Quotas.
 	Quotas []*Quota `json:"-"`
 }
 
