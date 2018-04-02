@@ -5,8 +5,8 @@ Authentication
 
 To work with the Selectel VPC API you first need to:
 
-- create a Selectel account: https://my.selectel.ru/registration
-- obtain an API token: http://my.selectel.ru/profile/apikeys
+	- create a Selectel account: https://my.selectel.ru/registration
+	- obtain an API token: http://my.selectel.ru/profile/apikeys
 
 You can then provide the API token to the selvpc service client.
 
