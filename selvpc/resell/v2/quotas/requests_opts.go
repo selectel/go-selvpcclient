@@ -2,6 +2,7 @@ package quotas
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // QuotaOpts represents quota options for a single resource that can be used in the update request.
@@ -29,6 +30,7 @@ type ResourceQuotaOpts struct {
 
 // UpdateProjectQuotasOpts represents options for the UpdateProjectQuotas request.
 type UpdateProjectQuotasOpts struct {
+	// QuotasOpts represents a slice of QuotaOpts.
 	QuotasOpts []QuotaOpts `json:"-"`
 }
 
@@ -37,7 +39,6 @@ MarshalJSON implements custom marshalling method for the UpdateProjectQuotasOpts
 
 We need it to marshal structure to a a JSON that the Resell v2 API wants:
 
-{
     "quotas": {
         "compute_cores": [
             {
@@ -46,12 +47,16 @@ We need it to marshal structure to a a JSON that the Resell v2 API wants:
                 "zone": "ru-2a"
             },
             ...
-				],
-				...
+        ],
+        ...
     }
-}
 */
 func (opts *UpdateProjectQuotasOpts) MarshalJSON() ([]byte, error) {
+	// Check the opts.
+	if len(opts.QuotasOpts) == 0 {
+		return nil, fmt.Errorf("got empty QuotasOpts")
+	}
+
 	// Convert opts's quotas update options slice to a map that has resource names
 	// as keys and resource quotas update options as values.
 	resourceQuotasMap := make(map[string][]ResourceQuotaOpts, len(opts.QuotasOpts))
