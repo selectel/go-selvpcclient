@@ -1,6 +1,11 @@
 # go-selvpcclient: a Go library for the Selectel VPC API
+[![GoDoc](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc?status.svg)](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc)
+[![Build Status](https://travis-ci.org/selectel/go-selvpcclient.svg?branch=master)](https://travis-ci.org/selectel/go-selvpcclient)
+[![Go Report Card](https://goreportcard.com/badge/github.com/selectel/go-selvpcclient)](https://goreportcard.com/report/github.com/selectel/go-selvpcclient)
 
 Package go-selvpcclient provides a Go library to work with the Selectel VPC API.
+
+## Documentation
 
 The Go library documentation is available at [godoc.org](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc).
 
