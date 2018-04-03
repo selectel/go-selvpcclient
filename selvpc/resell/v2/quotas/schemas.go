@@ -133,31 +133,36 @@ func (result *ProjectsQuotas) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	// Convert projects quota maps to the slice of ProjectQuota types.
-	// Here we're allocating memory in advance for both of project and resource quotas
-	// because we already know the lenght of each slices from the JSON bytearray.
-	projectQuotasSlice := make([]*ProjectQuota, len(s.ProjectsQuotas))
-	i := 0
-	for projectName, projectQuotas := range s.ProjectsQuotas {
-		resourceQuotasSlice := make([]Quota, len(projectQuotas))
-		j := 0
-		for resourceName, resourceQuotas := range projectQuotas {
-			resourceQuotasSlice[j] = Quota{
-				Name: resourceName,
-				ResourceQuotasEntities: resourceQuotas,
-			}
-			j++
-		}
-		projectQuotasSlice[i] = &ProjectQuota{
-			ID:            projectName,
-			ProjectQuotas: resourceQuotasSlice,
-		}
-		i++
+	// Populate the result with an empty slice in case of empty quota list.
+	*result = ProjectsQuotas{
+		ProjectQuotas: []*ProjectQuota{},
 	}
 
-	// Populate the result with the unmarshalled data.
-	*result = ProjectsQuotas{
-		ProjectQuotas: projectQuotasSlice,
+	if len(s.ProjectsQuotas) != 0 {
+		// Convert projects quota maps to the slice of ProjectQuota types.
+		// Here we're allocating memory in advance for both of project and resource quotas
+		// because we already know the lenght of each slices from the JSON bytearray.
+		projectQuotasSlice := make([]*ProjectQuota, len(s.ProjectsQuotas))
+		i := 0
+		for projectName, projectQuotas := range s.ProjectsQuotas {
+			resourceQuotasSlice := make([]Quota, len(projectQuotas))
+			j := 0
+			for resourceName, resourceQuotas := range projectQuotas {
+				resourceQuotasSlice[j] = Quota{
+					Name: resourceName,
+					ResourceQuotasEntities: resourceQuotas,
+				}
+				j++
+			}
+			projectQuotasSlice[i] = &ProjectQuota{
+				ID:            projectName,
+				ProjectQuotas: resourceQuotasSlice,
+			}
+			i++
+		}
+
+		// Add the unmarshalled project quotas slice to the result.
+		result.ProjectQuotas = projectQuotasSlice
 	}
 
 	return nil
