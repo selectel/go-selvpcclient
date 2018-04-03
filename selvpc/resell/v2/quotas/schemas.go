@@ -101,6 +101,7 @@ type ProjectQuota struct {
 
 // ProjectsQuotas represents quotas for different projects.
 type ProjectsQuotas struct {
+	// ProjectQuotas represents slice of ProjectQuotas.
 	ProjectQuotas []*ProjectQuota `json:"-"`
 }
 
@@ -108,22 +109,21 @@ type ProjectsQuotas struct {
 UnmarshalJSON implements custom unmarshalling method for the ProjectsQuotas type.
 
 We need it to work with a JSON structure that the Resell v2 API responses with:
-{
+
     "quotas": {
         "6d23928357bb4e0eb302794bc57fb8fd": {
             "compute_cores": [
                 {
-                    "region": "ru-1",
-                    "used": 2,
-                    "value": 10,
-                    "zone": "ru-1b"
-								},
-								...
-						]
-				},
-				...
+                   "region": "ru-1",
+                   "used": 2,
+                   "value": 10,
+                   "zone": "ru-1b"
+                },
+                ...
+            ]
+        },
+        ...
     }
-}
 */
 func (result *ProjectsQuotas) UnmarshalJSON(b []byte) error {
 	// Populate temporary structure with projects quotas represented as maps.
