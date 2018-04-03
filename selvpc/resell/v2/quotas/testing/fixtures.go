@@ -206,3 +206,51 @@ var TestGetProjectsQuotasResponseSingle = []*quotas.ProjectQuota{
 		},
 	},
 }
+
+// TestGetProjectQuotasResponseRaw represents a raw response from the GetProject request.
+const TestGetProjectQuotasResponseRaw = `
+{
+    "quotas": {
+        "network_subnets_29_vrrp": [
+            {
+                "value": 1
+            }
+        ],
+        "network_floatingips": [
+            {
+                "region": "ru-3",
+                "value": 2
+            }
+        ]
+    }
+}
+`
+
+// TestGetProjectQuotasResponseSingleRaw represents a raw response with a single quota from the GetProject request.
+const TestGetProjectQuotasResponseSingleRaw = `
+{
+    "quotas": {
+        "compute_ram": [
+            {
+                "region": "ru-3",
+                "value": 51200,
+                "zone": "ru-3a"
+            }
+        ]
+    }
+}
+`
+
+// TestGetProjectQuotasResponseSingle represents the unmarshalled TestGetProjectQuotasResponseSingleRaw response.
+var TestGetProjectQuotasResponseSingle = []*quotas.Quota{
+	{
+		Name: "compute_ram",
+		ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+			{
+				Region: "ru-3",
+				Zone:   "ru-3a",
+				Value:  51200,
+			},
+		},
+	},
+}
