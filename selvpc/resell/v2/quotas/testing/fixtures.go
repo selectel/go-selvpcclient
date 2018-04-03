@@ -121,3 +121,88 @@ var TestGetFreeQuotasResponseSingle = []*quotas.Quota{
 		},
 	},
 }
+
+// TestGetProjectsQuotasResponseRaw represents a raw response from the GetProjectsQuotas request.
+const TestGetProjectsQuotasResponseRaw = `
+{
+    "quotas": {
+        "c83243b3c18a4d109a5f0fe45336af85": {
+            "compute_cores": [
+                {
+                    "region": "ru-2",
+                    "value": 40,
+                    "zone": "ru-2a"
+                },
+                {
+                    "region": "ru-3",
+                    "value": 100,
+                    "zone": "ru-3a"
+                }
+            ],
+            "compute_ram": [
+                {
+                    "region": "ru-2",
+                    "zone": "ru-2a",
+                    "value": 2560
+                },
+                {
+                    "region": "ru-3",
+                    "zone": "ru-3a",
+                    "value": 10240
+                }
+            ]
+        },
+        "fe4cde3ee844415098edb570f381c190": {
+            "compute_cores": [
+                {
+                    "region": "ru-1",
+                    "value": 40,
+                    "zone": "ru-1b"
+                }
+            ],
+            "image_gigabytes": [
+                {
+                    "region": "ru-1",
+                    "value": 24
+                }
+            ]
+        }
+    }
+}
+`
+
+// TestGetProjectsQuotasResponseSingleRaw represents a raw response with a single quota from the GetProjectsQuotas request.
+const TestGetProjectsQuotasResponseSingleRaw = `
+{
+    "quotas": {
+        "c83243b3c18a4d109a5f0fe45336af85": {
+            "compute_cores": [
+                {
+                    "region": "ru-2",
+                    "value": 40,
+                    "zone": "ru-2a"
+                }
+            ]
+        }
+    }
+}
+`
+
+// TestGetProjectsQuotasResponseSingle represents the unmarshalled TestProjectsQuotasResponseRaw response.
+var TestGetProjectsQuotasResponseSingle = []*quotas.ProjectQuota{
+	{
+		ID: "c83243b3c18a4d109a5f0fe45336af85",
+		ProjectQuotas: []quotas.Quota{
+			{
+				Name: "compute_cores",
+				ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+					{
+						Region: "ru-2",
+						Zone:   "ru-2a",
+						Value:  40,
+					},
+				},
+			},
+		},
+	},
+}
