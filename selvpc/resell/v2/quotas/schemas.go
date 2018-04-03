@@ -40,7 +40,7 @@ UnmarshalJSON implements custom unmarshalling method for the ResourcesQuotas typ
 
 We need it to work with a JSON structure that the Resell v2 API responses with:
 
-{
+
     "quotas": {
         "compute_cores": [
             {
@@ -49,10 +49,9 @@ We need it to work with a JSON structure that the Resell v2 API responses with:
                 "zone": "ru-2a"
             },
             ...
-				],
-				...
+        ],
+        ...
     }
-}
 */
 func (result *ResourcesQuotas) UnmarshalJSON(b []byte) error {
 	// Populate temporary structure with resource quotas represented as maps.
