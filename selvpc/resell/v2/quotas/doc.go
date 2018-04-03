@@ -44,5 +44,32 @@ Example of getting quotas for a single project
   for _, singleProjectQuota := range singleProjectQuotas {
     fmt.Println(singleProjectQuota)
   }
+
+Example of updating quotas for a single project
+
+  projectQuotaUpdateOpts := quotas.UpdateProjectQuotasOpts{
+    QuotasOpts: []*quotas.QuotaOpts{
+      {
+        Name: "image_gigabytes",
+        ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+          {
+            Region: "ru-1",
+            Value:  10,
+          },
+          {
+            Region: "ru-2",
+            Value:  20,
+          },
+        },
+      },
+    },
+  }
+  updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, resellClient, updateProjectID, projectQuotaUpdateOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, updatedProjectQuota := range updatedProjectQuotas {
+    fmt.Println(updatedProjectQuota)
+  }
 */
 package quotas
