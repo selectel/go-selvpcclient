@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpc"
-	"github.com/selectel/go-selvpcclient/selvpc/testutils"
+	"github.com/selectel/go-selvpcclient/selvpcclient"
+	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
 )
 
 func TestDoGetRequest(t *testing.T) {
@@ -27,7 +27,7 @@ func TestDoGetRequest(t *testing.T) {
 	})
 
 	endpoint := testEnv.Server.URL + "/"
-	client := &selvpc.ServiceClient{
+	client := &selvpcclient.ServiceClient{
 		HTTPClient: &http.Client{},
 		Endpoint:   endpoint,
 		TokenID:    "token",
@@ -65,7 +65,7 @@ func TestDoPostRequest(t *testing.T) {
 	})
 
 	endpoint := testEnv.Server.URL + "/"
-	client := &selvpc.ServiceClient{
+	client := &selvpcclient.ServiceClient{
 		HTTPClient: &http.Client{},
 		Endpoint:   endpoint,
 		TokenID:    "token",
