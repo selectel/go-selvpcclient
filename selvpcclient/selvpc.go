@@ -17,7 +17,7 @@ const (
 	DefaultEndpoint = "https://api.selectel.ru/vpc"
 
 	// DefaultUserAgent contains basic user agent that will be used in queries.
-	DefaultUserAgent = "selvpc/" + AppVersion
+	DefaultUserAgent = "selvpcclient/" + AppVersion
 )
 
 // ServiceClient stores details that are needed to work with different Selectel VPC APIs.
@@ -69,7 +69,7 @@ func (client *ServiceClient) DoRequest(ctx context.Context, method, url string, 
 		nil,
 	}
 	if response.StatusCode >= 400 && response.StatusCode <= 599 {
-		err = fmt.Errorf("selvpc: got the %d error status code from the server", response.StatusCode)
+		err = fmt.Errorf("selvpcclient: got the %d error status code from the server", response.StatusCode)
 		responseResult.Err = err
 	}
 
