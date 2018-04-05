@@ -1,4 +1,4 @@
-package selvpc
+package selvpcclient
 
 import (
 	"context"

@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/selectel/go-selvpcclient/selvpc"
+	"github.com/selectel/go-selvpcclient/selvpcclient"
 )
 
 // TestEnv represents a testing environment for all resources.
 type TestEnv struct {
 	Mux    *http.ServeMux
 	Server *httptest.Server
-	Client *selvpc.ServiceClient
+	Client *selvpcclient.ServiceClient
 }
 
 // SetupTestEnv prepares the new testing environmenœt.

@@ -1,11 +1,11 @@
 package resell
 
-import "github.com/selectel/go-selvpcclient/selvpc"
+import "github.com/selectel/go-selvpcclient/selvpcclient"
 
 const (
 	// Endpoint contains the base url for all versions of the Resell client.
-	Endpoint = selvpc.DefaultEndpoint + "/resell"
+	Endpoint = selvpcclient.DefaultEndpoint + "/resell"
 
 	// UserAgent contains the user agent for all versions of the Resell client.
-	UserAgent = selvpc.DefaultUserAgent
+	UserAgent = selvpcclient.DefaultUserAgent
 )

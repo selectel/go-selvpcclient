@@ -1,5 +1,5 @@
 # go-selvpcclient: a Go library for the Selectel VPC API
-[![GoDoc](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc?status.svg)](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc)
+[![GoDoc](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc?status.svg)](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient)
 [![Build Status](https://travis-ci.org/selectel/go-selvpcclient.svg?branch=master)](https://travis-ci.org/selectel/go-selvpcclient)
 [![Go Report Card](https://goreportcard.com/badge/github.com/selectel/go-selvpcclient)](https://goreportcard.com/report/github.com/selectel/go-selvpcclient)
 
@@ -7,7 +7,7 @@ Package go-selvpcclient provides a Go library to work with the Selectel VPC API.
 
 ## Documentation
 
-The Go library documentation is available at [godoc.org](https://godoc.org/github.com/selectel/go-selvpcclient/selvpc).
+The Go library documentation is available at [godoc.org](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient).
 
 The API usage examples are available at [knowledge base](https://kb.selectel.com/24381383.html).  
 API documentation is also available at the [VPC page](https://my.selectel.ru/vpc/docs) (if you've created an account on the [registration page](https://my.selectel.ru/registration)).
@@ -19,7 +19,7 @@ API documentation is also available at the [VPC page](https://my.selectel.ru/vpc
 You can install `go-selvpcclient` as a Go package:
 
 ```bash
-go get github.com/selectel/go-selvpcclient/selvpc
+go get github.com/selectel/go-selvpcclient/selvpcclient
 ```
 
 ### Authentication
@@ -39,8 +39,8 @@ import (
   "fmt"
   "log"
 
-  resell "github.com/selectel/go-selvpcclient/selvpc/resell/v2"
-  "github.com/selectel/go-selvpcclient/selvpc/resell/v2/projects"
+  resell "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2"
+  "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects"
 )
 
 // API token from the https://my.selectel.ru.

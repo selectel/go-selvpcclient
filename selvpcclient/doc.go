@@ -1,5 +1,5 @@
 /*
-Package selvpc provides a library to work with the Selectel VPC API.
+Package selvpcclient provides a library to work with the Selectel VPC API.
 
 Authentication
 
@@ -22,4 +22,4 @@ You need to initialize the needed service client prior to do any requests:
 All methods of service clients uses the Go context to provide end-user of the
 library with a native way to work with the cancelation signals
 */
-package selvpc
+package selvpcclient
