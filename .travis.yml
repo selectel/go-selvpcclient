@@ -3,6 +3,8 @@ language: go
 install:
   - go get golang.org/x/tools/cmd/goimports
   - go get github.com/golang/lint/golint
+  - go get github.com/mattn/goveralls
+  - go get github.com/wadey/gocovmerge
 go:
   - "1.10"
 before_script:
@@ -11,4 +13,6 @@ before_script:
   - ./scripts/imports
   - ./scripts/format
 script:
-  - go test -v ./...
+  - ./scripts/test
+after_success:
+- $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
