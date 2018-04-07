@@ -71,5 +71,12 @@ Example of updating a single project
     log.Fatal(err)
   }
   fmt.Println(updatedProject)
+
+Example of deleting a single project
+
+  _, err = projects.Delete(context, resellClient, newProject.ID)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package projects

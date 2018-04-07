@@ -190,3 +190,18 @@ func TestUpdateProject(t *testing.T) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
+
+func TestDeleteProject(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testEnv.Mux.HandleFunc("/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+	})
+
+	ctx := context.Background()
+	_, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
