@@ -255,6 +255,8 @@ var TestGetProjectQuotasResponseSingle = []*quotas.Quota{
 	},
 }
 
+var ramQuotaValue = 64000
+
 // TestUpdateQuotasOpts represents options for the UpdateProjectQuotas request.
 var TestUpdateQuotasOpts = quotas.UpdateProjectQuotasOpts{
 	QuotasOpts: []quotas.QuotaOpts{
@@ -264,7 +266,7 @@ var TestUpdateQuotasOpts = quotas.UpdateProjectQuotasOpts{
 				{
 					Region: "ru-2",
 					Zone:   "ru-2a",
-					Value:  64000,
+					Value:  &ramQuotaValue,
 				},
 			},
 		},
