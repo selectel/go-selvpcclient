@@ -203,3 +203,55 @@ var TestCreateProjectResponse = &projects.Project{
 	URL:     "https://yyyyyy.selvpc.ru",
 	Enabled: true,
 }
+
+// TestUpdateProjectOptsRaw represents marshalled options for the Update request.
+const TestUpdateProjectOptsRaw = `
+{
+    "project": {
+        "name": "Project3",
+        "theme": {
+            "color": "#581845"
+        }
+    }
+}
+`
+
+var color = "#581845"
+
+// TestUpdateProjectOpts represent options for the Update request.
+var TestUpdateProjectOpts = projects.UpdateOpts{
+	Name: "Project3",
+	Theme: &projects.ThemeUpdateOpts{
+		Color: &color,
+	},
+}
+
+// TestUpdateProjectResponseRaw represents a raw response from the Update request.
+const TestUpdateProjectResponseRaw = `
+{
+    "project": {
+        "enabled": true,
+        "id": "f9ede488e5f14bac8962d8c53d0af9f4",
+        "name": "Project3",
+        "theme": {
+            "logo": null,
+            "color": "#581845"
+				},
+        "custom_url": null,
+        "url": "https://zzzzzz.selvpc.ru"
+    }
+}
+`
+
+// TestUpdateProjectResponse represents the unmarshalled TestUpdateProjectResponseRaw response.
+var TestUpdateProjectResponse = &projects.Project{
+	ID:      "f9ede488e5f14bac8962d8c53d0af9f4",
+	Name:    "Project3",
+	URL:     "https://zzzzzz.selvpc.ru",
+	Enabled: true,
+	Theme: projects.Theme{
+		Logo:  "",
+		Color: "#581845",
+	},
+	CustomURL: "",
+}

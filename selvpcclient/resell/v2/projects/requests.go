@@ -89,3 +89,36 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 
 	return result.Project, responseResult, nil
 }
+
+// Update requests an update of the project referenced by its id.
+func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, updateOpts UpdateOpts) (*Project, *selvpcclient.ResponseResult, error) {
+	// Nest update options into the parent "project" JSON structure.
+	type updateProject struct {
+		Options UpdateOpts `json:"project"`
+	}
+	updateProjectOpts := &updateProject{Options: updateOpts}
+	requestBody, err := json.Marshal(updateProjectOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
+	responseResult, err := client.DoRequest(ctx, "PATCH", url, bytes.NewReader(requestBody))
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract a project from the response body.
+	var result struct {
+		Project *Project `json:"project"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Project, responseResult, nil
+}
