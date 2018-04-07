@@ -1,7 +1,9 @@
 package projects
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -53,4 +55,37 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Project, 
 	}
 
 	return result.Projects, responseResult, nil
+}
+
+// Create requests a creation of the project.
+func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts CreateOpts) (*Project, *selvpcclient.ResponseResult, error) {
+	// Nest create options into the parent "project" JSON structure.
+	type createProject struct {
+		Options CreateOpts `json:"project"`
+	}
+	createProjectOpts := &createProject{Options: createOpts}
+	requestBody, err := json.Marshal(createProjectOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+	responseResult, err := client.DoRequest(ctx, "POST", url, bytes.NewReader(requestBody))
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract a project from the response body.
+	var result struct {
+		Project *Project `json:"project"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Project, responseResult, nil
 }

@@ -148,3 +148,58 @@ var TestListProjectsSingleResponse = []*projects.Project{
 		CustomURL: "",
 	},
 }
+
+// TestCreateProjectOptsRaw represents marshalled options for the Create request.
+const TestCreateProjectOptsRaw = `
+{
+    "project": {
+        "name": "Project2",
+        "quotas": {
+            "image_gigabytes": [
+                {
+                    "region": "ru-1",
+                    "value": 12
+                }
+            ]
+        }
+    }
+}
+`
+
+var imageGigabytesValue = 12
+
+// TestCreateProjectOpts represent options for the Create request.
+var TestCreateProjectOpts = projects.CreateOpts{
+	Name: "Project2",
+	Quotas: []quotas.QuotaOpts{
+		{
+			Name: "image_gigabytes",
+			ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+				{
+					Region: "ru-1",
+					Value:  &imageGigabytesValue,
+				},
+			},
+		},
+	},
+}
+
+// TestCreateProjectResponseRaw represents a raw response from the Create request.
+const TestCreateProjectResponseRaw = `
+{
+    "project": {
+        "enabled": true,
+        "id": "9c97bdc75295493096cf5edcb8c37933",
+        "name": "Project2",
+        "url": "https://yyyyyy.selvpc.ru"
+    }
+}
+`
+
+// TestCreateProjectResponse represents the unmarshalled TestCreateProjectResponseRaw response.
+var TestCreateProjectResponse = &projects.Project{
+	ID:      "9c97bdc75295493096cf5edcb8c37933",
+	Name:    "Project2",
+	URL:     "https://yyyyyy.selvpc.ru",
+	Enabled: true,
+}
