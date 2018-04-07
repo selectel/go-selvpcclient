@@ -7,5 +7,5 @@ for testingpkg in $(go list ./selvpcclient/.../testing); do
   go test -v -covermode count -coverprofile "./${i}.coverprofile" -coverpkg $coverpkg $testingpkg
   ((i++))
 done
-gocovmerge "$(ls ./*.coverprofile)" > coverage.out
+gocovmerge $(ls ./*.coverprofile) > coverage.out
 rm *.coverprofile
