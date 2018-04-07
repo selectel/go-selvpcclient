@@ -19,5 +19,38 @@ Example of listing all projects in the domain
   for _, myProject := range allProjects {
     fmt.Println(myProject)
   }
+
+Example of creating a single project
+
+  createOpts := projects.CreateOpts{
+    Name: "test000",
+    Quotas: []quotas.QuotaOpts{
+      {
+        Name: "compute_cores",
+        ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+          {
+            Region: "ru-1",
+            Zone:   "ru-1b",
+            Value:  1,
+          },
+        },
+      },
+      {
+        Name: "compute_ram",
+        ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+          {
+            Region: "ru-1",
+            Zone:   "ru-1b",
+            Value:  1024,
+          },
+        },
+      },
+    },
+  }
+  newProject, _, err := projects.Create(context, resellClient, createOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Println(newProject)
 */
 package projects
