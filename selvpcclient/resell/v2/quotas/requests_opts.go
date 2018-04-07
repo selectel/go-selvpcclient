@@ -25,7 +25,7 @@ type ResourceQuotaOpts struct {
 	Zone string `json:"zone,omitempty"`
 
 	// Value contans value of resource quota in the specific region and zone.
-	Value int `json:"value"`
+	Value *int `json:"value"`
 }
 
 // UpdateProjectQuotasOpts represents options for the UpdateProjectQuotas request.
