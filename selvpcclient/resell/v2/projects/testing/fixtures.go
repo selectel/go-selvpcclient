@@ -100,3 +100,51 @@ var TestGetProjectSingleQuotaResponse = &projects.Project{
 		},
 	},
 }
+
+// TestListProjectsResponseRaw represents a raw response from the List request.
+const TestListProjectsResponseRaw = `
+{
+    "projects": [
+        {
+            "custom_url": null,
+            "enabled": true,
+            "id": "49338ac045f448e294b25d013f890317",
+            "name": "Project1",
+            "url": "https://xxxxxx.selvpc.ru"
+        },
+        {
+            "custom_url": null,
+            "enabled": true,
+            "id": "9c97bdc75295493096cf5edcb8c37933",
+            "name": "Project2",
+            "url": "https://yyyyyy.selvpc.ru"
+        }
+    ]
+}
+`
+
+// TestListProjectsResponseSingleRaw represents a raw response with a single project from the List request.
+const TestListProjectsResponseSingleRaw = `
+{
+    "projects": [
+        {
+            "custom_url": null,
+            "enabled": true,
+            "id": "49338ac045f448e294b25d013f890317",
+            "name": "Project1",
+            "url": "https://xxxxxx.selvpc.ru"
+        }
+    ]
+}
+`
+
+// TestListProjectsSingleResponse represents the unmarshalled TestListProjectsResponseSingleRaw response.
+var TestListProjectsSingleResponse = []*projects.Project{
+	{
+		ID:        "49338ac045f448e294b25d013f890317",
+		Name:      "Project1",
+		URL:       "https://xxxxxx.selvpc.ru",
+		Enabled:   true,
+		CustomURL: "",
+	},
+}
