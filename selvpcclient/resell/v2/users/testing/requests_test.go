@@ -2,7 +2,9 @@ package testing
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -57,5 +59,49 @@ func TestListUsersSingle(t *testing.T) {
 
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	}
+}
+
+func TestCreateUser(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+		fmt.Fprintf(w, TestCreateUserResponseRaw)
+
+		b, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			t.Errorf("unable to read the request body: %v", err)
+		}
+
+		var actualRequest interface{}
+		err = json.Unmarshal(b, &actualRequest)
+		if err != nil {
+			t.Errorf("unable to unmarshal the request body: %v", err)
+		}
+
+		var expectedRequest interface{}
+		err = json.Unmarshal([]byte(TestCreateUserOptsRaw), &expectedRequest)
+		if err != nil {
+			t.Errorf("unable to unmarshal expected raw response: %v", err)
+		}
+
+		if !reflect.DeepEqual(actualRequest, expectedRequest) {
+			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
+		}
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateUserOpts
+	actualResponse, _, err := users.Create(ctx, testEnv.Client, createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestCreateUserResponse
+
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }

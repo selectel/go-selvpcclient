@@ -11,5 +11,17 @@ Example of getting all users
   for _, user := range allUsers {
     fmt.Println(user)
   }
+
+Example of creating a single user
+
+  userCreateOpts := users.UserOpts{
+    Name:     "user0",
+    Password: "verysecret",
+  }
+  createdUser, _, err := users.Create(ctx, resellClient, userCreateOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Println(createdUser)
 */
 package users
