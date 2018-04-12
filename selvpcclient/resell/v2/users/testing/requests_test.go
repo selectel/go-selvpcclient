@@ -20,6 +20,10 @@ func TestListUsers(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestListUsersResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -47,6 +51,10 @@ func TestListUsersSingle(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestListUsersSingleUserResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -69,6 +77,10 @@ func TestCreateUser(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestCreateUserResponseRaw)
+
+		if r.Method != http.MethodPost {
+			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
+		}
 
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -113,6 +125,10 @@ func TestUpdateUser(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestUpdateUserResponseRaw)
+
+		if r.Method != http.MethodPatch {
+			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
+		}
 
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {
