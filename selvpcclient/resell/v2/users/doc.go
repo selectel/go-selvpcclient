@@ -23,5 +23,19 @@ Example of creating a single user
     log.Fatal(err)
   }
   fmt.Println(createdUser)
+
+Example of updating a single user
+
+  userEnabled := false
+  userUpdateOpts := users.UserOpts{
+    Name:     "user1",
+    Password: "moresecret",
+    Enabled:  &userEnabled,
+  }
+  updatedUser, _, err := users.Update(ctx, resellClient, createdUser.ID, userUpdateOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Println(updatedUser)
 */
 package users

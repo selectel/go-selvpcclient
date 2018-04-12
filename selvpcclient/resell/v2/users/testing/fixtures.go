@@ -75,3 +75,37 @@ var TestCreateUserResponse = &users.User{
 	Name:    "NewUser1",
 	Enabled: true,
 }
+
+// TestUpdateUserOptsRaw represents marshalled options for the Update request.
+const TestUpdateUserOptsRaw = `
+{
+    "user": {
+        "name": "UpdatedUser1",
+        "password":"supersecret"
+    }
+}
+`
+
+// TestUpdateUserOpts represents options for the Update request.
+var TestUpdateUserOpts = users.UserOpts{
+	Name:     "UpdatedUser1",
+	Password: "supersecret",
+}
+
+// TestUpdateUserResponseRaw represents a raw response from the Update request.
+const TestUpdateUserResponseRaw = `
+{
+    "user": {
+        "enabled": true,
+        "name": "UpdatedUser1",
+        "id": "4b2e452ed4c940bd87a88499eaf14c4f"
+    }
+}
+`
+
+// TestUpdateUserResponse represents the unmarshalled TestUpdateUserResponseRaw response.
+var TestUpdateUserResponse = &users.User{
+	ID:      "4b2e452ed4c940bd87a88499eaf14c4f",
+	Name:    "UpdatedUser1",
+	Enabled: true,
+}
