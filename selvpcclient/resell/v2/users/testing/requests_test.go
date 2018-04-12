@@ -149,3 +149,22 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
+
+func TestDeleteUser(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+
+		if r.Method != http.MethodDelete {
+			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
+		}
+	})
+
+	ctx := context.Background()
+	_, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
