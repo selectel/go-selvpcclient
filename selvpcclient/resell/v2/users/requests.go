@@ -99,3 +99,16 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 
 	return result.User, responseResult, nil
 }
+
+// Delete deletes a single user by its id.
+func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
+	responseResult, err := client.DoRequest(ctx, "DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	if responseResult.Err != nil {
+		err = responseResult.Err
+	}
+	return responseResult, err
+}

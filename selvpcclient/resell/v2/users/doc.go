@@ -37,5 +37,12 @@ Example of updating a single user
     log.Fatal(err)
   }
   fmt.Println(updatedUser)
+
+Example of deleting a single user
+
+  _, err = users.Delete(context, resellClient, createdUser.ID)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package users
