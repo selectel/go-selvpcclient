@@ -20,6 +20,10 @@ func TestGetProject(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/projects/49338ac045f448e294b25d013f890317", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetProjectResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -43,6 +47,10 @@ func TestGetProjectSingleQuota(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/projects/49338ac045f448e294b25d013f890317", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetProjectResponseSingleQuotaRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -65,6 +73,10 @@ func TestListProjects(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/projects", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestListProjectsResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -88,6 +100,10 @@ func TestListProjectsSingle(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/projects", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestListProjectsResponseSingleRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -110,6 +126,10 @@ func TestCreateProject(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/projects", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestCreateProjectResponseRaw)
+
+		if r.Method != http.MethodPost {
+			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
+		}
 
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -155,6 +175,10 @@ func TestUpdateProject(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestUpdateProjectResponseRaw)
 
+		if r.Method != http.MethodPatch {
+			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
+		}
+
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			t.Errorf("unable to read the request body: %v", err)
@@ -197,6 +221,10 @@ func TestDeleteProject(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 	testEnv.Mux.HandleFunc("/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
+
+		if r.Method != http.MethodDelete {
+			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
+		}
 	})
 
 	ctx := context.Background()
