@@ -20,6 +20,10 @@ func TestGetAllQuotas(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetAllQuotasResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -52,6 +56,10 @@ func TestGetAllQuotasSingle(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetAllQuotasResponseSingleRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -74,6 +82,10 @@ func TestGetFreeQuotas(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/free", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetFreeQuotasResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -106,6 +118,10 @@ func TestGetFreeQuotasSingle(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/free", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetFreeQuotasResponseSingleRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -128,6 +144,10 @@ func TestGetProjectsQuotas(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetProjectsQuotasResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -160,6 +180,10 @@ func TestGetProjectsQuotasSingle(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetProjectsQuotasResponseSingleRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -182,6 +206,10 @@ func TestGetProjectQuotas(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetProjectQuotasResponseRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -214,6 +242,10 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestGetProjectQuotasResponseSingleRaw)
+
+		if r.Method != http.MethodGet {
+			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
+		}
 	})
 
 	ctx := context.Background()
@@ -236,6 +268,10 @@ func TestUpdateProjectQuotas(t *testing.T) {
 	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, TestUpdateProjectQuotasResponseRaw)
+
+		if r.Method != http.MethodPatch {
+			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
+		}
 
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {
