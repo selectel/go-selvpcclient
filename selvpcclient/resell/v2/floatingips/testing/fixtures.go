@@ -95,7 +95,7 @@ const TestListFloatingIPsSingleResponseRaw = `
 }
 `
 
-// TestListFloatingIPsSingleResponse represents the unmarshalled TestListUsersSingleUserResponseRaw response.
+// TestListFloatingIPsSingleResponse represents the unmarshalled TestListFloatingIPsSingleResponseRaw response.
 var TestListFloatingIPsSingleResponse = []*floatingips.FloatingIP{
 	{
 		FloatingIPAddress: "203.0.113.11",

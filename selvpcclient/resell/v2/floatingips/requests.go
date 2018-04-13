@@ -43,7 +43,7 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*FloatingI
 		return nil, responseResult, responseResult.Err
 	}
 
-	// Extract users from the response body.
+	// Extract floating ips from the response body.
 	var result struct {
 		FloatingIPs []*FloatingIP `json:"floatingips"`
 	}
