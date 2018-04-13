@@ -19,5 +19,24 @@ Example of getting all floatingips
   for _, floatingIP := range floatingips {
     fmt.Println(floatingIP)
   }
+
+Example of creating floating ips in project
+
+  newFloatingIPsOpts := floatingips.FloatingIPOpts{
+  FloatingIPs: []floatingips.FloatingIPOpt{
+      {
+        Region:   "ru-2",
+        Quantity: 2,
+      },
+    },
+  }
+  projectID := "49338ac045f448e294b25d013f890317"
+  newFloatingIPs, _, err := floatingips.Create(ctx, resellClient, projectID, newFipOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, newFloatingIP := range newFloatingIPs {
+    fmt.Printf("%v\n", newFloatingIP)
+  }
 */
 package floatingips
