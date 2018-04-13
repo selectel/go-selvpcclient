@@ -1,6 +1,55 @@
 package testing
 
-import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/floatingips"
+import (
+	"time"
+
+	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/floatingips"
+	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/servers"
+)
+
+// TestGetFloatingIPResponseRaw represents a raw response from the Get request.
+const TestGetFloatingIPResponseRaw = `
+{
+    "floatingip": {
+        "fixed_ip_address": "10.0.0.4",
+        "floating_ip_address": "203.0.113.11",
+        "id": "5232d5f3-4950-454b-bd41-78c5295622cd",
+        "port_id": "f7376dd2-c70f-4465-a5a8-e1a89b665d30",
+        "project_id": "49338ac045f448e294b25d013f890317",
+        "region": "ru-3",
+        "servers": [
+            {
+                "id": "253b680c-89f6-4c85-afbf-c9a67c92d3fe",
+                "name": "Node00",
+                "status": "ACTIVE",
+                "updated": "2018-02-20T22:02:21Z"
+            }
+        ],
+        "status": "ACTIVE"
+    }
+}
+`
+
+var floatingIPServerTimeStamp, _ = time.Parse(time.RFC3339, "2018-02-20T22:02:21Z")
+
+// TestGetFloatingIPResponse represents an unmarshalled TestGetFloatingIPResponseRaw.
+var TestGetFloatingIPResponse = &floatingips.FloatingIP{
+	FloatingIPAddress: "203.0.113.11",
+	ID:                "5232d5f3-4950-454b-bd41-78c5295622cd",
+	ProjectID:         "49338ac045f448e294b25d013f890317",
+	PortID:            "f7376dd2-c70f-4465-a5a8-e1a89b665d30",
+	FixedIPAddress:    "10.0.0.4",
+	Region:            "ru-3",
+	Status:            "ACTIVE",
+	Servers: []servers.Server{
+		{
+			ID:      "253b680c-89f6-4c85-afbf-c9a67c92d3fe",
+			Name:    "Node00",
+			Status:  "ACTIVE",
+			Updated: floatingIPServerTimeStamp,
+		},
+	},
+}
 
 // TestListFloatingIPsResponseRaw represents a raw response from the List request.
 const TestListFloatingIPsResponseRaw = `
