@@ -37,11 +37,11 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*User, *se
 // Create requests a creation of the user.
 func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts UserOpts) (*User, *selvpcclient.ResponseResult, error) {
 	// Nest create options into the parent "user" JSON structure.
-	type createProject struct {
+	type createUser struct {
 		Options UserOpts `json:"user"`
 	}
-	createProjectOpts := &createProject{Options: createOpts}
-	requestBody, err := json.Marshal(createProjectOpts)
+	createUserOpts := &createUser{Options: createOpts}
+	requestBody, err := json.Marshal(createUserOpts)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -70,11 +70,11 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 // Update requests an update of the user referenced by its id.
 func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, updateOpts UserOpts) (*User, *selvpcclient.ResponseResult, error) {
 	// Nest update options into the parent "user" JSON structure.
-	type updateProject struct {
+	type updateUser struct {
 		Options UserOpts `json:"user"`
 	}
-	updateProjectOpts := &updateProject{Options: updateOpts}
-	requestBody, err := json.Marshal(updateProjectOpts)
+	updateUserOpts := &updateUser{Options: updateOpts}
+	requestBody, err := json.Marshal(updateUserOpts)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -88,7 +88,7 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 		return nil, responseResult, responseResult.Err
 	}
 
-	// Extract a project from the response body.
+	// Extract an user from the response body.
 	var result struct {
 		User *User `json:"user"`
 	}
