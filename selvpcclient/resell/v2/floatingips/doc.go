@@ -38,5 +38,12 @@ Example of creating floating ips in project
   for _, newFloatingIP := range newFloatingIPs {
     fmt.Printf("%v\n", newFloatingIP)
   }
+
+Example of deleting a single floatingip
+
+  _, err = floatingips.Delete(ctx, resellClient, "412a04ba-4cb2-4823-abd1-fcd48952b882")
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package floatingips
