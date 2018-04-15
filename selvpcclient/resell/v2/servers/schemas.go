@@ -16,7 +16,7 @@ type Server struct {
 	// Status represents a current status of the server.
 	Status string `json:"status"`
 
-	// Updated contains ISO-8601 timestamps of when the state of the server
+	// Updated contains the ISO-8601 timestamp of when the state of the server
 	// last changed.
 	Updated time.Time `json:"updated"`
 }

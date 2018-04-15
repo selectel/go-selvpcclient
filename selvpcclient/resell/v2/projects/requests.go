@@ -123,7 +123,7 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 	return result.Project, responseResult, nil
 }
 
-// Delete deletes a single projects by its id.
+// Delete deletes a single project by its id.
 func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
 	responseResult, err := client.DoRequest(ctx, "DELETE", url, nil)

@@ -1,5 +1,5 @@
 /*
-Package floatingips provides the ability to retrieve and manage floatingips through
+Package floatingips provides the ability to retrieve and manage floating ips through
 the Resell v2 API.
 
 Example of getting a single floating ip referenced by its id
@@ -10,7 +10,7 @@ Example of getting a single floating ip referenced by its id
   }
   fmt.Println(floatingip)
 
-Example of getting all floatingips
+Example of getting all floating ips
 
   allFloatingIPs, _, err := floatingips.List(ctx, resellClient)
   if err != nil {
@@ -20,7 +20,7 @@ Example of getting all floatingips
     fmt.Println(floatingIP)
   }
 
-Example of creating floating ips in project
+Example of creating floating ips in a project
 
   newFloatingIPsOpts := floatingips.FloatingIPOpts{
   FloatingIPs: []floatingips.FloatingIPOpt{
@@ -39,7 +39,7 @@ Example of creating floating ips in project
     fmt.Printf("%v\n", newFloatingIP)
   }
 
-Example of deleting a single floatingip
+Example of deleting a single floating ip
 
   _, err = floatingips.Delete(ctx, resellClient, "412a04ba-4cb2-4823-abd1-fcd48952b882")
   if err != nil {
