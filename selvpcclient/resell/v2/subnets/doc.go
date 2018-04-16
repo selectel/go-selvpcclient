@@ -9,5 +9,15 @@ Example of getting a single subnet referenced by its id
     log.Fatal(err)
   }
   fmt.Println(subnet)
+
+Example of getting all subnets
+
+  allSubnets, _, err := subnets.List(ctx, resellClient)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, subnet := range allSubnet {
+    fmt.Println(subnet)
+  }
 */
 package subnets

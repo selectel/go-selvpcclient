@@ -31,3 +31,26 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*S
 
 	return result.Subnet, responseResult, nil
 }
+
+// List gets a list of subnets in the current domain.
+func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Subnet, *selvpcclient.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract subnets from the response body.
+	var result struct {
+		Subnets []*Subnet `json:"subnets"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Subnets, responseResult, nil
+}
