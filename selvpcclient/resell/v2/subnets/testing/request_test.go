@@ -143,3 +143,22 @@ func TestCreateSubnets(t *testing.T) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
+
+func TestDeleteSubnet(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testEnv.Mux.HandleFunc("/resell/v2/subnets/112233", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+
+		if r.Method != http.MethodDelete {
+			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
+		}
+	})
+
+	ctx := context.Background()
+	_, err := subnets.Delete(ctx, testEnv.Client, "112233")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
