@@ -18,7 +18,16 @@ const (
 
 	// DefaultUserAgent contains basic user agent that will be used in queries.
 	DefaultUserAgent = "selvpcclient/" + AppVersion
+
+	// IPv4 represents IP version 4.
+	IPv4 IPVersion = "ipv4"
+
+	// IPv6 represents IP version 6.
+	IPv6 IPVersion = "ipv6"
 )
+
+// IPVersion represents a type for the IP versions of the Resell API.
+type IPVersion string
 
 // ServiceClient stores details that are needed to work with different Selectel VPC APIs.
 type ServiceClient struct {
