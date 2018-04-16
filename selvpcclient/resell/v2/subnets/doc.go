@@ -19,5 +19,25 @@ Example of getting all subnets
   for _, subnet := range allSubnet {
     fmt.Println(subnet)
   }
+
+Example of creating subnets
+
+  createOpts := subnets.SubnetOpts{
+    Subnets: []subnets.SubnetOpt{
+      {
+        Region:       "ru-3",
+        Type:         selvpcclient.IPv4,
+        PrefixLength: 29,
+        Quantity:     1,
+      },
+    },
+	}
+  newSubnets, _, err := subnets.Create(ctx, resellClient, projectID, createOpts)
+  if err != nil {
+  	log.Fatal(err)
+  }
+  for _, newSubnet := range newSubnets {
+  	fmt.Printf("%v\n", newSubnet)
+  }
 */
 package subnets
