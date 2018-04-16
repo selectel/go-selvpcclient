@@ -39,5 +39,12 @@ Example of creating subnets
   for _, newSubnet := range newSubnets {
   	fmt.Printf("%v\n", newSubnet)
   }
+
+Example of deleting a single subnet
+
+  _, err = subnets.Delete(ctx, resellClient, subnetID)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package subnets
