@@ -39,5 +39,12 @@ Example of creating licenses in a project
   for _, newLicense := range newLicenses {
     fmt.Printf("%v\n", newLicense)
   }
+
+Example of deleting a single floating ip
+
+  _, err = licenses.Delete(ctx, resellClient, "5232d5f3-4950-454b-bd41-78c5295622cd")
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package licenses
