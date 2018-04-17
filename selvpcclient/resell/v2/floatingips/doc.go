@@ -23,7 +23,7 @@ Example of getting all floating ips
 Example of creating floating ips in a project
 
   newFloatingIPsOpts := floatingips.FloatingIPOpts{
-  FloatingIPs: []floatingips.FloatingIPOpt{
+    FloatingIPs: []floatingips.FloatingIPOpt{
       {
         Region:   "ru-2",
         Quantity: 2,
@@ -31,7 +31,7 @@ Example of creating floating ips in a project
     },
   }
   projectID := "49338ac045f448e294b25d013f890317"
-  newFloatingIPs, _, err := floatingips.Create(ctx, resellClient, projectID, newFipOpts)
+  newFloatingIPs, _, err := floatingips.Create(ctx, resellClient, projectID, newFloatingIPsOpts)
   if err != nil {
     log.Fatal(err)
   }
