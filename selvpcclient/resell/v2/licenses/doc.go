@@ -8,6 +8,16 @@ Example of getting a single license referenced by its id
   if err != nil {
     log.Fatal(err)
   }
-	fmt.Println(license)
+  fmt.Println(license)
+
+Example of getting all licenses
+
+  allLicenses, _, err := licenses.List(ctx, resellClient)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, license := range allLicenses {
+    fmt.Println(license)
+  }
 */
 package licenses

@@ -5,7 +5,7 @@ import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/servers"
 // License represents a single Resell Floating IP.
 type License struct {
 	// ID is a unique id of the license.
-	ID string `json:"id"`
+	ID int `json:"id"`
 
 	// ProjectID represents an associated Resell project.
 	ProjectID string `json:"project_id"`
