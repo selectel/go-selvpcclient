@@ -101,3 +101,53 @@ var TestListLicensesSingleResponse = []*licenses.License{
 		Type:      "license_windows_2012_standard",
 	},
 }
+
+// TestCreateLicenseOptsRaw represents marshalled options for the Create request.
+const TestCreateLicenseOptsRaw = `
+{
+    "licenses": [
+        {
+            "region": "ru-2",
+            "quantity": 1,
+            "type": "license_windows_2016_standard"
+        }
+    ]
+}
+`
+
+// TestCreateLicenseOpts represent options for the Create request.
+var TestCreateLicenseOpts = licenses.LicenseOpts{
+	Licenses: []licenses.LicenseOpt{
+		{
+			Region:   "ru-2",
+			Quantity: 1,
+			Type:     "license_windows_2016_standard",
+		},
+	},
+}
+
+// TestCreateLicenseResponseRaw represents a raw response from the Create request.
+const TestCreateLicenseResponseRaw = `
+{
+    "licenses": [
+        {
+            "type": "license_windows_2016_standard",
+            "status": "DOWN",
+            "region": "ru-2",
+            "project_id": "49338ac045f448e294b25d013f890317",
+            "id": 1123123
+        }
+    ]
+}
+`
+
+// TestCreateLicenseResponse represents the unmarshalled TestCreateFloatingIPResponseRaw response.
+var TestCreateLicenseResponse = []*licenses.License{
+	{
+		ID:        1123123,
+		ProjectID: "49338ac045f448e294b25d013f890317",
+		Region:    "ru-2",
+		Status:    "DOWN",
+		Type:      "license_windows_2016_standard",
+	},
+}
