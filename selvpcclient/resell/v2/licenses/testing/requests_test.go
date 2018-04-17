@@ -143,3 +143,22 @@ func TestCreateLicenses(t *testing.T) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
+
+func TestDeleteLicense(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testEnv.Mux.HandleFunc("/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+
+		if r.Method != http.MethodDelete {
+			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
+		}
+	})
+
+	ctx := context.Background()
+	_, err := licenses.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
