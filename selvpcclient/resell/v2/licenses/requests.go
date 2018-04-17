@@ -31,3 +31,26 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*L
 
 	return result.License, responseResult, nil
 }
+
+// List gets a list of licenses in the current domain.
+func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*License, *selvpcclient.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract licenses from the response body.
+	var result struct {
+		Licenses []*License `json:"licenses"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Licenses, responseResult, nil
+}
