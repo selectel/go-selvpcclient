@@ -109,3 +109,25 @@ var TestUpdateUserResponse = &users.User{
 	Name:    "UpdatedUser1",
 	Enabled: true,
 }
+
+// TestManyUsersInvalidResponseRaw represents a raw invalid response with several users.
+const TestManyUsersInvalidResponseRaw = `
+{
+    "users": [
+        {
+            "id": 222
+        }
+    ]
+}
+`
+
+// TestSingleUserInvalidResponseRaw represents a raw invalid response with a single user.
+const TestSingleUserInvalidResponseRaw = `
+{
+    "user": [
+        {
+            "id": 222
+        }
+    ]
+}
+`
