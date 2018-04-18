@@ -72,7 +72,7 @@ func TestListUsersSingle(t *testing.T) {
 	}
 }
 
-func TestListUsersError(t *testing.T) {
+func TestListUsersHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
@@ -86,9 +86,9 @@ func TestListUsersError(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	users, httpResponse, err := users.List(ctx, testEnv.Client)
+	allUsers, httpResponse, err := users.List(ctx, testEnv.Client)
 
-	if users != nil {
+	if allUsers != nil {
 		t.Fatal("expected no users from the List method")
 	}
 	if err == nil {
@@ -96,6 +96,23 @@ func TestListUsersError(t *testing.T) {
 	}
 	if httpResponse.StatusCode != http.StatusBadGateway {
 		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadGateway, httpResponse.StatusCode)
+	}
+}
+
+func TestListUsersTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	allUsers, _, err := users.List(ctx, testEnv.Client)
+
+	if allUsers != nil {
+		t.Fatal("expected no users from the List method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the List method")
 	}
 }
 
@@ -148,7 +165,7 @@ func TestCreateUser(t *testing.T) {
 	}
 }
 
-func TestCreateUserError(t *testing.T) {
+func TestCreateUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
@@ -184,16 +201,34 @@ func TestCreateUserError(t *testing.T) {
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
-	actualResponse, httpResponse, err := users.Create(ctx, testEnv.Client, createOpts)
+	user, httpResponse, err := users.Create(ctx, testEnv.Client, createOpts)
 
-	if actualResponse != nil {
-		t.Fatal("expected no actualResponse from the Create method")
+	if user != nil {
+		t.Fatal("expected no user from the Create method")
 	}
 	if err == nil {
 		t.Fatal("expected error from the Create method")
 	}
 	if httpResponse.StatusCode != http.StatusBadRequest {
 		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestCreateUserTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	createOpts := TestCreateUserOpts
+	user, _, err := users.Create(ctx, testEnv.Client, createOpts)
+
+	if user != nil {
+		t.Fatal("expected no users from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
 	}
 }
 
@@ -246,7 +281,7 @@ func TestUpdateUser(t *testing.T) {
 	}
 }
 
-func TestUpdateUserError(t *testing.T) {
+func TestUpdateUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
@@ -282,16 +317,34 @@ func TestUpdateUserError(t *testing.T) {
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
-	actualResponse, httpResponse, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, httpResponse, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
-	if actualResponse != nil {
-		t.Fatal("expected no actualResponse from the Update method")
+	if user != nil {
+		t.Fatal("expected no user from the Update method")
 	}
 	if err == nil {
 		t.Fatal("expected error from the Update method")
 	}
 	if httpResponse.StatusCode != http.StatusBadRequest {
 		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestUpdateUserTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	updateOpts := TestUpdateUserOpts
+	user, _, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+
+	if user != nil {
+		t.Fatal("expected no users from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
 	}
 }
 
