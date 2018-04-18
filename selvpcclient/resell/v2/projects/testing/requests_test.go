@@ -2,9 +2,6 @@ package testing
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,17 +11,13 @@ import (
 )
 
 func TestGetProject(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects/49338ac045f448e294b25d013f890317", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetProjectResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/49338ac045f448e294b25d013f890317",
+		TestGetProjectResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -32,6 +25,9 @@ func TestGetProject(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get project")
 	}
@@ -41,17 +37,13 @@ func TestGetProject(t *testing.T) {
 }
 
 func TestGetProjectSingleQuota(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects/49338ac045f448e294b25d013f890317", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetProjectResponseSingleQuotaRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/49338ac045f448e294b25d013f890317",
+		TestGetProjectResponseSingleQuotaRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -61,23 +53,22 @@ func TestGetProjectSingleQuota(t *testing.T) {
 
 	expected := TestGetProjectSingleQuotaResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestListProjects(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestListProjectsResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects",
+		TestListProjectsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := projects.List(ctx, testEnv.Client)
@@ -85,6 +76,9 @@ func TestListProjects(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get projects")
 	}
@@ -94,17 +88,13 @@ func TestListProjects(t *testing.T) {
 }
 
 func TestListProjectsSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestListProjectsResponseSingleRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects",
+		TestListProjectsResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := projects.List(ctx, testEnv.Client)
@@ -114,44 +104,23 @@ func TestListProjectsSingle(t *testing.T) {
 
 	expected := TestListProjectsSingleResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestCreateProject(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestCreateProjectResponseRaw)
-
-		if r.Method != http.MethodPost {
-			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestCreateProjectOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
+		TestCreateProjectResponseRaw, TestCreateProjectOptsRaw, http.MethodPost, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
@@ -162,44 +131,23 @@ func TestCreateProject(t *testing.T) {
 
 	expectedResponse := TestCreateProjectResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 
 func TestUpdateProject(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestUpdateProjectResponseRaw)
-
-		if r.Method != http.MethodPatch {
-			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestUpdateProjectOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		TestUpdateProjectResponseRaw, TestUpdateProjectOptsRaw, http.MethodPatch, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
@@ -210,26 +158,29 @@ func TestUpdateProject(t *testing.T) {
 
 	expectedResponse := TestUpdateProjectResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 
 func TestDeleteProject(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-
-		if r.Method != http.MethodDelete {
-			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	_, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 	if err != nil {
 		t.Fatal(err)
+	}
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
 	}
 }

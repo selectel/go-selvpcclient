@@ -2,9 +2,6 @@ package testing
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,18 +11,13 @@ import (
 )
 
 func TestListUsers(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestListUsersResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
+		TestListUsersResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := users.List(ctx, testEnv.Client)
@@ -33,6 +25,9 @@ func TestListUsers(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get users")
 	}
@@ -46,18 +41,14 @@ func TestListUsers(t *testing.T) {
 }
 
 func TestListUsersSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestListUsersSingleUserResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
+		TestListUsersSingleUserResponseRaw, http.MethodGet, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := users.List(ctx, testEnv.Client)
@@ -67,27 +58,30 @@ func TestListUsersSingle(t *testing.T) {
 
 	expected := TestListUsersSingleUserResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestListUsersHTTPError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadGateway)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
+		TestListUsersSingleUserResponseRaw, http.MethodGet, http.StatusBadGateway,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	allUsers, httpResponse, err := users.List(ctx, testEnv.Client)
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if allUsers != nil {
 		t.Fatal("expected no users from the List method")
 	}
@@ -95,7 +89,8 @@ func TestListUsersHTTPError(t *testing.T) {
 		t.Fatal("expected error from the List method")
 	}
 	if httpResponse.StatusCode != http.StatusBadGateway {
-		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadGateway, httpResponse.StatusCode)
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadGateway, httpResponse.StatusCode)
 	}
 }
 
@@ -117,22 +112,21 @@ func TestListUsersTimeoutError(t *testing.T) {
 }
 
 func TestListUsersUnmarshallError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestManyUsersInvalidResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
+		TestManyUsersInvalidResponseRaw, http.MethodGet, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	allUsers, _, err := users.List(ctx, testEnv.Client)
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if allUsers != nil {
 		t.Fatal("expected no users from the List method")
 	}
@@ -142,39 +136,14 @@ func TestListUsersUnmarshallError(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestCreateUserResponseRaw)
-
-		if r.Method != http.MethodPost {
-			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestCreateUserOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users",
+		TestCreateUserResponseRaw, TestCreateUserOptsRaw, http.MethodPost,
+		http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
@@ -185,49 +154,30 @@ func TestCreateUser(t *testing.T) {
 
 	expectedResponse := TestCreateUserResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 
 func TestCreateUserHTTPError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-
-		if r.Method != http.MethodPost {
-			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestCreateUserOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users", "",
+		TestCreateUserOptsRaw, http.MethodPost, http.StatusBadRequest, &endpointCalled, t)
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
 	user, httpResponse, err := users.Create(ctx, testEnv.Client, createOpts)
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if user != nil {
 		t.Fatal("expected no user from the Create method")
 	}
@@ -258,44 +208,21 @@ func TestCreateUserTimeoutError(t *testing.T) {
 }
 
 func TestCreateUserUnmarshallError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestSingleUserInvalidResponseRaw)
-
-		if r.Method != http.MethodPost {
-			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestCreateUserOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users", TestSingleUserInvalidResponseRaw,
+		TestCreateUserOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
 	user, _, err := users.Create(ctx, testEnv.Client, createOpts)
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if user != nil {
 		t.Fatal("expected no user from the Create method")
 	}
@@ -305,39 +232,14 @@ func TestCreateUserUnmarshallError(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestUpdateUserResponseRaw)
-
-		if r.Method != http.MethodPatch {
-			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestUpdateUserOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		TestUpdateUserResponseRaw, TestUpdateUserOptsRaw, http.MethodPatch, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
@@ -348,49 +250,30 @@ func TestUpdateUser(t *testing.T) {
 
 	expectedResponse := TestUpdateUserResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 
 func TestUpdateUserHTTPError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-
-		if r.Method != http.MethodPatch {
-			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestUpdateUserOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		"", TestUpdateUserOptsRaw, http.MethodPatch, http.StatusBadRequest, &endpointCalled, t)
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
 	user, httpResponse, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if user != nil {
 		t.Fatal("expected no user from the Update method")
 	}
@@ -421,44 +304,22 @@ func TestUpdateUserTimeoutError(t *testing.T) {
 }
 
 func TestUpdateUserUnmarshallError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, TestSingleUserInvalidResponseRaw)
-
-		if r.Method != http.MethodPatch {
-			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestUpdateUserOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		TestSingleUserInvalidResponseRaw, TestUpdateUserOptsRaw, http.MethodPatch,
+		http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
 	user, _, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if user != nil {
 		t.Fatal("expected no user from the Update method")
 	}
@@ -468,40 +329,39 @@ func TestUpdateUserUnmarshallError(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-
-		if r.Method != http.MethodDelete {
-			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	_, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 	if err != nil {
 		t.Fatal(err)
 	}
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 }
 
 func TestDeleteUserHTTPError(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadGateway)
-
-		if r.Method != http.MethodDelete {
-			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
 
 	ctx := context.Background()
 	httpResponse, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if err == nil {
 		t.Fatal("expected error from the Delete method")
 	}

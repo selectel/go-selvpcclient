@@ -2,9 +2,6 @@ package testing
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,17 +11,13 @@ import (
 )
 
 func TestGetAllQuotas(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetAllQuotasResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas",
+		TestGetAllQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetAll(ctx, testEnv.Client)
@@ -32,6 +25,9 @@ func TestGetAllQuotas(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get quotas")
 	}
@@ -50,17 +46,13 @@ func TestGetAllQuotas(t *testing.T) {
 }
 
 func TestGetAllQuotasSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetAllQuotasResponseSingleRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas",
+		TestGetAllQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetAll(ctx, testEnv.Client)
@@ -70,23 +62,22 @@ func TestGetAllQuotasSingle(t *testing.T) {
 
 	expected := TestGetAllQuotasResponseSingle
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestGetFreeQuotas(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/free", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetFreeQuotasResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/free",
+		TestGetFreeQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetFree(ctx, testEnv.Client)
@@ -94,6 +85,9 @@ func TestGetFreeQuotas(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get quotas")
 	}
@@ -112,17 +106,13 @@ func TestGetFreeQuotas(t *testing.T) {
 }
 
 func TestGetFreeQuotasSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/free", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetFreeQuotasResponseSingleRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/free",
+		TestGetFreeQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetFree(ctx, testEnv.Client)
@@ -132,23 +122,22 @@ func TestGetFreeQuotasSingle(t *testing.T) {
 
 	expected := TestGetFreeQuotasResponseSingle
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestGetProjectsQuotas(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetProjectsQuotasResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects",
+		TestGetProjectsQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
@@ -156,6 +145,9 @@ func TestGetProjectsQuotas(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get quotas")
 	}
@@ -174,17 +166,13 @@ func TestGetProjectsQuotas(t *testing.T) {
 }
 
 func TestGetProjectsQuotasSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetProjectsQuotasResponseSingleRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects",
+		TestGetProjectsQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
@@ -194,23 +182,22 @@ func TestGetProjectsQuotasSingle(t *testing.T) {
 
 	expected := TestGetProjectsQuotasResponseSingle
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestGetProjectQuotas(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetProjectQuotasResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		TestGetProjectQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
@@ -218,6 +205,9 @@ func TestGetProjectQuotas(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get quotas")
 	}
@@ -236,17 +226,13 @@ func TestGetProjectQuotas(t *testing.T) {
 }
 
 func TestGetProjectQuotasSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetProjectQuotasResponseSingleRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		TestGetProjectQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
@@ -256,44 +242,23 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 
 	expected := TestGetProjectQuotasResponseSingle
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestUpdateProjectQuotas(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestUpdateProjectQuotasResponseRaw)
-
-		if r.Method != http.MethodPatch {
-			t.Fatalf("expected %s method but got %s", http.MethodPatch, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestUpdateQuotasOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v update options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		TestUpdateProjectQuotasResponseRaw, TestUpdateQuotasOptsRaw, http.MethodPatch, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
@@ -304,6 +269,9 @@ func TestUpdateProjectQuotas(t *testing.T) {
 
 	expectedResponse := TestUpdateProjectQuotasResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
