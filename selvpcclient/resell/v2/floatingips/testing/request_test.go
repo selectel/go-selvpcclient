@@ -2,9 +2,6 @@ package testing
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,17 +11,13 @@ import (
 )
 
 func TestGetFloatingIP(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetFloatingIPResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		TestGetFloatingIPResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
@@ -34,23 +27,22 @@ func TestGetFloatingIP(t *testing.T) {
 
 	expected := TestGetFloatingIPResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestListFloatingIPs(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/floatingips", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestListFloatingIPsResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips",
+		TestListFloatingIPsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := floatingips.List(ctx, testEnv.Client)
@@ -58,6 +50,9 @@ func TestListFloatingIPs(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get floating ips")
 	}
@@ -71,17 +66,13 @@ func TestListFloatingIPs(t *testing.T) {
 }
 
 func TestListFloatingIPsSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/floatingips", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestListFloatingIPsSingleResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips",
+		TestListFloatingIPsSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := floatingips.List(ctx, testEnv.Client)
@@ -91,44 +82,23 @@ func TestListFloatingIPsSingle(t *testing.T) {
 
 	expected := TestListFloatingIPsSingleResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestCreateFloatingIPs(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestCreateFloatingIPResponseRaw)
-
-		if r.Method != http.MethodPost {
-			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestCreateFloatingIPOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
+		TestCreateFloatingIPResponseRaw, TestCreateFloatingIPOptsRaw, http.MethodPost, http.StatusOK,
+		&endpointCalled, t)
 
 	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
@@ -139,26 +109,29 @@ func TestCreateFloatingIPs(t *testing.T) {
 
 	expectedResponse := TestCreateFloatingIPResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 
 func TestDeleteFloatingIP(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-
-		if r.Method != http.MethodDelete {
-			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	_, err := floatingips.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 	if err != nil {
 		t.Fatal(err)
+	}
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
 	}
 }

@@ -2,9 +2,6 @@ package testing
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,17 +11,13 @@ import (
 )
 
 func TestGetSubnet(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/subnets/111122", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestGetSubnetResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/subnets/111122",
+		TestGetSubnetResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := subnets.Get(ctx, testEnv.Client, "111122")
@@ -34,23 +27,22 @@ func TestGetSubnet(t *testing.T) {
 
 	expected := TestGetSubnetResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestListSubnets(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/subnets", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestListSubnetsResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/subnets",
+		TestListSubnetsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := subnets.List(ctx, testEnv.Client)
@@ -58,6 +50,9 @@ func TestListSubnets(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if actual == nil {
 		t.Fatal("didn't get subnets")
 	}
@@ -71,17 +66,13 @@ func TestListSubnets(t *testing.T) {
 }
 
 func TestListSubnetsSingle(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/subnets", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestListSubnetsSingleResponseRaw)
-
-		if r.Method != http.MethodGet {
-			t.Fatalf("expected %s method but got %s", http.MethodGet, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/subnets",
+		TestListSubnetsSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	actual, _, err := subnets.List(ctx, testEnv.Client)
@@ -91,44 +82,23 @@ func TestListSubnetsSingle(t *testing.T) {
 
 	expected := TestListSubnetsSingleResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected %#v, but got %#v", expected, actual)
 	}
 }
 
 func TestCreateSubnets(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, TestCreateSubnetsResponseRaw)
-
-		if r.Method != http.MethodPost {
-			t.Fatalf("expected %s method but got %s", http.MethodPost, r.Method)
-		}
-
-		b, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("unable to read the request body: %v", err)
-		}
-
-		var actualRequest interface{}
-		err = json.Unmarshal(b, &actualRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal the request body: %v", err)
-		}
-
-		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(TestCreateSubnetsOptsRaw), &expectedRequest)
-		if err != nil {
-			t.Errorf("unable to unmarshal expected raw response: %v", err)
-		}
-
-		if !reflect.DeepEqual(actualRequest, expectedRequest) {
-			t.Fatalf("expected %#v create options, but got %#v", expectedRequest, actualRequest)
-		}
-	})
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
+		TestCreateSubnetsResponseRaw, TestCreateSubnetsOptsRaw, http.MethodPost,
+		http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	createOpts := TestCreateSubnetsOpts
@@ -139,26 +109,30 @@ func TestCreateSubnets(t *testing.T) {
 
 	expectedResponse := TestCreateSubnetResponse
 
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
 		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 
 func TestDeleteSubnet(t *testing.T) {
+	endpointCalled := false
+
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testEnv.Mux.HandleFunc("/resell/v2/subnets/112233", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-
-		if r.Method != http.MethodDelete {
-			t.Fatalf("expected %s method but got %s", http.MethodDelete, r.Method)
-		}
-	})
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/subnets/112233", "",
+		http.MethodDelete, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
 	_, err := subnets.Delete(ctx, testEnv.Client, "112233")
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
 	}
 }
