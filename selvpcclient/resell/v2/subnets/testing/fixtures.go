@@ -177,3 +177,25 @@ var TestCreateSubnetResponse = []*subnets.Subnet{
 		Status:    "DOWN",
 	},
 }
+
+// TestManySubnetsInvalidResponseRaw represents a raw invalid response with several subnets.
+const TestManySubnetsInvalidResponseRaw = `
+{
+    "subnets": [
+        {
+            "id": "222"
+        }
+    ]
+}
+`
+
+// TestSingleSubnetInvalidResponseRaw represents a raw invalid response with a single subnet.
+const TestSingleSubnetInvalidResponseRaw = `
+{
+    "subnet": [
+        {
+            "id": "222"
+        }
+    ]
+}
+`
