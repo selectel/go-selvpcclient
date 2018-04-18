@@ -11,11 +11,23 @@ import (
 const APIVersion = "v2"
 
 // NewV2ResellClient initializes a new Resell client for the V2 API.
-func NewV2ResellClient(TokenID string) *selvpcclient.ServiceClient {
+func NewV2ResellClient(tokenID string) *selvpcclient.ServiceClient {
 	resellClient := &selvpcclient.ServiceClient{
 		HTTPClient: &http.Client{},
 		Endpoint:   resell.Endpoint + "/" + APIVersion,
-		TokenID:    TokenID,
+		TokenID:    tokenID,
+		UserAgent:  resell.UserAgent,
+	}
+
+	return resellClient
+}
+
+// NewV2ResellClientWithEndpoint initializes a new Resell client for the V2 API with custom endpoint.
+func NewV2ResellClientWithEndpoint(tokenID, endpoint string) *selvpcclient.ServiceClient {
+	resellClient := &selvpcclient.ServiceClient{
+		HTTPClient: &http.Client{},
+		Endpoint:   endpoint,
+		TokenID:    tokenID,
 		UserAgent:  resell.UserAgent,
 	}
 
