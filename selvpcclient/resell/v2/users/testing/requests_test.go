@@ -111,7 +111,7 @@ func TestListUsersTimeoutError(t *testing.T) {
 	}
 }
 
-func TestListUsersUnmarshallError(t *testing.T) {
+func TestListUsersUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()
@@ -207,7 +207,7 @@ func TestCreateUserTimeoutError(t *testing.T) {
 	}
 }
 
-func TestCreateUserUnmarshallError(t *testing.T) {
+func TestCreateUserUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()
@@ -303,7 +303,7 @@ func TestUpdateUserTimeoutError(t *testing.T) {
 	}
 }
 
-func TestUpdateUserUnmarshallError(t *testing.T) {
+func TestUpdateUserUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()
