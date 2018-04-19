@@ -255,3 +255,23 @@ var TestUpdateProjectResponse = &projects.Project{
 	},
 	CustomURL: "",
 }
+
+// TestManyProjectsInvalidResponseRaw represents a raw invalid response with many projects.
+const TestManyProjectsInvalidResponseRaw = `
+{
+    "projects": [
+        {
+            "id": 12
+        }
+    ]
+}
+`
+
+// TestSingleProjectInvalidResponseRaw represents a raw invalid response with a single project.
+const TestSingleProjectInvalidResponseRaw = `
+{
+    "project": {
+        "id": 12
+    }
+}
+`
