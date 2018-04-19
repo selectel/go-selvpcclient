@@ -175,3 +175,23 @@ var TestCreateFloatingIPResponse = []*floatingips.FloatingIP{
 		Status:            "DOWN",
 	},
 }
+
+// TestManyFloatingIPsInvalidResponseRaw represents a raw invalid response with several floating ips.
+const TestManyFloatingIPsInvalidResponseRaw = `
+{
+    "floatingips": [
+        {
+            "id": 123
+        }
+    ]
+}
+`
+
+// TestSingleFloatingIPInvalidResponseRaw represents a raw invalid response with a single floating ip.
+const TestSingleFloatingIPInvalidResponseRaw = `
+{
+    "floatingip": {
+        "id": 123
+    }
+}
+`
