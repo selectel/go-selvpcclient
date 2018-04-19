@@ -197,10 +197,10 @@ func TestListSubnetsTimeoutError(t *testing.T) {
 	allSubnet, _, err := subnets.List(ctx, testEnv.Client)
 
 	if allSubnet != nil {
-		t.Fatal("expected no subnets from the Get method")
+		t.Fatal("expected no subnets from the List method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the Get method")
+		t.Fatal("expected error from the List method")
 	}
 }
 

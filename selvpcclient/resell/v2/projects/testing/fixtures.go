@@ -255,3 +255,37 @@ var TestUpdateProjectResponse = &projects.Project{
 	},
 	CustomURL: "",
 }
+
+// TestManyProjectsInvalidResponseRaw represents a raw invalid response with many projects.
+const TestManyProjectsInvalidResponseRaw = `
+{
+    "projects": [
+        {
+            "id": 12
+        }
+    ]
+}
+`
+
+// TestSingleProjectInvalidResponseRaw represents a raw invalid response with a single project.
+const TestSingleProjectInvalidResponseRaw = `
+{
+    "project": {
+        "id": 12
+    }
+}
+`
+
+// TestCreateProjectNoQuotasOptsRaw represents a raw request body without quotas.
+const TestCreateProjectNoQuotasOptsRaw = `
+{
+    "project": {
+        "name": "Project2"
+    }
+}
+`
+
+// TestCreateProjectNoQuotasOpts represents project create options without quotas.
+var TestCreateProjectNoQuotasOpts = projects.CreateOpts{
+	Name: "Project2",
+}

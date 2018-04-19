@@ -622,3 +622,20 @@ func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the Update method")
 	}
 }
+
+func TestUpdateProjectQuotasMarshallError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	updateOpts := TestUpdateQuotasInvalidOpts
+	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+
+	if allQuotas != nil {
+		t.Fatal("expected no quotas from the Update method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Update method")
+	}
+}

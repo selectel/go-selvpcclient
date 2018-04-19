@@ -331,3 +331,15 @@ const TestQuotasInvalidResponseRaw = `
     }
 }
 `
+
+// TestUpdateQuotasInvalidOptsRaw represents a raw request body without quotas.
+const TestUpdateQuotasInvalidOptsRaw = `
+{
+    "quotas": {}
+}
+`
+
+// TestUpdateQuotasInvalidOpts represents update opts without quotas.
+var TestUpdateQuotasInvalidOpts = quotas.UpdateProjectQuotasOpts{
+	QuotasOpts: []quotas.QuotaOpts{},
+}
