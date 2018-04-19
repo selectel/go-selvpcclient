@@ -316,3 +316,18 @@ var TestUpdateProjectQuotasResponse = []*quotas.Quota{
 		},
 	},
 }
+
+// TestQuotasInvalidResponseRaw represents a raw invalid quotas response.
+const TestQuotasInvalidResponseRaw = `
+{
+    "quotas": {
+        111: [
+            {
+                "region": "ru-2",
+                "value": 64000,
+                "zone": "ru-2a"
+            }
+        ]
+    }
+}
+`
