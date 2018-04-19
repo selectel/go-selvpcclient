@@ -151,3 +151,23 @@ var TestCreateLicenseResponse = []*licenses.License{
 		Type:      "license_windows_2016_standard",
 	},
 }
+
+// TestManyLicensesInvalidResponseRaw represents a raw invalid response with several licenses.
+const TestManyLicensesInvalidResponseRaw = `
+{
+    "licenses": [
+        {
+            "id": "49338ac045f448e294b25d013f890317"
+        }
+    ]
+}
+`
+
+// TestSingleLicenseInvalidResponseRaw represents a raw invalid response with a single license.
+const TestSingleLicenseInvalidResponseRaw = `
+{
+    "license": {
+        "id": "49338ac045f448e294b25d013f890317"
+    }
+}
+`
