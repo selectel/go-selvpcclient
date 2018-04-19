@@ -275,3 +275,17 @@ const TestSingleProjectInvalidResponseRaw = `
     }
 }
 `
+
+// TestCreateProjectNoQuotasOptsRaw represents a raw request body without quotas.
+const TestCreateProjectNoQuotasOptsRaw = `
+{
+    "project": {
+        "name": "Project2"
+    }
+}
+`
+
+// TestCreateProjectNoQuotasOpts represents project create options without quotas.
+var TestCreateProjectNoQuotasOpts = projects.CreateOpts{
+	Name: "Project2",
+}

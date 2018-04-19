@@ -348,6 +348,32 @@ func TestCreateProjectsUnmarshalError(t *testing.T) {
 	}
 }
 
+func TestCreateProjectsNoQuotas(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
+		TestCreateProjectResponseRaw, TestCreateProjectNoQuotasOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateProjectNoQuotasOpts
+	actualResponse, _, err := projects.Create(ctx, testEnv.Client, createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestCreateProjectResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
 func TestUpdateProject(t *testing.T) {
 	endpointCalled := false
 
