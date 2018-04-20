@@ -2,8 +2,8 @@ package testing
 
 import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/roles"
 
-// TestListResponseRaw represents a raw response from List requests.
-const TestListResponseRaw = `
+// TestListProjectResponseRaw represents a raw response from ListProject requests.
+const TestListProjectResponseRaw = `
 {
     "roles": [
         {
@@ -41,6 +41,26 @@ var TestListResponseSingle = []*roles.Role{
 		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
 	},
 }
+
+// TestListUserResponseRaw represents a raw response from ListUser requests.
+const TestListUserResponseRaw = `
+{
+    "roles": [
+        {
+            "project_id": "81800a8ec3fc49fca2cf00857de3ae9d",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        },
+        {
+            "project_id": "d7452adc9769422a908edfd2281d7c55",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        },
+        {
+            "project_id": "49338ac045f448e294b25d013f890317",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        }
+    ]
+}
+`
 
 // TestManyRolesInvalidResponseRaw represents a raw invalid response with several roles.
 const TestManyRolesInvalidResponseRaw = `
