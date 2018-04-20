@@ -21,5 +21,17 @@ Example of getting roles for the specified user
   for _, myRole := range allRoles {
     fmt.Println(myRole)
   }
+
+Example of creating a single role
+
+  createOpts := roles.RoleOpt{
+    ProjectID: "49338ac045f448e294b25d013f890317",
+    UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+  }
+  role, _, err := roles.Create(ctx, resellClient, createOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  fmt.Println(myRole)
 */
 package roles
