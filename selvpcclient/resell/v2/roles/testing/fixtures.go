@@ -62,6 +62,28 @@ const TestListUserResponseRaw = `
 }
 `
 
+// TestCreateRoleOpts represent options for the Create request.
+var TestCreateRoleOpts = roles.RoleOpt{
+	ProjectID: "49338ac045f448e294b25d013f890317",
+	UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+}
+
+// TestCreateRoleResponseRaw represents a raw response from the Create request.
+const TestCreateRoleResponseRaw = `
+{
+    "role": {
+        "project_id": "49338ac045f448e294b25d013f890317",
+        "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+    }
+}
+`
+
+// TestCreateRoleResponse represents the unmarshalled TestCreateRoleResponseRaw response.
+var TestCreateRoleResponse = &roles.Role{
+	ProjectID: "49338ac045f448e294b25d013f890317",
+	UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+}
+
 // TestManyRolesInvalidResponseRaw represents a raw invalid response with several roles.
 const TestManyRolesInvalidResponseRaw = `
 {
@@ -70,5 +92,14 @@ const TestManyRolesInvalidResponseRaw = `
             "project_id": 123
         }
     ]
+}
+`
+
+// TestSingleRoleInvalidResponseRaw represents a raw invalid response with a single role.
+const TestSingleRoleInvalidResponseRaw = `
+{
+    "role": {
+        "project_id": 123
+    }
 }
 `

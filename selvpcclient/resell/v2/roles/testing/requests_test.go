@@ -257,3 +257,114 @@ func TestListRolesUserUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the List method")
 	}
 }
+
+func TestCreateRole(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux,
+		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		TestCreateRoleResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := roles.RoleOpt{
+		ProjectID: "49338ac045f448e294b25d013f890317",
+		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+	}
+	actual, _, err := roles.Create(ctx, testEnv.Client, createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := TestCreateRoleResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	}
+}
+
+func TestCreateRoleHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux,
+		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		TestCreateRoleResponseRaw, http.MethodPost, http.StatusBadGateway, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := roles.RoleOpt{
+		ProjectID: "49338ac045f448e294b25d013f890317",
+		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+	}
+	role, httpResponse, err := roles.Create(ctx, testEnv.Client, createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if role != nil {
+		t.Fatal("expected no role from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadGateway, httpResponse.StatusCode)
+	}
+}
+
+func TestCreateRoleTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	createOpts := roles.RoleOpt{
+		ProjectID: "49338ac045f448e294b25d013f890317",
+		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+	}
+	role, _, err := roles.Create(ctx, testEnv.Client, createOpts)
+
+	if role != nil {
+		t.Fatal("expected no role from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}
+
+func TestCreateRoleUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux,
+		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		TestSingleRoleInvalidResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := roles.RoleOpt{
+		ProjectID: "49338ac045f448e294b25d013f890317",
+		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+	}
+	role, _, err := roles.Create(ctx, testEnv.Client, createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if role != nil {
+		t.Fatal("expected no role from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}
