@@ -33,5 +33,24 @@ Example of creating a single role
     log.Fatal(err)
   }
   fmt.Println(myRole)
+
+Example of creating several roles
+
+  createOpts := roles.RoleOpts{
+    Roles: []roles.RoleOpt{
+      {
+        ProjectID: "81800a8ec3fc49fca2cf00857de3ae9d",
+        UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+      },
+      {
+        ProjectID: "d7452adc9769422a908edfd2281d7c55",
+        UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+      },
+    },
+  }
+  allRoles, httpResponse, err := roles.CreateBulk(ctx, testEnv.Client, createOpts)
+  for _, myRole := range allRoles {
+    fmt.Println(myRole)
+  }
 */
 package roles

@@ -84,6 +84,52 @@ var TestCreateRoleResponse = &roles.Role{
 	UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
 }
 
+// TestCreateRolesOptsRaw represent raw options for the Create request.
+const TestCreateRolesOptsRaw = `
+{
+    "roles": [
+        {
+            "project_id": "81800a8ec3fc49fca2cf00857de3ae9d",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        },
+        {
+            "project_id": "d7452adc9769422a908edfd2281d7c55",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        }
+    ]
+}
+`
+
+// TestCreateRolesOpts represent options for the Create request.
+var TestCreateRolesOpts = roles.RoleOpts{
+	Roles: []roles.RoleOpt{
+		{
+			ProjectID: "81800a8ec3fc49fca2cf00857de3ae9d",
+			UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+		},
+		{
+			ProjectID: "d7452adc9769422a908edfd2281d7c55",
+			UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+		},
+	},
+}
+
+// TestCreateRolesResponseRaw represents a raw response from the Create request.
+const TestCreateRolesResponseRaw = `
+{
+    "roles": [
+        {
+            "project_id": "81800a8ec3fc49fca2cf00857de3ae9d",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        },
+        {
+            "project_id": "d7452adc9769422a908edfd2281d7c55",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        }
+    ]
+}
+`
+
 // TestManyRolesInvalidResponseRaw represents a raw invalid response with several roles.
 const TestManyRolesInvalidResponseRaw = `
 {
