@@ -1,7 +1,9 @@
 package roles
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -76,4 +78,33 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 	}
 
 	return result.Role, responseResult, nil
+}
+
+// CreateBulk requests a creation of several roles.
+func CreateBulk(ctx context.Context, client *selvpcclient.ServiceClient, createOpts RoleOpts) ([]*Role, *selvpcclient.ResponseResult, error) {
+	createRolesOpts := &createOpts
+	requestBody, err := json.Marshal(createRolesOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+	responseResult, err := client.DoRequest(ctx, "POST", url, bytes.NewReader(requestBody))
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract role from the response body.
+	var result struct {
+		Roles []*Role `json:"roles"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Roles, responseResult, nil
 }

@@ -269,10 +269,7 @@ func TestCreateRole(t *testing.T) {
 		TestCreateRoleResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	createOpts := roles.RoleOpt{
-		ProjectID: "49338ac045f448e294b25d013f890317",
-		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
-	}
+	createOpts := TestCreateRoleOpts
 	actual, _, err := roles.Create(ctx, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
@@ -299,10 +296,7 @@ func TestCreateRoleHTTPError(t *testing.T) {
 		TestCreateRoleResponseRaw, http.MethodPost, http.StatusBadGateway, &endpointCalled, t)
 
 	ctx := context.Background()
-	createOpts := roles.RoleOpt{
-		ProjectID: "49338ac045f448e294b25d013f890317",
-		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
-	}
+	createOpts := TestCreateRoleOpts
 	role, httpResponse, err := roles.Create(ctx, testEnv.Client, createOpts)
 
 	if !endpointCalled {
@@ -327,10 +321,7 @@ func TestCreateRoleTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	createOpts := roles.RoleOpt{
-		ProjectID: "49338ac045f448e294b25d013f890317",
-		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
-	}
+	createOpts := TestCreateRoleOpts
 	role, _, err := roles.Create(ctx, testEnv.Client, createOpts)
 
 	if role != nil {
@@ -352,10 +343,7 @@ func TestCreateRoleUnmarshalError(t *testing.T) {
 		TestSingleRoleInvalidResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	createOpts := roles.RoleOpt{
-		ProjectID: "49338ac045f448e294b25d013f890317",
-		UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
-	}
+	createOpts := TestCreateRoleOpts
 	role, _, err := roles.Create(ctx, testEnv.Client, createOpts)
 
 	if !endpointCalled {
@@ -366,5 +354,109 @@ func TestCreateRoleUnmarshalError(t *testing.T) {
 	}
 	if err == nil {
 		t.Fatal("expected error from the Create method")
+	}
+}
+
+func TestCreateRolesBulk(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/roles",
+		TestCreateRolesResponseRaw, TestCreateRolesOptsRaw, http.MethodPost, http.StatusOK,
+		&endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateRolesOpts
+	actual, _, err := roles.CreateBulk(ctx, testEnv.Client, createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if actual == nil {
+		t.Fatal("didn't get roles")
+	}
+	actualKind := reflect.TypeOf(actual).Kind()
+	if actualKind != reflect.Slice {
+		t.Errorf("expected slice of pointers to roles, but got %v", actualKind)
+	}
+	if len(actual) != 2 {
+		t.Errorf("expected 2 roles, but got %d", len(actual))
+	}
+}
+
+func TestCreateRolesBulkHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/roles",
+		TestCreateRolesResponseRaw, TestCreateRolesOptsRaw, http.MethodPost,
+		http.StatusBadGateway, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateRolesOpts
+	allRoles, httpResponse, err := roles.CreateBulk(ctx, testEnv.Client, createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if allRoles != nil {
+		t.Fatal("expected no roles from the CreateBulk method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the CreateBulk method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadGateway, httpResponse.StatusCode)
+	}
+}
+
+func TestCreateRolesBulkTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	createOpts := TestCreateRolesOpts
+	allRoles, _, err := roles.CreateBulk(ctx, testEnv.Client, createOpts)
+
+	if allRoles != nil {
+		t.Fatal("expected no role from the CreateBulk method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the CreateBulk method")
+	}
+}
+
+func TestCreateRolesBulkUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/roles",
+		TestManyRolesInvalidResponseRaw, TestCreateRolesOptsRaw, http.MethodPost,
+		http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateRolesOpts
+	allRoles, _, err := roles.CreateBulk(ctx, testEnv.Client, createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if allRoles != nil {
+		t.Fatal("expected no role from the CreateBulk method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the CreateBulk method")
 	}
 }
