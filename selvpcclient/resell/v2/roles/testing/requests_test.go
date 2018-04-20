@@ -269,7 +269,7 @@ func TestCreateRole(t *testing.T) {
 		TestCreateRoleResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	createOpts := TestCreateRoleOpts
+	createOpts := TestRoleOpt
 	actual, _, err := roles.Create(ctx, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
@@ -296,7 +296,7 @@ func TestCreateRoleHTTPError(t *testing.T) {
 		TestCreateRoleResponseRaw, http.MethodPost, http.StatusBadGateway, &endpointCalled, t)
 
 	ctx := context.Background()
-	createOpts := TestCreateRoleOpts
+	createOpts := TestRoleOpt
 	role, httpResponse, err := roles.Create(ctx, testEnv.Client, createOpts)
 
 	if !endpointCalled {
@@ -321,7 +321,7 @@ func TestCreateRoleTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	createOpts := TestCreateRoleOpts
+	createOpts := TestRoleOpt
 	role, _, err := roles.Create(ctx, testEnv.Client, createOpts)
 
 	if role != nil {
@@ -343,7 +343,7 @@ func TestCreateRoleUnmarshalError(t *testing.T) {
 		TestSingleRoleInvalidResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	createOpts := TestCreateRoleOpts
+	createOpts := TestRoleOpt
 	role, _, err := roles.Create(ctx, testEnv.Client, createOpts)
 
 	if !endpointCalled {
@@ -458,5 +458,66 @@ func TestCreateRolesBulkUnmarshalError(t *testing.T) {
 	}
 	if err == nil {
 		t.Fatal("expected error from the CreateBulk method")
+	}
+}
+
+func TestDeleteRole(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux,
+		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	deleteOpts := TestRoleOpt
+	_, err := roles.Delete(ctx, testEnv.Client, deleteOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+}
+
+func TestDeleteRoleHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux,
+		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+
+	ctx := context.Background()
+	deleteOpts := TestRoleOpt
+	httpResponse, err := roles.Delete(ctx, testEnv.Client, deleteOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestDeleteRoleTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	deleteOpts := TestRoleOpt
+	_, err := roles.Delete(ctx, testEnv.Client, deleteOpts)
+
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
 	}
 }

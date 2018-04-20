@@ -62,8 +62,8 @@ const TestListUserResponseRaw = `
 }
 `
 
-// TestCreateRoleOpts represent options for the Create request.
-var TestCreateRoleOpts = roles.RoleOpt{
+// TestRoleOpt represent options for the Create and Delete requests.
+var TestRoleOpt = roles.RoleOpt{
 	ProjectID: "49338ac045f448e294b25d013f890317",
 	UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
 }

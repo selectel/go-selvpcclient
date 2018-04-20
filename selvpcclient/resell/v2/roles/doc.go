@@ -52,5 +52,17 @@ Example of creating several roles
   for _, myRole := range allRoles {
     fmt.Println(myRole)
   }
+
+
+Example of deleting a single role
+
+  deleteOpts := roles.RoleOpt{
+    ProjectID: "49338ac045f448e294b25d013f890317",
+    UserID:    "763eecfaeb0c8e9b76ab12a82eb4c11",
+  }
+  _, err := roles.Delete(ctx, resellClient, deleteOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package roles

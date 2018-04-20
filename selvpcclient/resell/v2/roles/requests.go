@@ -108,3 +108,16 @@ func CreateBulk(ctx context.Context, client *selvpcclient.ServiceClient, createO
 
 	return result.Roles, responseResult, nil
 }
+
+// Delete requests a deletion of the single role for the specified project and user.
+func Delete(ctx context.Context, client *selvpcclient.ServiceClient, deleteOpts RoleOpt) (*selvpcclient.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", deleteOpts.ProjectID, "users", deleteOpts.UserID}, "/")
+	responseResult, err := client.DoRequest(ctx, "DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	if responseResult.Err != nil {
+		return responseResult, responseResult.Err
+	}
+	return responseResult, nil
+}
