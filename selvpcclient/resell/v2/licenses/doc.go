@@ -32,7 +32,7 @@ Example of creating licenses in a project
     },
   }
   projectID := "49338ac045f448e294b25d013f890317"
-  newLicenses, _, err := floatingips.Create(ctx, resellClient, projectID, newLicensesOptions)
+  newLicenses, _, err := licenses.Create(ctx, resellClient, projectID, newLicensesOptions)
   if err != nil {
     log.Fatal(err)
   }
@@ -40,7 +40,7 @@ Example of creating licenses in a project
     fmt.Printf("%v\n", newLicense)
   }
 
-Example of deleting a single floating ip
+Example of deleting a single license
 
   _, err = licenses.Delete(ctx, resellClient, "5232d5f3-4950-454b-bd41-78c5295622cd")
   if err != nil {

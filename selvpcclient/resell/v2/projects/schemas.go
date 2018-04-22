@@ -6,7 +6,7 @@ import (
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
 )
 
-// Project represents a single Resell project.
+// Project represents a single Identity service project.
 type Project struct {
 	// ID is a unique id of a project.
 	ID string `json:"-"`

@@ -141,7 +141,7 @@ const TestCreateLicenseResponseRaw = `
 }
 `
 
-// TestCreateLicenseResponse represents the unmarshalled TestCreateFloatingIPResponseRaw response.
+// TestCreateLicenseResponse represents the unmarshalled TestCreateLicenseResponseRaw response.
 var TestCreateLicenseResponse = []*licenses.License{
 	{
 		ID:        1123123,

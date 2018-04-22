@@ -22,7 +22,7 @@ func NewV2ResellClient(tokenID string) *selvpcclient.ServiceClient {
 	return resellClient
 }
 
-// NewV2ResellClientWithEndpoint initializes a new Resell client for the V2 API with custom endpoint.
+// NewV2ResellClientWithEndpoint initializes a new Resell client for the V2 API with a custom endpoint.
 func NewV2ResellClientWithEndpoint(tokenID, endpoint string) *selvpcclient.ServiceClient {
 	resellClient := &selvpcclient.ServiceClient{
 		HTTPClient: &http.Client{},

@@ -25,6 +25,6 @@ type Subnet struct {
 	// SubnetID represents id of the associated subnet in the Networking service.
 	SubnetID string `json:"subnet_id"`
 
-	// ProjectID represents an associated Resell project.
+	// ProjectID represents an associated Identity service project.
 	ProjectID string `json:"project_id"`
 }

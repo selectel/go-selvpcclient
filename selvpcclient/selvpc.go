@@ -20,26 +20,14 @@ const (
 
 	// DefaultUserAgent contains basic user agent that will be used in queries.
 	DefaultUserAgent = "selvpcclient/" + AppVersion
-
-	// IPv4 represents IP version 4.
-	IPv4 IPVersion = "ipv4"
-
-	// IPv6 represents IP version 6.
-	IPv6 IPVersion = "ipv6"
-
-	// RFC3339NoZ describes a timestamp format used by some SelVPC responses.
-	RFC3339NoZ = "2006-01-02T15:04:05"
 )
-
-// IPVersion represents a type for the IP versions of the Resell API.
-type IPVersion string
 
 // ServiceClient stores details that are needed to work with different Selectel VPC APIs.
 type ServiceClient struct {
 	// HTTPClient represents an initialized HTTP client that will be used to do requests.
 	HTTPClient *http.Client
 
-	// Endpoint represents an enpoint that will be used in all requests.
+	// Endpoint represents an endpoint that will be used in all requests.
 	Endpoint string
 
 	// TokenID is a client authentication token.
@@ -90,7 +78,7 @@ func (client *ServiceClient) DoRequest(ctx context.Context, method, url string, 
 	return responseResult, nil
 }
 
-// ExtractResult allow to provide an object into which ResponseResult body will be extracted.
+// ExtractResult allows to provide an object into which ResponseResult body will be extracted.
 func (result *ResponseResult) ExtractResult(to interface{}) error {
 	body, err := ioutil.ReadAll(result.Body)
 	defer result.Body.Close()
@@ -101,6 +89,9 @@ func (result *ResponseResult) ExtractResult(to interface{}) error {
 	err = json.Unmarshal(body, to)
 	return err
 }
+
+// RFC3339NoZ describes a timestamp format used by some SelVPC responses.
+const RFC3339NoZ = "2006-01-02T15:04:05"
 
 // JSONRFC3339NoZTimezone is a type for timestamps SelVPC responses with the RFC3339NoZ format.
 type JSONRFC3339NoZTimezone time.Time
@@ -124,3 +115,14 @@ func (jt *JSONRFC3339NoZTimezone) UnmarshalJSON(data []byte) error {
 	*jt = JSONRFC3339NoZTimezone(t)
 	return nil
 }
+
+const (
+	// IPv4 represents IP version 4.
+	IPv4 IPVersion = "ipv4"
+
+	// IPv6 represents IP version 6.
+	IPv6 IPVersion = "ipv6"
+)
+
+// IPVersion represents a type for the IP versions of the different Selectel VPC APIs.
+type IPVersion string
