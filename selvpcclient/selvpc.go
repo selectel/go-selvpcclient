@@ -1,12 +1,14 @@
 package selvpcclient
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 const (
@@ -24,6 +26,9 @@ const (
 
 	// IPv6 represents IP version 6.
 	IPv6 IPVersion = "ipv6"
+
+	// RFC3339NoZ describes a timestamp format used by some SelVPC responses.
+	RFC3339NoZ = "2006-01-02T15:04:05"
 )
 
 // IPVersion represents a type for the IP versions of the Resell API.
@@ -95,4 +100,27 @@ func (result *ResponseResult) ExtractResult(to interface{}) error {
 
 	err = json.Unmarshal(body, to)
 	return err
+}
+
+// JSONRFC3339NoZTimezone is a type for timestamps SelVPC responses with the RFC3339NoZ format.
+type JSONRFC3339NoZTimezone time.Time
+
+// UnmarshalJSON helps to unmarshal timestamps from SelVPC responses to the
+// JSONRFC3339NoZTimezone type.
+func (jt *JSONRFC3339NoZTimezone) UnmarshalJSON(data []byte) error {
+	b := bytes.NewBuffer(data)
+	dec := json.NewDecoder(b)
+	var s string
+	if err := dec.Decode(&s); err != nil {
+		return err
+	}
+	if s == "" {
+		return nil
+	}
+	t, err := time.Parse(RFC3339NoZ, s)
+	if err != nil {
+		return err
+	}
+	*jt = JSONRFC3339NoZTimezone(t)
+	return nil
 }
