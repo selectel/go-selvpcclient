@@ -20,6 +20,6 @@ You need to initialize the needed service client prior to do any requests:
 	resellClient := resell.NewV2ResellClient(token)
 
 All methods of service clients uses the Go context to provide end-user of the
-library with a native way to work with the cancelation signals
+library with a native way to work with the cancellation signals
 */
 package selvpcclient

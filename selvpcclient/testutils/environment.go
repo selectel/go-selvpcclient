@@ -14,7 +14,7 @@ type TestEnv struct {
 	Client *selvpcclient.ServiceClient
 }
 
-// SetupTestEnv prepares the new testing environmenœt.
+// SetupTestEnv prepares the new testing environment.
 func SetupTestEnv() *TestEnv {
 	mux := http.NewServeMux()
 	server := httptest.NewServer(mux)

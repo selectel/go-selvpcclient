@@ -8,10 +8,10 @@ type LicenseOpts struct {
 
 // LicenseOpt represents options for the single license.
 type LicenseOpt struct {
-	// Region represents a region of where the license should reside.
+	// Region represents a region of where the licenses should reside.
 	Region string `json:"region"`
 
-	// Quantity represents how many licenses do we need to create.
+	// Quantity represents how many licenses do we need to create in a single request.
 	Quantity int `json:"quantity"`
 
 	// Type represents needed type of the license.

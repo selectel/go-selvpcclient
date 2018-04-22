@@ -10,17 +10,17 @@ type FloatingIP struct {
 	// ID is a unique id of the floating ip.
 	ID string `json:"id"`
 
-	// ProjectID represents an associated Resell project.
+	// ProjectID represents an associated Identity service project.
 	ProjectID string `json:"project_id"`
 
-	// PortID contains an uuid of the port to which floating ip is associated to.
+	// PortID contains a Networking service uuid of the port to which floating ip is associated to.
 	PortID string `json:"port_id"`
 
 	// FixedIPAddress contains an IP address of the port to which floating ip is
 	// associated to.
 	FixedIPAddress string `json:"fixed_ip_address"`
 
-	// Region represents a region of where the floating ip resides.
+	// Region represents an Identity service region of where the floating ip resides.
 	Region string `json:"region"`
 
 	// Status represents a current status of the floating ip.

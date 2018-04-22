@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 )
 
-// Quota represents a quota information for a single resource.
+// Quota represents a quota information for a single billing resource.
 type Quota struct {
 	// Name is a resource human-readable name.
 	Name string `json:"-"`
 
-	// ResourceQuotasEntities contains information about quotas of a single resource in different locations.
+	// ResourceQuotasEntities contains information about quotas of a single billing resource in different locations.
 	ResourceQuotasEntities []ResourceQuotaEntity `json:"-"`
 }
 

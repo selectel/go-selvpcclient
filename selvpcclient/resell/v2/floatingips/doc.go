@@ -4,11 +4,11 @@ the Resell v2 API.
 
 Example of getting a single floating ip referenced by its id
 
-  floatingip, _, err := floatingips.Get(context, resellClient, fipID)
+  floatingIP, _, err := floatingips.Get(context, resellClient, fipID)
   if err != nil {
     log.Fatal(err)
   }
-  fmt.Println(floatingip)
+  fmt.Println(floatingIP)
 
 Example of getting all floating ips
 
@@ -36,7 +36,7 @@ Example of creating floating ips in a project
     log.Fatal(err)
   }
   for _, newFloatingIP := range newFloatingIPs {
-    fmt.Printf("%v\n", newFloatingIP)
+    fmt.Println(newFloatingIPs)
   }
 
 Example of deleting a single floating ip
