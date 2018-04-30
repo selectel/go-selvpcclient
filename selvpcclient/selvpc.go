@@ -15,11 +15,14 @@ const (
 	// AppVersion is a version of the application.
 	AppVersion = "1.0.0"
 
+	// AppName is a global application name.
+	AppName = "selvpcclient"
+
 	// DefaultEndpoint contains basic endpoint for queries.
 	DefaultEndpoint = "https://api.selectel.ru/vpc"
 
 	// DefaultUserAgent contains basic user agent that will be used in queries.
-	DefaultUserAgent = "selvpcclient/" + AppVersion
+	DefaultUserAgent = AppName + "/" + AppVersion
 )
 
 // ServiceClient stores details that are needed to work with different Selectel VPC APIs.
