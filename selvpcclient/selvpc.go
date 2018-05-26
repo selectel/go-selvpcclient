@@ -8,6 +8,10 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"reflect"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -129,3 +133,55 @@ const (
 
 // IPVersion represents a type for the IP versions of the different Selectel VPC APIs.
 type IPVersion string
+
+// BuildQueryParameters converts provided options struct to the string of URL parameters.
+func BuildQueryParameters(opts interface{}) (string, error) {
+	optsValue := reflect.ValueOf(opts)
+	if optsValue.Kind() != reflect.Struct {
+		return "", fmt.Errorf("provided options is not a structure")
+	}
+	optsType := reflect.TypeOf(opts)
+
+	params := url.Values{}
+
+	for i := 0; i < optsValue.NumField(); i++ {
+		fieldValue := optsValue.Field(i)
+		fieldType := optsType.Field(i)
+
+		queryTag := fieldType.Tag.Get("param")
+		if queryTag != "" {
+			if isZero(fieldValue) {
+				continue
+			}
+
+			tags := strings.Split(queryTag, ",")
+		loop:
+			switch fieldValue.Kind() {
+			case reflect.Ptr:
+				fieldValue = fieldValue.Elem()
+				goto loop
+			case reflect.String:
+				params.Add(tags[0], fieldValue.String())
+			case reflect.Int:
+				params.Add(tags[0], strconv.FormatInt(fieldValue.Int(), 10))
+			case reflect.Bool:
+				params.Add(tags[0], strconv.FormatBool(fieldValue.Bool()))
+			}
+		}
+	}
+
+	return params.Encode(), nil
+}
+
+// isZero checks if provided value is zero.
+func isZero(v reflect.Value) bool {
+	if v.Kind() == reflect.Ptr {
+		if v.IsNil() {
+			return true
+		}
+		return false
+	}
+
+	z := reflect.Zero(v.Type())
+	return v.Interface() == z.Interface()
+}
