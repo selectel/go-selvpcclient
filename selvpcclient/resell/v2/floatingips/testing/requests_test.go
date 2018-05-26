@@ -114,7 +114,7 @@ func TestListFloatingIPs(t *testing.T) {
 		TestListFloatingIPsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	actual, _, err := floatingips.List(ctx, testEnv.Client)
+	actual, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -144,7 +144,7 @@ func TestListFloatingIPsSingle(t *testing.T) {
 		TestListFloatingIPsSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	actual, _, err := floatingips.List(ctx, testEnv.Client)
+	actual, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,7 +170,7 @@ func TestListFloatingIPsHTTPError(t *testing.T) {
 		&endpointCalled, t)
 
 	ctx := context.Background()
-	allFloatingIPs, httpResponse, err := floatingips.List(ctx, testEnv.Client)
+	allFloatingIPs, httpResponse, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -194,7 +194,7 @@ func TestListFloatingIPsTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client)
+	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
 
 	if allFloatingIPs != nil {
 		t.Fatal("expected no floating ips from the List method")
@@ -215,7 +215,7 @@ func TestListFloatingIPsUnmarshalError(t *testing.T) {
 		&endpointCalled, t)
 
 	ctx := context.Background()
-	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client)
+	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")

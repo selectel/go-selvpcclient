@@ -35,8 +35,17 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*F
 }
 
 // List gets a list of floating ips in the current domain.
-func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*FloatingIP, *selvpcclient.ResponseResult, error) {
+func List(ctx context.Context, client *selvpcclient.ServiceClient, opts ListOpts) ([]*FloatingIP, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+
+	queryParams, err := selvpcclient.BuildQueryParameters(opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	if queryParams != "" {
+		url = strings.Join([]string{url, queryParams}, "?")
+	}
+
 	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, nil, err
