@@ -114,7 +114,7 @@ func TestListLicenses(t *testing.T) {
 		TestListLicensesResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	actual, _, err := licenses.List(ctx, testEnv.Client)
+	actual, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -144,7 +144,7 @@ func TestListLicensesSingle(t *testing.T) {
 		TestListLicensesSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	actual, _, err := licenses.List(ctx, testEnv.Client)
+	actual, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,7 +170,7 @@ func TestListLicensesHTTPError(t *testing.T) {
 		&endpointCalled, t)
 
 	ctx := context.Background()
-	allLicenses, httpResponse, err := licenses.List(ctx, testEnv.Client)
+	allLicenses, httpResponse, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -194,7 +194,7 @@ func TestListLicensesTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	allLicenses, _, err := licenses.List(ctx, testEnv.Client)
+	allLicenses, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
 
 	if allLicenses != nil {
 		t.Fatal("expected no licenses from the List method")
@@ -215,7 +215,7 @@ func TestListLicensesUnmarshalError(t *testing.T) {
 		&endpointCalled, t)
 
 	ctx := context.Background()
-	allLicenses, _, err := licenses.List(ctx, testEnv.Client)
+	allLicenses, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
