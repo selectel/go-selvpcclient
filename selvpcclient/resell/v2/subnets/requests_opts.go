@@ -22,3 +22,8 @@ type SubnetOpt struct {
 	// PrefixLength represents length of the subnet prefix.
 	PrefixLength int `json:"prefix_length"`
 }
+
+// ListOpts represents options for the licenses List request.
+type ListOpts struct {
+	Detailed bool `param:"detailed"`
+}

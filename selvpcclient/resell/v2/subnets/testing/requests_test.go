@@ -114,7 +114,7 @@ func TestListSubnets(t *testing.T) {
 		TestListSubnetsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	actual, _, err := subnets.List(ctx, testEnv.Client)
+	actual, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -144,7 +144,7 @@ func TestListSubnetsSingle(t *testing.T) {
 		TestListSubnetsSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
 
 	ctx := context.Background()
-	actual, _, err := subnets.List(ctx, testEnv.Client)
+	actual, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,7 +170,7 @@ func TestListSubnetsHTTPError(t *testing.T) {
 		&endpointCalled, t)
 
 	ctx := context.Background()
-	allSubnet, httpResponse, err := subnets.List(ctx, testEnv.Client)
+	allSubnet, httpResponse, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -194,7 +194,7 @@ func TestListSubnetsTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	allSubnet, _, err := subnets.List(ctx, testEnv.Client)
+	allSubnet, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
 
 	if allSubnet != nil {
 		t.Fatal("expected no subnets from the List method")
@@ -215,7 +215,7 @@ func TestListSubnetsUnmarshalError(t *testing.T) {
 		&endpointCalled, t)
 
 	ctx := context.Background()
-	allSubnet, _, err := subnets.List(ctx, testEnv.Client)
+	allSubnet, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
