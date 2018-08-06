@@ -62,6 +62,9 @@ type Zone struct {
 	// IsDefault shows if zone is a default availability zone.
 	IsDefault bool `json:"is_default"`
 
+	// IsPrivate shows if zone is a private availability zone.
+	IsPrivate bool `json:"is_private"`
+
 	// Name contains a human-readable region name.
 	Name string `json:"name"`
 }
