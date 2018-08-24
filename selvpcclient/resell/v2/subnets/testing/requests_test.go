@@ -97,10 +97,10 @@ func TestGetSubnetUnmarshalError(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if subnet != nil {
-		t.Fatal("expected no subnet from the List method")
+		t.Fatal("expected no subnet from the Get method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the List method")
+		t.Fatal("expected error from the Get method")
 	}
 }
 
@@ -176,10 +176,10 @@ func TestListSubnetsHTTPError(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if allSubnet != nil {
-		t.Fatal("expected no subnets from the Get method")
+		t.Fatal("expected no subnets from the List method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the Get method")
+		t.Fatal("expected error from the List method")
 	}
 	if httpResponse.StatusCode != http.StatusBadGateway {
 		t.Fatalf("expected %d status in the HTTP response, but got %d",

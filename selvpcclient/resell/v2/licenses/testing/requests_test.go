@@ -97,10 +97,10 @@ func TestGetLicenseUnmarshalError(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if license != nil {
-		t.Fatal("expected no license from the List method")
+		t.Fatal("expected no license from the Get method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the List method")
+		t.Fatal("expected error from the Get method")
 	}
 }
 
@@ -176,10 +176,10 @@ func TestListLicensesHTTPError(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if allLicenses != nil {
-		t.Fatal("expected no licenses from the Get method")
+		t.Fatal("expected no licenses from the List method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the Get method")
+		t.Fatal("expected error from the List method")
 	}
 	if httpResponse.StatusCode != http.StatusBadGateway {
 		t.Fatalf("expected %d status in the HTTP response, but got %d",
