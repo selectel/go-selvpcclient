@@ -23,6 +23,7 @@ You can use this library to work with the following objects of the Selectel VPC 
 * [roles](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/roles)
 * [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/tokens)
 * [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets)
+* [vrrp_subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/vrrpsubnets)
 * [floating ips](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/floatingips)
 * [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/licenses)
 * [traffic](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/traffic)
