@@ -8,6 +8,16 @@ Example of getting a single VRRP subnet referenced by its id
   if err != nil {
     log.Fatal(err)
   }
-	fmt.Println(vrrpsubnet)
+  fmt.Println(vrrpsubnet)
+
+Example of getting all VRRP subnets
+
+  allVRRPSubnets, _, err := vrrpsubnets.List(ctx, resellClient, vrrpsubnets.ListOpts{})
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, vrrpSubnet := range allVRRPSubnets {
+    fmt.Println(vrrpSubnet)
+  }
 */
 package vrrpsubnets
