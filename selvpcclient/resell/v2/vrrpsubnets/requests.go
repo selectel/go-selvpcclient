@@ -94,3 +94,16 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, projectID s
 
 	return result.VRRPSubnets, responseResult, nil
 }
+
+// Delete deletes a single VRRP subnet by its id.
+func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
+	responseResult, err := client.DoRequest(ctx, "DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	if responseResult.Err != nil {
+		err = responseResult.Err
+	}
+	return responseResult, err
+}

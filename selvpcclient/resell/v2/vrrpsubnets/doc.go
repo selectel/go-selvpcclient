@@ -42,5 +42,12 @@ Example of creating VRRP subnets
   for _, newVRRPSubnet := range newVRRPSubnets {
     fmt.Printf("%v\n", newVRRPSubnet)
   }
+
+Example of deleting a single VRRP subnet
+
+  _, err = vrrpsubnets.Delete(ctx, resellClient, subnetID)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package vrrpsubnets
