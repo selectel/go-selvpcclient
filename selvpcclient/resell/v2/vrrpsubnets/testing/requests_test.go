@@ -197,3 +197,102 @@ func TestListVRRPSubnetsUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the List method")
 	}
 }
+
+func TestCreateVRRPSubnets(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
+		TestCreateVRRPSubnetsResponseRaw, TestCreateVRRPSubnetsOptsRaw, http.MethodPost,
+		http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateVRRPSubnetsOpts
+	actualResponse, _, err := vrrpsubnets.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestCreateVRRPSubnetsResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
+func TestCreateVRRPSubnetsHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
+		TestCreateVRRPSubnetsResponseRaw, TestCreateVRRPSubnetsOptsRaw, http.MethodPost,
+		http.StatusBadRequest, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateVRRPSubnetsOpts
+	vrrpSubnet, httpResponse, err := vrrpsubnets.Create(ctx, testEnv.Client,
+		"49338ac045f448e294b25d013f890317", createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if vrrpSubnet != nil {
+		t.Fatal("expected no VRRP subnet from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+	if httpResponse.StatusCode != http.StatusBadRequest {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestCreateVRRPSubnetsTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	createOpts := TestCreateVRRPSubnetsOpts
+	vrrpSubnet, _, err := vrrpsubnets.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+
+	if vrrpSubnet != nil {
+		t.Fatal("expected no VRRP subnet from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}
+
+func TestCreateVRRPSubnetsUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
+		TestManyVRRPSubnetsInvalidResponseRaw, TestCreateVRRPSubnetsOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateVRRPSubnetsOpts
+	vrrpSubnet, _, err := vrrpsubnets.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if vrrpSubnet != nil {
+		t.Fatal("expected no VRRP subnet from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}

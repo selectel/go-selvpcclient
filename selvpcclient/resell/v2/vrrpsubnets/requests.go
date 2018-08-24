@@ -1,7 +1,9 @@
 package vrrpsubnets
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -45,6 +47,35 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient, opts ListOpts
 	}
 
 	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract VRRP subnets from the response body.
+	var result struct {
+		VRRPSubnets []*VRRPSubnet `json:"vrrp_subnets"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.VRRPSubnets, responseResult, nil
+}
+
+// Create requests a creation of the VRRP subnets in the specified project.
+func Create(ctx context.Context, client *selvpcclient.ServiceClient, projectID string, createOpts VRRPSubnetOpts) ([]*VRRPSubnet, *selvpcclient.ResponseResult, error) {
+	createVRRPSubnetsOpts := &createOpts
+	requestBody, err := json.Marshal(createVRRPSubnetsOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", projectID}, "/")
+	responseResult, err := client.DoRequest(ctx, "POST", url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err
 	}
