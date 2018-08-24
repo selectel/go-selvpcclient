@@ -97,10 +97,10 @@ func TestGetFloatingIPUnmarshalError(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if floatingIP != nil {
-		t.Fatal("expected no floating ip from the List method")
+		t.Fatal("expected no floating ip from the Get method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the List method")
+		t.Fatal("expected error from the Get method")
 	}
 }
 
@@ -176,10 +176,10 @@ func TestListFloatingIPsHTTPError(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if allFloatingIPs != nil {
-		t.Fatal("expected no floating ips from the Get method")
+		t.Fatal("expected no floating ips from the List method")
 	}
 	if err == nil {
-		t.Fatal("expected error from the Get method")
+		t.Fatal("expected error from the List method")
 	}
 	if httpResponse.StatusCode != http.StatusBadGateway {
 		t.Fatalf("expected %d status in the HTTP response, but got %d",
