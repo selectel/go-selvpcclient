@@ -12,7 +12,7 @@ Example of getting a single subnet referenced by its id
 
 Example of getting all subnets
 
-  allSubnets, _, err := subnets.List(ctx, resellClient)
+  allSubnets, _, err := subnets.List(ctx, resellClient, subnets.ListOpts{})
   if err != nil {
     log.Fatal(err)
   }
