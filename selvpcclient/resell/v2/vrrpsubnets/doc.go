@@ -19,5 +19,28 @@ Example of getting all VRRP subnets
   for _, vrrpSubnet := range allVRRPSubnets {
     fmt.Println(vrrpSubnet)
   }
+
+Example of creating VRRP subnets
+
+  createOpts := vrrpsubnets.VRRPSubnetOpts{
+    VRRPSubnets: []vrrpsubnets.VRRPSubnetOpt{
+      {
+        Quantity: 1,
+        Regions: vrrpsubnets.VRRPRegionOpt{
+          Master: "ru-2",
+          Slave:  "ru-1",
+        },
+        Type:         "ipv4",
+        PrefixLength: 29,
+      },
+    },
+  }
+  newVRRPSubnets, _, err := vrrpsubnets.Create(ctx, resellClient, projectID, createOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, newVRRPSubnet := range newVRRPSubnets {
+    fmt.Printf("%v\n", newVRRPSubnet)
+  }
 */
 package vrrpsubnets
