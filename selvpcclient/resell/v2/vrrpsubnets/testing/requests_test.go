@@ -296,3 +296,60 @@ func TestCreateVRRPSubnetsUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the Create method")
 	}
 }
+
+func TestDeleteVRRPSubnet(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/112233", "",
+		http.MethodDelete, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	_, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+}
+
+func TestDeleteVRRPSubnetHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/112233",
+		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+
+	ctx := context.Background()
+	httpResponse, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestDeleteVRRPSubnetTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	_, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
+
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+}
