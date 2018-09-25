@@ -277,6 +277,33 @@ func TestCreateProject(t *testing.T) {
 	}
 }
 
+func TestCreateProjectAutoQuotas(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
+		TestCreateProjectAutoQuotasResponseRaw, TestCreateProjectAutoQuotasOptsRaw,
+		http.MethodPost, http.StatusOK, &endpointCalled, t)
+
+	ctx := context.Background()
+	createOpts := TestCreateProjectAutoQuotasOpts
+	actualResponse, _, err := projects.Create(ctx, testEnv.Client, createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestCreateProjectAutoQuotasResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
 func TestCreateProjectsHTTPError(t *testing.T) {
 	endpointCalled := false
 
