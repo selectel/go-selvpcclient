@@ -181,7 +181,7 @@ func TestListProjectsSingle(t *testing.T) {
 	}
 }
 
-func TestListSubnetsHTTPError(t *testing.T) {
+func TestListProjectsHTTPError(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()
@@ -209,7 +209,7 @@ func TestListSubnetsHTTPError(t *testing.T) {
 	}
 }
 
-func TestListSubnetsTimeoutError(t *testing.T) {
+func TestListProjectsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
@@ -226,7 +226,7 @@ func TestListSubnetsTimeoutError(t *testing.T) {
 	}
 }
 
-func TestListSubnetsUnmarshalError(t *testing.T) {
+func TestListProjectsUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()
