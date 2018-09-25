@@ -204,6 +204,69 @@ var TestCreateProjectResponse = &projects.Project{
 	Enabled: true,
 }
 
+// TestCreateProjectAutoQuotasOptsRaw represents marshalled options for the
+// Create request with auto_quotas parameter.
+const TestCreateProjectAutoQuotasOptsRaw = `
+{
+    "project": {
+        "name": "Project2",
+        "auto_quotas": true
+    }
+}
+`
+
+// TestCreateProjectAutoQuotasOpts represent options for the Create request
+// with auto_quotas parameter.
+var TestCreateProjectAutoQuotasOpts = projects.CreateOpts{
+	Name:       "Project2",
+	AutoQuotas: true,
+}
+
+// TestCreateProjectAutoQuotasResponseRaw represents a raw response from the
+// Create request with auto_quotas parameter.
+const TestCreateProjectAutoQuotasResponseRaw = `
+{
+    "project": {
+        "enabled": true,
+        "id": "9c97bdc75295493096cf5edcb8c37933",
+        "name": "Project2",
+        "url": "https://yyyyyy.selvpc.ru",
+        "quotas": {
+            "compute_cores": [
+                {
+                    "region": "ru-1",
+                    "used": 2,
+                    "value": 10,
+                    "zone": "ru-1b"
+                }
+            ]
+        }
+    }
+}
+`
+
+// TestCreateProjectAutoQuotasResponse represents the unmarshalled
+// TestCreateProjectAutoQuotasResponseRaw response.
+var TestCreateProjectAutoQuotasResponse = &projects.Project{
+	ID:      "9c97bdc75295493096cf5edcb8c37933",
+	Name:    "Project2",
+	URL:     "https://yyyyyy.selvpc.ru",
+	Enabled: true,
+	Quotas: []quotas.Quota{
+		{
+			Name: "compute_cores",
+			ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+				{
+					Region: "ru-1",
+					Used:   2,
+					Value:  10,
+					Zone:   "ru-1b",
+				},
+			},
+		},
+	},
+}
+
 // TestUpdateProjectOptsRaw represents marshalled options for the Update request.
 const TestUpdateProjectOptsRaw = `
 {
