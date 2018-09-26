@@ -134,7 +134,7 @@ func TestGetProjectUnmarshalError(t *testing.T) {
 		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestSingleProjectInvalidResponseRaw,
 		Method:      http.MethodGet,
-		Status:      http.StatusBadGateway,
+		Status:      http.StatusOK,
 		CallFlag:    &endpointCalled,
 	})
 

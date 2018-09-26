@@ -102,7 +102,7 @@ func TestGetVRRPSubnetUnmarshalError(t *testing.T) {
 		URL:         "/resell/v2/vrrp_subnets/186",
 		RawResponse: TestSingleVRRPSubnetInvalidResponseRaw,
 		Method:      http.MethodGet,
-		Status:      http.StatusBadGateway,
+		Status:      http.StatusOK,
 		CallFlag:    &endpointCalled,
 	})
 

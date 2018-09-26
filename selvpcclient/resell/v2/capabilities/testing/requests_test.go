@@ -114,7 +114,7 @@ func TestGetCapabilitiesUnmarshalError(t *testing.T) {
 		URL:         "/resell/v2/capabilities",
 		RawResponse: TestGetCapabilitiesInvalidRaw,
 		Method:      http.MethodGet,
-		Status:      http.StatusBadGateway,
+		Status:      http.StatusOK,
 		CallFlag:    &endpointCalled,
 	})
 

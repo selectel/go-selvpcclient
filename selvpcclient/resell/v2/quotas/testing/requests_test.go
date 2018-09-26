@@ -143,7 +143,7 @@ func TestGetAllQuotasUnmarshalError(t *testing.T) {
 		URL:         "/resell/v2/quotas",
 		RawResponse: TestQuotasInvalidResponseRaw,
 		Method:      http.MethodGet,
-		Status:      http.StatusBadGateway,
+		Status:      http.StatusOK,
 		CallFlag:    &endpointCalled,
 	})
 
