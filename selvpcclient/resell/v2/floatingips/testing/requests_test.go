@@ -16,8 +16,14 @@ func TestGetFloatingIP(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
-		TestGetFloatingIPResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		RawResponse: TestGetFloatingIPResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
@@ -41,9 +47,14 @@ func TestGetFloatingIPHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
-		TestGetFloatingIPResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		RawResponse: TestGetFloatingIPResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	floatingIP, httpResponse, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
@@ -86,9 +97,14 @@ func TestGetFloatingIPUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
-		TestSingleFloatingIPInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		RawResponse: TestSingleFloatingIPInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	floatingIP, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
@@ -110,8 +126,14 @@ func TestListFloatingIPs(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips",
-		TestListFloatingIPsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips",
+		RawResponse: TestListFloatingIPsResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
@@ -140,8 +162,14 @@ func TestListFloatingIPsSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips",
-		TestListFloatingIPsSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips",
+		RawResponse: TestListFloatingIPsSingleResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
@@ -165,9 +193,14 @@ func TestListFloatingIPsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips",
-		TestListFloatingIPsResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips",
+		RawResponse: TestListFloatingIPsResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allFloatingIPs, httpResponse, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
@@ -210,9 +243,14 @@ func TestListFloatingIPsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips",
-		TestManyFloatingIPsInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips",
+		RawResponse: TestManyFloatingIPsInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
@@ -234,9 +272,15 @@ func TestCreateFloatingIPs(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
-		TestCreateFloatingIPResponseRaw, TestCreateFloatingIPOptsRaw, http.MethodPost, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestCreateFloatingIPResponseRaw,
+		RawRequest:  TestCreateFloatingIPOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
@@ -261,9 +305,15 @@ func TestCreateFloatingIPsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
-		TestCreateFloatingIPResponseRaw, TestCreateFloatingIPOptsRaw, http.MethodPost,
-		http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestCreateFloatingIPResponseRaw,
+		RawRequest:  TestCreateFloatingIPOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
@@ -308,8 +358,15 @@ func TestCreateFloatingIPsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
-		TestManyFloatingIPsInvalidResponseRaw, TestCreateFloatingIPOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestManyFloatingIPsInvalidResponseRaw,
+		RawRequest:  TestCreateFloatingIPOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
@@ -332,8 +389,13 @@ func TestDeleteFloatingIP(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
-		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	_, err := floatingips.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
@@ -351,8 +413,13 @@ func TestDeleteFloatingIPHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
-		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	httpResponse, err := floatingips.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")

@@ -15,8 +15,14 @@ func TestGetCapabilities(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/capabilities",
-		TestGetCapabilitiesRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/capabilities",
+		RawResponse: TestGetCapabilitiesRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	capabilities, _, err := capabilities.Get(ctx, testEnv.Client)
@@ -53,8 +59,14 @@ func TestGetCapabilitiesHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/capabilities",
-		TestGetCapabilitiesRaw, http.MethodGet, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/capabilities",
+		RawResponse: TestGetCapabilitiesRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	capabilities, httpResponse, err := capabilities.Get(ctx, testEnv.Client)
@@ -97,8 +109,14 @@ func TestGetCapabilitiesUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/capabilities",
-		TestGetCapabilitiesInvalidRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/capabilities",
+		RawResponse: TestGetCapabilitiesInvalidRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	capabilities, _, err := capabilities.Get(ctx, testEnv.Client)

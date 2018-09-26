@@ -16,8 +16,14 @@ func TestGetAllQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas",
-		TestGetAllQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas",
+		RawResponse: TestGetAllQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetAll(ctx, testEnv.Client)
@@ -51,8 +57,14 @@ func TestGetAllQuotasSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas",
-		TestGetAllQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas",
+		RawResponse: TestGetAllQuotasResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetAll(ctx, testEnv.Client)
@@ -76,9 +88,14 @@ func TestGetAllQuotasHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas",
-		TestGetAllQuotasResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas",
+		RawResponse: TestGetAllQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, httpResponse, err := quotas.GetAll(ctx, testEnv.Client)
@@ -121,9 +138,14 @@ func TestGetAllQuotasUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas",
-		TestQuotasInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas",
+		RawResponse: TestQuotasInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, _, err := quotas.GetAll(ctx, testEnv.Client)
@@ -145,8 +167,14 @@ func TestGetFreeQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/free",
-		TestGetFreeQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/free",
+		RawResponse: TestGetFreeQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetFree(ctx, testEnv.Client)
@@ -180,8 +208,14 @@ func TestGetFreeQuotasSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/free",
-		TestGetFreeQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/free",
+		RawResponse: TestGetFreeQuotasResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetFree(ctx, testEnv.Client)
@@ -205,9 +239,14 @@ func TestGetFreeQuotasHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/free",
-		TestGetFreeQuotasResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/free",
+		RawResponse: TestGetFreeQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, httpResponse, err := quotas.GetFree(ctx, testEnv.Client)
@@ -250,9 +289,14 @@ func TestGetFreeQuotasUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/free",
-		TestQuotasInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/free",
+		RawResponse: TestQuotasInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, _, err := quotas.GetFree(ctx, testEnv.Client)
@@ -274,8 +318,14 @@ func TestGetProjectsQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects",
-		TestGetProjectsQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects",
+		RawResponse: TestGetProjectsQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
@@ -309,8 +359,14 @@ func TestGetProjectsQuotasSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects",
-		TestGetProjectsQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects",
+		RawResponse: TestGetProjectsQuotasResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
@@ -334,9 +390,14 @@ func TestGetProjectsQuotasHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects",
-		TestGetProjectsQuotasResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects",
+		RawResponse: TestGetProjectsQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, httpResponse, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
@@ -379,9 +440,14 @@ func TestGetProjectsQuotasUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects",
-		TestQuotasInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects",
+		RawResponse: TestQuotasInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
@@ -403,8 +469,14 @@ func TestGetProjectQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		TestGetProjectQuotasResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestGetProjectQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
@@ -438,8 +510,14 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		TestGetProjectQuotasResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestGetProjectQuotasResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
@@ -463,9 +541,14 @@ func TestGetProjectQuotasHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		TestGetProjectQuotasResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestGetProjectQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, httpResponse, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
@@ -508,9 +591,14 @@ func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		TestQuotasInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestQuotasInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
@@ -532,9 +620,15 @@ func TestUpdateProjectQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		TestUpdateProjectQuotasResponseRaw, TestUpdateQuotasOptsRaw, http.MethodPatch, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestUpdateProjectQuotasResponseRaw,
+		RawRequest:  TestUpdateQuotasOptsRaw,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
@@ -559,8 +653,14 @@ func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		"", TestUpdateQuotasOptsRaw, http.MethodPatch, http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:        testEnv.Mux,
+		URL:        "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawRequest: TestUpdateQuotasOptsRaw,
+		Method:     http.MethodPatch,
+		Status:     http.StatusBadRequest,
+		CallFlag:   &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
@@ -604,9 +704,15 @@ func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
-		TestQuotasInvalidResponseRaw, TestUpdateQuotasOptsRaw, http.MethodPatch,
-		http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestQuotasInvalidResponseRaw,
+		RawRequest:  TestUpdateQuotasOptsRaw,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts

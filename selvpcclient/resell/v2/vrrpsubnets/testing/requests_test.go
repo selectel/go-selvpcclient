@@ -16,8 +16,14 @@ func TestGetVRRPSubnet(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/186",
-		TestGetVRRPSubnetResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets/186",
+		RawResponse: TestGetVRRPSubnetResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := vrrpsubnets.Get(ctx, testEnv.Client, "186")
@@ -41,9 +47,14 @@ func TestGetVRRPSubnetHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/186",
-		TestGetVRRPSubnetResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets/186",
+		RawResponse: TestGetVRRPSubnetResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	subnet, httpResponse, err := vrrpsubnets.Get(ctx, testEnv.Client, "186")
@@ -86,9 +97,14 @@ func TestGetVRRPSubnetUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/186",
-		TestSingleVRRPSubnetInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets/186",
+		RawResponse: TestSingleVRRPSubnetInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	vrpsubnet, _, err := vrrpsubnets.Get(ctx, testEnv.Client, "186")
@@ -110,8 +126,14 @@ func TestListVRRPSubnets(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets",
-		TestListVRRPSubnetsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets",
+		RawResponse: TestListVRRPSubnetsResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
@@ -135,9 +157,14 @@ func TestListVRRPSubnetsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets",
-		TestListVRRPSubnetsResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets",
+		RawResponse: TestListVRRPSubnetsResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allVRRPSubnets, httpResponse, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
@@ -180,9 +207,14 @@ func TestListVRRPSubnetsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets",
-		TestManyVRRPSubnetsInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets",
+		RawResponse: TestManyVRRPSubnetsInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allVRRPSubnets, _, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
@@ -204,9 +236,15 @@ func TestCreateVRRPSubnets(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
-		TestCreateVRRPSubnetsResponseRaw, TestCreateVRRPSubnetsOptsRaw, http.MethodPost,
-		http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestCreateVRRPSubnetsResponseRaw,
+		RawRequest:  TestCreateVRRPSubnetsOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
@@ -231,9 +269,15 @@ func TestCreateVRRPSubnetsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
-		TestCreateVRRPSubnetsResponseRaw, TestCreateVRRPSubnetsOptsRaw, http.MethodPost,
-		http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestCreateVRRPSubnetsResponseRaw,
+		RawRequest:  TestCreateVRRPSubnetsOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
@@ -279,8 +323,15 @@ func TestCreateVRRPSubnetsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
-		TestManyVRRPSubnetsInvalidResponseRaw, TestCreateVRRPSubnetsOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestManyVRRPSubnetsInvalidResponseRaw,
+		RawRequest:  TestCreateVRRPSubnetsOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
@@ -303,8 +354,13 @@ func TestDeleteVRRPSubnet(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/112233", "",
-		http.MethodDelete, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/vrrp_subnets/112233",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	_, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
@@ -323,8 +379,13 @@ func TestDeleteVRRPSubnetHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/vrrp_subnets/112233",
-		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/vrrp_subnets/112233",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	httpResponse, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")

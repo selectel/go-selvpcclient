@@ -16,8 +16,14 @@ func TestListUsers(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
-		TestListUsersResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users",
+		RawResponse: TestListUsersResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := users.List(ctx, testEnv.Client)
@@ -46,9 +52,14 @@ func TestListUsersSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
-		TestListUsersSingleUserResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users",
+		RawResponse: TestListUsersSingleUserResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := users.List(ctx, testEnv.Client)
@@ -72,9 +83,14 @@ func TestListUsersHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
-		TestListUsersSingleUserResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users",
+		RawResponse: TestListUsersSingleUserResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allUsers, httpResponse, err := users.List(ctx, testEnv.Client)
@@ -117,9 +133,14 @@ func TestListUsersUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users",
-		TestManyUsersInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users",
+		RawResponse: TestManyUsersInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allUsers, _, err := users.List(ctx, testEnv.Client)
@@ -141,9 +162,15 @@ func TestCreateUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users",
-		TestCreateUserResponseRaw, TestCreateUserOptsRaw, http.MethodPost,
-		http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users",
+		RawResponse: TestCreateUserResponseRaw,
+		RawRequest:  TestCreateUserOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
@@ -168,8 +195,14 @@ func TestCreateUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users", "",
-		TestCreateUserOptsRaw, http.MethodPost, http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:        testEnv.Mux,
+		URL:        "/resell/v2/users",
+		RawRequest: TestCreateUserOptsRaw,
+		Method:     http.MethodPost,
+		Status:     http.StatusBadRequest,
+		CallFlag:   &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
@@ -213,8 +246,15 @@ func TestCreateUserUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users", TestSingleUserInvalidResponseRaw,
-		TestCreateUserOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users",
+		RawResponse: TestSingleUserInvalidResponseRaw,
+		RawRequest:  TestCreateUserOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateUserOpts
@@ -237,9 +277,15 @@ func TestUpdateUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
-		TestUpdateUserResponseRaw, TestUpdateUserOptsRaw, http.MethodPatch, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		RawResponse: TestUpdateUserResponseRaw,
+		RawRequest:  TestUpdateUserOptsRaw,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
@@ -264,8 +310,14 @@ func TestUpdateUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
-		"", TestUpdateUserOptsRaw, http.MethodPatch, http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:        testEnv.Mux,
+		URL:        "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		RawRequest: TestUpdateUserOptsRaw,
+		Method:     http.MethodPatch,
+		Status:     http.StatusBadRequest,
+		CallFlag:   &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
@@ -309,9 +361,15 @@ func TestUpdateUserUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
-		TestSingleUserInvalidResponseRaw, TestUpdateUserOptsRaw, http.MethodPatch,
-		http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		RawResponse: TestSingleUserInvalidResponseRaw,
+		RawRequest:  TestUpdateUserOptsRaw,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
@@ -334,8 +392,13 @@ func TestDeleteUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
-		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	_, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
@@ -353,8 +416,13 @@ func TestDeleteUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
-		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	httpResponse, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
