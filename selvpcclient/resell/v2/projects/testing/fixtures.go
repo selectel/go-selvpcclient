@@ -154,6 +154,7 @@ const TestCreateProjectOptsRaw = `
 {
     "project": {
         "name": "Project2",
+        "auto_quotas": false,
         "quotas": {
             "image_gigabytes": [
                 {
@@ -343,7 +344,8 @@ const TestSingleProjectInvalidResponseRaw = `
 const TestCreateProjectNoQuotasOptsRaw = `
 {
     "project": {
-        "name": "Project2"
+        "name": "Project2",
+        "auto_quotas": false
     }
 }
 `
