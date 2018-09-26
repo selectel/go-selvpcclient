@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -54,10 +55,10 @@ type ResponseResult struct {
 }
 
 // DoRequest performs the HTTP request with the current ServiceClient's HTTPClient.
-// Authentication and optional headers will be automatically added.
-func (client *ServiceClient) DoRequest(ctx context.Context, method, url string, body io.Reader) (*ResponseResult, error) {
+// Authentication and optional headers will be added automatically.
+func (client *ServiceClient) DoRequest(ctx context.Context, method, path string, body io.Reader) (*ResponseResult, error) {
 	// Prepare a HTTP request with the provided context.
-	request, err := http.NewRequest(method, url, body)
+	request, err := http.NewRequest(method, path, body)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +139,7 @@ type IPVersion string
 func BuildQueryParameters(opts interface{}) (string, error) {
 	optsValue := reflect.ValueOf(opts)
 	if optsValue.Kind() != reflect.Struct {
-		return "", fmt.Errorf("provided options is not a structure")
+		return "", errors.New("provided options is not a structure")
 	}
 	optsType := reflect.TypeOf(opts)
 
