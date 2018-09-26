@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -14,7 +15,7 @@ const resourceURL = "roles"
 // ListProject returns all roles in the specified project.
 func ListProject(ctx context.Context, client *selvpcclient.ServiceClient, id string) ([]*Role, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", id}, "/")
-	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -37,7 +38,7 @@ func ListProject(ctx context.Context, client *selvpcclient.ServiceClient, id str
 // ListUser returns all roles that are associated with the specified user.
 func ListUser(ctx context.Context, client *selvpcclient.ServiceClient, id string) ([]*Role, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, "users", id}, "/")
-	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -60,7 +61,7 @@ func ListUser(ctx context.Context, client *selvpcclient.ServiceClient, id string
 // Create requests a creation of the single role for the specified project and user.
 func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts RoleOpt) (*Role, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", createOpts.ProjectID, "users", createOpts.UserID}, "/")
-	responseResult, err := client.DoRequest(ctx, "POST", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -89,7 +90,7 @@ func CreateBulk(ctx context.Context, client *selvpcclient.ServiceClient, createO
 	}
 
 	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, "POST", url, bytes.NewReader(requestBody))
+	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -112,7 +113,7 @@ func CreateBulk(ctx context.Context, client *selvpcclient.ServiceClient, createO
 // Delete requests a deletion of the single role for the specified project and user.
 func Delete(ctx context.Context, client *selvpcclient.ServiceClient, deleteOpts RoleOpt) (*selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", deleteOpts.ProjectID, "users", deleteOpts.UserID}, "/")
-	responseResult, err := client.DoRequest(ctx, "DELETE", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
 	}
