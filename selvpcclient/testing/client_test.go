@@ -19,9 +19,9 @@ func TestDoGetRequest(t *testing.T) {
 	defer testEnv.TearDownTestEnv()
 	testEnv.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, "response")
+		fmt.Fprint(w, "response")
 
-		if r.Method != "GET" {
+		if r.Method != http.MethodGet {
 			t.Errorf("got %s method, want GET", r.Method)
 		}
 	})
@@ -35,12 +35,12 @@ func TestDoGetRequest(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := client.DoRequest(ctx, "GET", endpoint, nil)
+	response, err := client.DoRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		log.Fatalf("unexpected error: %v", err)
 	}
 	if response.Body == nil {
-		log.Fatalf("response body is empty")
+		log.Fatal("response body is empty")
 	}
 	if response.StatusCode != 200 {
 		log.Fatalf("got %d response status, want 200", response.StatusCode)
@@ -52,9 +52,9 @@ func TestDoPostRequest(t *testing.T) {
 	defer testEnv.TearDownTestEnv()
 	testEnv.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, "response")
+		fmt.Fprint(w, "response")
 
-		if r.Method != "POST" {
+		if r.Method != http.MethodPost {
 			t.Errorf("got %s method, want POST", r.Method)
 		}
 
@@ -82,12 +82,12 @@ func TestDoPostRequest(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := client.DoRequest(ctx, "POST", endpoint, bytes.NewReader(requestBody))
+	response, err := client.DoRequest(ctx, http.MethodPost, endpoint, bytes.NewReader(requestBody))
 	if err != nil {
 		log.Fatalf("unexpected error: %v", err)
 	}
 	if response.Body == nil {
-		log.Fatalf("response body is empty")
+		log.Fatal("response body is empty")
 	}
 	if response.StatusCode != 200 {
 		log.Fatalf("got %d response status, want 200", response.StatusCode)
