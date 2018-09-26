@@ -317,12 +317,12 @@ func TestCreateLicensesHTTPError(t *testing.T) {
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	licenses, httpResponse, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, httpResponse, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if licenses != nil {
+	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
 	}
 	if err == nil {
@@ -342,9 +342,9 @@ func TestCreateLicensesTimeoutError(t *testing.T) {
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	licenses, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
-	if licenses != nil {
+	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
 	}
 	if err == nil {
@@ -370,12 +370,12 @@ func TestCreateLicensesUnmarshalError(t *testing.T) {
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	licenses, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if licenses != nil {
+	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
 	}
 	if err == nil {
