@@ -16,7 +16,7 @@ func TestListUsers(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
 		RawResponse: TestListUsersResponseRaw,
@@ -52,7 +52,7 @@ func TestListUsersSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
 		RawResponse: TestListUsersSingleUserResponseRaw,
@@ -83,7 +83,7 @@ func TestListUsersHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
 		RawResponse: TestListUsersSingleUserResponseRaw,
@@ -133,7 +133,7 @@ func TestListUsersUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
 		RawResponse: TestManyUsersInvalidResponseRaw,
@@ -162,7 +162,7 @@ func TestCreateUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
 		RawResponse: TestCreateUserResponseRaw,
@@ -195,7 +195,7 @@ func TestCreateUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
 		URL:        "/resell/v2/users",
 		RawRequest: TestCreateUserOptsRaw,
@@ -246,7 +246,7 @@ func TestCreateUserUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
 		RawResponse: TestSingleUserInvalidResponseRaw,
@@ -277,7 +277,7 @@ func TestUpdateUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
 		RawResponse: TestUpdateUserResponseRaw,
@@ -310,7 +310,7 @@ func TestUpdateUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
 		URL:        "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
 		RawRequest: TestUpdateUserOptsRaw,
@@ -361,7 +361,7 @@ func TestUpdateUserUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
 		RawResponse: TestSingleUserInvalidResponseRaw,
@@ -392,7 +392,7 @@ func TestDeleteUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
 		Method:   http.MethodDelete,
@@ -416,7 +416,7 @@ func TestDeleteUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
 		Method:   http.MethodDelete,

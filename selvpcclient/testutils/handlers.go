@@ -37,7 +37,7 @@ type HandleReqOpts struct {
 }
 
 // HandleReqWithoutBody provides the HTTP endpoint to test requests without body.
-func HandleReqWithoutBody(t *testing.T, opts HandleReqOpts) {
+func HandleReqWithoutBody(t *testing.T, opts *HandleReqOpts) {
 	opts.Mux.HandleFunc(opts.URL, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(opts.Status)
@@ -52,7 +52,7 @@ func HandleReqWithoutBody(t *testing.T, opts HandleReqOpts) {
 }
 
 // HandleReqWithBody provides the HTTP endpoint to test requests with body.
-func HandleReqWithBody(t *testing.T, opts HandleReqOpts) {
+func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
 	opts.Mux.HandleFunc(opts.URL, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(opts.Status)

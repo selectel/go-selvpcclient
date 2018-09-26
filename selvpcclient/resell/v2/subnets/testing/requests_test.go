@@ -16,7 +16,7 @@ func TestGetSubnet(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/111122",
 		RawResponse: TestGetSubnetResponseRaw,
@@ -47,7 +47,7 @@ func TestGetSubnetHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/111122",
 		RawResponse: TestGetSubnetResponseRaw,
@@ -97,7 +97,7 @@ func TestGetSubnetUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/111122",
 		RawResponse: TestSingleSubnetInvalidResponseRaw,
@@ -126,7 +126,7 @@ func TestListSubnets(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
 		RawResponse: TestListSubnetsResponseRaw,
@@ -162,7 +162,7 @@ func TestListSubnetsSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
 		RawResponse: TestListSubnetsSingleResponseRaw,
@@ -193,7 +193,7 @@ func TestListSubnetsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
 		RawResponse: TestListSubnetsResponseRaw,
@@ -243,7 +243,7 @@ func TestListSubnetsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
 		RawResponse: TestManySubnetsInvalidResponseRaw,
@@ -272,7 +272,7 @@ func TestCreateSubnets(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
 		RawResponse: TestCreateSubnetsResponseRaw,
@@ -305,7 +305,7 @@ func TestCreateSubnetsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
 		RawResponse: TestCreateSubnetsResponseRaw,
@@ -359,7 +359,7 @@ func TestCreateSubnetsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
 		RawResponse: TestManySubnetsInvalidResponseRaw,
@@ -390,7 +390,7 @@ func TestDeleteSubnet(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/subnets/112233",
 		Method:   http.MethodDelete,
@@ -415,7 +415,7 @@ func TestDeleteSubnetHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/subnets/112233",
 		Method:   http.MethodDelete,

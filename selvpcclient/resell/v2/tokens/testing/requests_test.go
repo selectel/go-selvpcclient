@@ -16,7 +16,7 @@ func TestCreateToken(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/tokens",
 		RawResponse: TestCreateTokenResponseRaw,
@@ -49,7 +49,7 @@ func TestCreateTokenHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/tokens",
 		RawResponse: TestCreateTokenResponseRaw,
@@ -102,7 +102,7 @@ func TestCreateTokenUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/tokens",
 		RawResponse: TestTokenInvalidResponseRaw,

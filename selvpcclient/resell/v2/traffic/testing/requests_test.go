@@ -16,7 +16,7 @@ func TestGetDomainTraffic(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
 		RawResponse: TestGetTrafficRaw,
@@ -52,7 +52,7 @@ func TestGetDomainTrafficUsed(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
 		RawResponse: TestGetTrafficUsedRaw,
@@ -83,7 +83,7 @@ func TestGetDomainTrafficHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
 		RawResponse: TestGetTrafficRaw,
@@ -133,7 +133,7 @@ func TestGetTrafficInvalidTimestampsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
 		RawResponse: TestGetTrafficInvalidTimestampsRaw,
@@ -162,7 +162,7 @@ func TestGetTrafficInvalidResponseUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
 		RawResponse: TestGetTrafficInvalidDataResponseRaw,

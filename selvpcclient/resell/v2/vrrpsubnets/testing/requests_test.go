@@ -16,7 +16,7 @@ func TestGetVRRPSubnet(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/186",
 		RawResponse: TestGetVRRPSubnetResponseRaw,
@@ -47,7 +47,7 @@ func TestGetVRRPSubnetHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/186",
 		RawResponse: TestGetVRRPSubnetResponseRaw,
@@ -97,7 +97,7 @@ func TestGetVRRPSubnetUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/186",
 		RawResponse: TestSingleVRRPSubnetInvalidResponseRaw,
@@ -126,7 +126,7 @@ func TestListVRRPSubnets(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets",
 		RawResponse: TestListVRRPSubnetsResponseRaw,
@@ -157,7 +157,7 @@ func TestListVRRPSubnetsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets",
 		RawResponse: TestListVRRPSubnetsResponseRaw,
@@ -207,7 +207,7 @@ func TestListVRRPSubnetsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets",
 		RawResponse: TestManyVRRPSubnetsInvalidResponseRaw,
@@ -236,7 +236,7 @@ func TestCreateVRRPSubnets(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestCreateVRRPSubnetsResponseRaw,
@@ -269,7 +269,7 @@ func TestCreateVRRPSubnetsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestCreateVRRPSubnetsResponseRaw,
@@ -323,7 +323,7 @@ func TestCreateVRRPSubnetsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestManyVRRPSubnetsInvalidResponseRaw,
@@ -354,7 +354,7 @@ func TestDeleteVRRPSubnet(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/vrrp_subnets/112233",
 		Method:   http.MethodDelete,
@@ -379,7 +379,7 @@ func TestDeleteVRRPSubnetHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/vrrp_subnets/112233",
 		Method:   http.MethodDelete,

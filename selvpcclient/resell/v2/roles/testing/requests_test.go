@@ -16,7 +16,7 @@ func TestListRolesProject(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestListProjectResponseRaw,
@@ -52,7 +52,7 @@ func TestListRolesProjectSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestListResponseSingleRaw,
@@ -83,7 +83,7 @@ func TestListRolesProjectHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestListProjectResponseRaw,
@@ -133,7 +133,7 @@ func TestListRolesProjectUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
 		RawResponse: TestManyRolesInvalidResponseRaw,
@@ -162,7 +162,7 @@ func TestListRolesUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestListUserResponseRaw,
@@ -198,7 +198,7 @@ func TestListRolesUserSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestListResponseSingleRaw,
@@ -229,7 +229,7 @@ func TestListRolesUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestListUserResponseRaw,
@@ -279,7 +279,7 @@ func TestListRolesUserUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestManyRolesInvalidResponseRaw,
@@ -308,7 +308,7 @@ func TestCreateRole(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestCreateRoleResponseRaw,
@@ -340,7 +340,7 @@ func TestCreateRoleHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestCreateRoleResponseRaw,
@@ -392,7 +392,7 @@ func TestCreateRoleUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		RawResponse: TestSingleRoleInvalidResponseRaw,
@@ -422,7 +422,7 @@ func TestCreateRolesBulk(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles",
 		RawResponse: TestCreateRolesResponseRaw,
@@ -460,7 +460,7 @@ func TestCreateRolesBulkHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles",
 		RawResponse: TestCreateRolesResponseRaw,
@@ -513,7 +513,7 @@ func TestCreateRolesBulkUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/roles",
 		RawResponse: TestManyRolesInvalidResponseRaw,
@@ -544,7 +544,7 @@ func TestDeleteRole(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		Method:   http.MethodDelete,
@@ -569,7 +569,7 @@ func TestDeleteRoleHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, testutils.HandleReqOpts{
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
 		Method:   http.MethodDelete,
