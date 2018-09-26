@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -24,7 +25,7 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 	}
 
 	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, "POST", url, bytes.NewReader(requestBody))
+	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err
 	}
