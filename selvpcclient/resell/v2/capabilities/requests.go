@@ -2,6 +2,7 @@ package capabilities
 
 import (
 	"context"
+	"net/http"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -12,7 +13,7 @@ const resourceURL = "capabilities"
 // Get returns the domain capabilities.
 func Get(ctx context.Context, client *selvpcclient.ServiceClient) (*Capabilities, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}

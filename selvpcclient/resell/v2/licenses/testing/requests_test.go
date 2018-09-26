@@ -16,8 +16,14 @@ func TestGetLicense(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses/123123",
-		TestGetLicenseResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses/123123",
+		RawResponse: TestGetLicenseResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := licenses.Get(ctx, testEnv.Client, "123123")
@@ -41,9 +47,14 @@ func TestGetLicenseHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses/123123",
-		TestGetLicenseResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses/123123",
+		RawResponse: TestGetLicenseResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	license, httpResponse, err := licenses.Get(ctx, testEnv.Client, "123123")
@@ -86,9 +97,14 @@ func TestGetLicenseUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses/123123",
-		TestSingleLicenseInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses/123123",
+		RawResponse: TestSingleLicenseInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	license, _, err := licenses.Get(ctx, testEnv.Client, "123123")
@@ -110,8 +126,14 @@ func TestListLicenses(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses",
-		TestListLicensesResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses",
+		RawResponse: TestListLicensesResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
@@ -140,8 +162,14 @@ func TestListLicensesSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses",
-		TestListLicensesSingleResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses",
+		RawResponse: TestListLicensesSingleResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
@@ -165,9 +193,14 @@ func TestListLicensesHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses",
-		TestListLicensesResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses",
+		RawResponse: TestListLicensesResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allLicenses, httpResponse, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
@@ -210,9 +243,14 @@ func TestListLicensesUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses",
-		TestManyLicensesInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses",
+		RawResponse: TestManyLicensesInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allLicenses, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
@@ -234,9 +272,15 @@ func TestCreateLicenses(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
-		TestCreateLicenseResponseRaw, TestCreateLicenseOptsRaw, http.MethodPost, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestCreateLicenseResponseRaw,
+		RawRequest:  TestCreateLicenseOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
@@ -261,18 +305,24 @@ func TestCreateLicensesHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
-		TestCreateLicenseResponseRaw, TestCreateLicenseOptsRaw, http.MethodPost,
-		http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestCreateLicenseResponseRaw,
+		RawRequest:  TestCreateLicenseOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	licenses, httpResponse, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, httpResponse, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if licenses != nil {
+	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
 	}
 	if err == nil {
@@ -292,9 +342,9 @@ func TestCreateLicensesTimeoutError(t *testing.T) {
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	licenses, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
-	if licenses != nil {
+	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
 	}
 	if err == nil {
@@ -308,17 +358,24 @@ func TestCreateLicensesUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
-		TestManyLicensesInvalidResponseRaw, TestCreateLicenseOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestManyLicensesInvalidResponseRaw,
+		RawRequest:  TestCreateLicenseOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	licenses, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if licenses != nil {
+	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
 	}
 	if err == nil {
@@ -332,8 +389,13 @@ func TestDeleteLicense(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd",
-		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	_, err := licenses.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
@@ -351,8 +413,13 @@ func TestDeleteLicenseHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd",
-		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	httpResponse, err := licenses.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")

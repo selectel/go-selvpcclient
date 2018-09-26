@@ -3,6 +3,7 @@ package testing
 import (
 	"time"
 
+	"github.com/selectel/go-selvpcclient/selvpcclient"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/servers"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/vrrpsubnets"
@@ -168,7 +169,7 @@ var TestCreateVRRPSubnetsOpts = vrrpsubnets.VRRPSubnetOpts{
 				Master: "ru-2",
 				Slave:  "ru-1",
 			},
-			Type:         "ipv4",
+			Type:         selvpcclient.IPv4,
 			PrefixLength: 29,
 		},
 	},

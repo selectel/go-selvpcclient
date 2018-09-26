@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"net/http"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
@@ -14,7 +15,7 @@ const resourceURL = "users"
 // List gets a list of users in the current domain.
 func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*User, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, "GET", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -47,7 +48,7 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 	}
 
 	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, "POST", url, bytes.NewReader(requestBody))
+	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -80,7 +81,7 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 	}
 
 	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, "PATCH", url, bytes.NewReader(requestBody))
+	responseResult, err := client.DoRequest(ctx, http.MethodPatch, url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -103,7 +104,7 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 // Delete deletes a single user by its id.
 func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, "DELETE", url, nil)
+	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
 	if err != nil {
 		return nil, err
 	}

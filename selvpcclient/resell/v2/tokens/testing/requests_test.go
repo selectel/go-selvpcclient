@@ -16,9 +16,15 @@ func TestCreateToken(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/tokens",
-		TestCreateTokenResponseRaw, TestCreateTokenOptsRaw, http.MethodPost, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/tokens",
+		RawResponse: TestCreateTokenResponseRaw,
+		RawRequest:  TestCreateTokenOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateTokenOpts
@@ -43,9 +49,15 @@ func TestCreateTokenHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/tokens",
-		TestCreateTokenResponseRaw, TestCreateTokenOptsRaw, http.MethodPost,
-		http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/tokens",
+		RawResponse: TestCreateTokenResponseRaw,
+		RawRequest:  TestCreateTokenOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateTokenOpts
@@ -90,8 +102,15 @@ func TestCreateTokenUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/tokens",
-		TestTokenInvalidResponseRaw, TestCreateTokenOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/tokens",
+		RawResponse: TestTokenInvalidResponseRaw,
+		RawRequest:  TestCreateTokenOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateTokenOpts

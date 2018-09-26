@@ -16,8 +16,14 @@ func TestListRolesProject(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
-		TestListProjectResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestListProjectResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := roles.ListProject(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -46,8 +52,14 @@ func TestListRolesProjectSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
-		TestListResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestListResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := roles.ListProject(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -71,9 +83,14 @@ func TestListRolesProjectHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
-		TestListProjectResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestListProjectResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allRoles, httpResponse, err := roles.ListProject(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -116,9 +133,14 @@ func TestListRolesProjectUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
-		TestManyRolesInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestManyRolesInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allRoles, _, err := roles.ListProject(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -140,8 +162,14 @@ func TestListRolesUser(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestListUserResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestListUserResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := roles.ListUser(ctx, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
@@ -170,8 +198,14 @@ func TestListRolesUserSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestListResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestListResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := roles.ListUser(ctx, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
@@ -195,9 +229,14 @@ func TestListRolesUserHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestListUserResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestListUserResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allRoles, httpResponse, err := roles.ListUser(ctx, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
@@ -240,9 +279,14 @@ func TestListRolesUserUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestManyRolesInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestManyRolesInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allRoles, _, err := roles.ListUser(ctx, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
@@ -264,9 +308,14 @@ func TestCreateRole(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux,
-		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestCreateRoleResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestCreateRoleResponseRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestRoleOpt
@@ -291,9 +340,14 @@ func TestCreateRoleHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux,
-		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestCreateRoleResponseRaw, http.MethodPost, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestCreateRoleResponseRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestRoleOpt
@@ -338,9 +392,14 @@ func TestCreateRoleUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux,
-		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		TestSingleRoleInvalidResponseRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		RawResponse: TestSingleRoleInvalidResponseRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestRoleOpt
@@ -363,9 +422,15 @@ func TestCreateRolesBulk(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/roles",
-		TestCreateRolesResponseRaw, TestCreateRolesOptsRaw, http.MethodPost, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestCreateRolesResponseRaw,
+		RawRequest:  TestCreateRolesOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateRolesOpts
@@ -395,9 +460,15 @@ func TestCreateRolesBulkHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/roles",
-		TestCreateRolesResponseRaw, TestCreateRolesOptsRaw, http.MethodPost,
-		http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestCreateRolesResponseRaw,
+		RawRequest:  TestCreateRolesOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateRolesOpts
@@ -442,9 +513,15 @@ func TestCreateRolesBulkUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/roles",
-		TestManyRolesInvalidResponseRaw, TestCreateRolesOptsRaw, http.MethodPost,
-		http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestManyRolesInvalidResponseRaw,
+		RawRequest:  TestCreateRolesOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateRolesOpts
@@ -467,9 +544,13 @@ func TestDeleteRole(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux,
-		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	deleteOpts := TestRoleOpt
@@ -488,9 +569,13 @@ func TestDeleteRoleHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux,
-		"/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
-		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/roles/projects/49338ac045f448e294b25d013f890317/users/763eecfaeb0c8e9b76ab12a82eb4c11",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	deleteOpts := TestRoleOpt

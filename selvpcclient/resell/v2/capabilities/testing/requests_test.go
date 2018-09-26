@@ -15,11 +15,17 @@ func TestGetCapabilities(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/capabilities",
-		TestGetCapabilitiesRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/capabilities",
+		RawResponse: TestGetCapabilitiesRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	capabilities, _, err := capabilities.Get(ctx, testEnv.Client)
+	c, _, err := capabilities.Get(ctx, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,23 +33,23 @@ func TestGetCapabilities(t *testing.T) {
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if capabilities == nil {
+	if c == nil {
 		t.Fatal("didn't get capabilities")
 	}
-	if len(capabilities.Licenses) != 2 {
-		t.Errorf("expected 2 licenses, but got %d", len(capabilities.Licenses))
+	if len(c.Licenses) != 2 {
+		t.Errorf("expected 2 licenses, but got %d", len(c.Licenses))
 	}
-	if len(capabilities.Regions) != 3 {
-		t.Errorf("expected 3 regions, but got %d", len(capabilities.Regions))
+	if len(c.Regions) != 3 {
+		t.Errorf("expected 3 regions, but got %d", len(c.Regions))
 	}
-	if len(capabilities.Resources) != 16 {
-		t.Errorf("expected 16 resources, but got %d", len(capabilities.Resources))
+	if len(c.Resources) != 16 {
+		t.Errorf("expected 16 resources, but got %d", len(c.Resources))
 	}
-	if len(capabilities.Subnets) != 1 {
-		t.Errorf("expected 1 subnets, but got %d", len(capabilities.Subnets))
+	if len(c.Subnets) != 1 {
+		t.Errorf("expected 1 subnets, but got %d", len(c.Subnets))
 	}
-	if len(capabilities.Traffic.Granularities) != 3 {
-		t.Errorf("expected 3 traffic granularities, but got %d", len(capabilities.Traffic.Granularities))
+	if len(c.Traffic.Granularities) != 3 {
+		t.Errorf("expected 3 traffic granularities, but got %d", len(c.Traffic.Granularities))
 	}
 }
 
@@ -53,16 +59,22 @@ func TestGetCapabilitiesHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/capabilities",
-		TestGetCapabilitiesRaw, http.MethodGet, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/capabilities",
+		RawResponse: TestGetCapabilitiesRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	capabilities, httpResponse, err := capabilities.Get(ctx, testEnv.Client)
+	c, httpResponse, err := capabilities.Get(ctx, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if capabilities != nil {
+	if c != nil {
 		t.Fatal("expected no capabilities from the Get method")
 	}
 	if err == nil {
@@ -81,9 +93,9 @@ func TestGetCapabilitiesTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	capabilities, _, err := capabilities.Get(ctx, testEnv.Client)
+	c, _, err := capabilities.Get(ctx, testEnv.Client)
 
-	if capabilities != nil {
+	if c != nil {
 		t.Fatal("expected no capabilities from the Get method")
 	}
 	if err == nil {
@@ -97,16 +109,22 @@ func TestGetCapabilitiesUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/capabilities",
-		TestGetCapabilitiesInvalidRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/capabilities",
+		RawResponse: TestGetCapabilitiesInvalidRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	capabilities, _, err := capabilities.Get(ctx, testEnv.Client)
+	c, _, err := capabilities.Get(ctx, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if capabilities != nil {
+	if c != nil {
 		t.Fatal("expected no capabilities from the Get method")
 	}
 	if err == nil {

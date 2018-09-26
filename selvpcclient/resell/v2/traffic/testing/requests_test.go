@@ -16,11 +16,17 @@ func TestGetDomainTraffic(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/traffic",
-		TestGetTrafficRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/traffic",
+		RawResponse: TestGetTrafficRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	actual, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(ctx, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,15 +34,15 @@ func TestGetDomainTraffic(t *testing.T) {
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if actual == nil {
+	if tr == nil {
 		t.Fatal("didn't get traffic")
 	}
-	actualKind := reflect.TypeOf(actual.DomainData).Kind()
+	actualKind := reflect.TypeOf(tr.DomainData).Kind()
 	if actualKind != reflect.Slice {
 		t.Errorf("expected slice of pointers to traffic data, but got %v", actualKind)
 	}
-	if len(actual.DomainData) != 3 {
-		t.Errorf("expected 3 traffic data structures, but got %d", len(actual.DomainData))
+	if len(tr.DomainData) != 3 {
+		t.Errorf("expected 3 traffic data structures, but got %d", len(tr.DomainData))
 	}
 }
 
@@ -46,11 +52,17 @@ func TestGetDomainTrafficUsed(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/traffic",
-		TestGetTrafficUsedRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/traffic",
+		RawResponse: TestGetTrafficUsedRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	actual, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(ctx, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,8 +72,8 @@ func TestGetDomainTrafficUsed(t *testing.T) {
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	if !reflect.DeepEqual(tr, expected) {
+		t.Fatalf("expected %#v, but got %#v", expected, tr)
 	}
 }
 
@@ -71,16 +83,22 @@ func TestGetDomainTrafficHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/traffic",
-		TestGetTrafficRaw, http.MethodGet, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/traffic",
+		RawResponse: TestGetTrafficRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	traffic, httpResponse, err := traffic.Get(ctx, testEnv.Client)
+	tr, httpResponse, err := traffic.Get(ctx, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if traffic != nil {
+	if tr != nil {
 		t.Fatal("expected no traffic from the Get method")
 	}
 	if err == nil {
@@ -99,9 +117,9 @@ func TestGetTrafficTimeoutError(t *testing.T) {
 	testEnv.NewTestResellV2Client()
 
 	ctx := context.Background()
-	traffic, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(ctx, testEnv.Client)
 
-	if traffic != nil {
+	if tr != nil {
 		t.Fatal("expected no traffic from the Get method")
 	}
 	if err == nil {
@@ -115,16 +133,22 @@ func TestGetTrafficInvalidTimestampsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/traffic",
-		TestGetTrafficInvalidTimestampsRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/traffic",
+		RawResponse: TestGetTrafficInvalidTimestampsRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	traffic, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(ctx, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if traffic != nil {
+	if tr != nil {
 		t.Fatal("expected no traffic from the Get method")
 	}
 	if err == nil {
@@ -138,16 +162,22 @@ func TestGetTrafficInvalidResponseUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/traffic",
-		TestGetTrafficInvalidDataResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/traffic",
+		RawResponse: TestGetTrafficInvalidDataResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
-	traffic, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(ctx, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if traffic != nil {
+	if tr != nil {
 		t.Fatal("expected no traffic from the Get method")
 	}
 	if err == nil {

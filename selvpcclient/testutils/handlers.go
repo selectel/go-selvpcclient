@@ -9,30 +9,57 @@ import (
 	"testing"
 )
 
-// HandleReqWithoutBody provides the HTTP endpoint to test requests without body.
-func HandleReqWithoutBody(mux *http.ServeMux, url, rawResponse, method string, httpStatus int, callFlag *bool, t *testing.T) {
-	mux.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(httpStatus)
-		fmt.Fprintf(w, rawResponse)
+// HandleReqOpts represents options for the testing utils package handlers.
+type HandleReqOpts struct {
+	// Mux represents HTTP Mux for a testing handler.
+	Mux *http.ServeMux
 
-		if r.Method != method {
-			t.Fatalf("expected %s method but got %s", method, r.Method)
+	// URL represents handler's HTTP URL.
+	URL string
+
+	// RawResponse represents raw string HTTP response that needs to be returned
+	// by the handler.
+	RawResponse string
+
+	// RawRequest represents raw string HTTP request that needs to be compared
+	// with the actual request that will be provided by the caller.
+	RawRequest string
+
+	// Method contains HTTP method that needs to be compared against real method
+	// provided by the caller.
+	Method string
+
+	// Status represents HTTP status that will be returned by the handler.
+	Status int
+
+	// CallFlag can be used to check if caller sent a request to a handler.
+	CallFlag *bool
+}
+
+// HandleReqWithoutBody provides the HTTP endpoint to test requests without body.
+func HandleReqWithoutBody(t *testing.T, opts *HandleReqOpts) {
+	opts.Mux.HandleFunc(opts.URL, func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(opts.Status)
+		fmt.Fprint(w, opts.RawResponse)
+
+		if r.Method != opts.Method {
+			t.Fatalf("expected %s method but got %s", opts.Method, r.Method)
 		}
 
-		*callFlag = true
+		*opts.CallFlag = true
 	})
 }
 
 // HandleReqWithBody provides the HTTP endpoint to test requests with body.
-func HandleReqWithBody(mux *http.ServeMux, url, rawResponse, rawRequest, method string, httpStatus int, callFlag *bool, t *testing.T) {
-	mux.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
+func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
+	opts.Mux.HandleFunc(opts.URL, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(httpStatus)
-		fmt.Fprintf(w, rawResponse)
+		w.WriteHeader(opts.Status)
+		fmt.Fprint(w, opts.RawResponse)
 
-		if r.Method != method {
-			t.Fatalf("expected %s method but got %s", method, r.Method)
+		if r.Method != opts.Method {
+			t.Fatalf("expected %s method but got %s", opts.Method, r.Method)
 		}
 
 		b, err := ioutil.ReadAll(r.Body)
@@ -47,7 +74,7 @@ func HandleReqWithBody(mux *http.ServeMux, url, rawResponse, rawRequest, method 
 		}
 
 		var expectedRequest interface{}
-		err = json.Unmarshal([]byte(rawRequest), &expectedRequest)
+		err = json.Unmarshal([]byte(opts.RawRequest), &expectedRequest)
 		if err != nil {
 			t.Errorf("unable to unmarshal expected raw request: %v", err)
 		}
@@ -56,6 +83,6 @@ func HandleReqWithBody(mux *http.ServeMux, url, rawResponse, rawRequest, method 
 			t.Fatalf("expected %#v request, but got %#v", expectedRequest, actualRequest)
 		}
 
-		*callFlag = true
+		*opts.CallFlag = true
 	})
 }

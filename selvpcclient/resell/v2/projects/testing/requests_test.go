@@ -16,8 +16,14 @@ func TestGetProject(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/49338ac045f448e294b25d013f890317",
-		TestGetProjectResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestGetProjectResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -42,8 +48,14 @@ func TestGetProjectSingleQuota(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/49338ac045f448e294b25d013f890317",
-		TestGetProjectResponseSingleQuotaRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestGetProjectResponseSingleQuotaRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -67,9 +79,14 @@ func TestGetProjectHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/49338ac045f448e294b25d013f890317",
-		TestGetProjectResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestGetProjectResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	project, httpResponse, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -112,9 +129,14 @@ func TestGetProjectUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/49338ac045f448e294b25d013f890317",
-		TestSingleProjectInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
+		RawResponse: TestSingleProjectInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	project, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
@@ -136,8 +158,14 @@ func TestListProjects(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects",
-		TestListProjectsResponseRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestListProjectsResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := projects.List(ctx, testEnv.Client)
@@ -162,8 +190,14 @@ func TestListProjectsSingle(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects",
-		TestListProjectsResponseSingleRaw, http.MethodGet, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestListProjectsResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	actual, _, err := projects.List(ctx, testEnv.Client)
@@ -187,9 +221,14 @@ func TestListProjectsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects",
-		TestListProjectsResponseRaw, http.MethodGet, http.StatusBadGateway,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestListProjectsResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allProjects, httpResponse, err := projects.List(ctx, testEnv.Client)
@@ -232,9 +271,14 @@ func TestListProjectsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects",
-		TestManyProjectsInvalidResponseRaw, http.MethodGet, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestManyProjectsInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	allProjects, _, err := projects.List(ctx, testEnv.Client)
@@ -256,9 +300,15 @@ func TestCreateProject(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
-		TestCreateProjectResponseRaw, TestCreateProjectOptsRaw, http.MethodPost, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestCreateProjectResponseRaw,
+		RawRequest:  TestCreateProjectOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
@@ -283,9 +333,15 @@ func TestCreateProjectAutoQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
-		TestCreateProjectAutoQuotasResponseRaw, TestCreateProjectAutoQuotasOptsRaw,
-		http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestCreateProjectAutoQuotasResponseRaw,
+		RawRequest:  TestCreateProjectAutoQuotasOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateProjectAutoQuotasOpts
@@ -310,9 +366,15 @@ func TestCreateProjectsHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
-		TestCreateProjectResponseRaw, TestCreateProjectOptsRaw, http.MethodPost,
-		http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestCreateProjectResponseRaw,
+		RawRequest:  TestCreateProjectOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
@@ -357,8 +419,15 @@ func TestCreateProjectsUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
-		TestSingleProjectInvalidResponseRaw, TestCreateProjectOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestSingleProjectInvalidResponseRaw,
+		RawRequest:  TestCreateProjectOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
@@ -381,8 +450,15 @@ func TestCreateProjectsNoQuotas(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects",
-		TestCreateProjectResponseRaw, TestCreateProjectNoQuotasOptsRaw, http.MethodPost, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects",
+		RawResponse: TestCreateProjectResponseRaw,
+		RawRequest:  TestCreateProjectNoQuotasOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	createOpts := TestCreateProjectNoQuotasOpts
@@ -407,9 +483,15 @@ func TestUpdateProject(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
-		TestUpdateProjectResponseRaw, TestUpdateProjectOptsRaw, http.MethodPatch, http.StatusOK,
-		&endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		RawResponse: TestUpdateProjectResponseRaw,
+		RawRequest:  TestUpdateProjectOptsRaw,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
@@ -434,8 +516,14 @@ func TestUpdateProjectHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
-		"", TestUpdateProjectOptsRaw, http.MethodPatch, http.StatusBadRequest, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:        testEnv.Mux,
+		URL:        "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		RawRequest: TestUpdateProjectOptsRaw,
+		Method:     http.MethodPatch,
+		Status:     http.StatusBadRequest,
+		CallFlag:   &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
@@ -479,9 +567,15 @@ func TestUpdateProjectUnmarshalError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
-		TestSingleProjectInvalidResponseRaw, TestUpdateProjectOptsRaw, http.MethodPatch,
-		http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		RawResponse: TestSingleProjectInvalidResponseRaw,
+		RawRequest:  TestUpdateProjectOptsRaw,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
 
 	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
@@ -504,8 +598,13 @@ func TestDeleteProject(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
-		"", http.MethodDelete, http.StatusOK, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	_, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
@@ -523,8 +622,13 @@ func TestDeleteProjectHTTPError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
 	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(testEnv.Mux, "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
-		"", http.MethodDelete, http.StatusBadGateway, &endpointCalled, t)
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
 
 	ctx := context.Background()
 	httpResponse, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
