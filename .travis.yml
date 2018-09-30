@@ -6,7 +6,7 @@ install:
   - go get github.com/mattn/goveralls
   - go get github.com/wadey/gocovmerge
 go:
-  - "1.10"
+  - "1.11"
 before_script:
   - go vet ./...
   - golint -set_exit_status ./...
