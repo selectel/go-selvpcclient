@@ -11,7 +11,7 @@ go:
 before_script:
   - go vet ./...
   - golint -set_exit_status ./...
-  - gocritic check-project --enable=all .
+  - gocritic check-project --enable=all -withExperimental -withOpinionated .
   - ./scripts/imports
   - ./scripts/format
 script:
