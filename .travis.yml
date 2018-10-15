@@ -2,7 +2,7 @@ sudo: false
 language: go
 install:
   - go get golang.org/x/tools/cmd/goimports
-  - go get github.com/golang/lint/golint
+  - go get golang.org/x/lint/golint
   - go get github.com/mattn/goveralls
   - go get github.com/wadey/gocovmerge
   - go get github.com/go-critic/go-critic/...
