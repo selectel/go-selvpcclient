@@ -74,11 +74,11 @@ type Resource struct {
 	// Name contains a human-readable resource name.
 	Name string `json:"name"`
 
-	// Preordered shows if resource is preordered.
-	Preordered bool `json:"preordered"`
-
 	// QuotaScope shows scope of the resource. It can be region, zone or null.
 	QuotaScope string `json:"quota_scope"`
+
+	// Preordered shows if resource is preordered.
+	Preordered bool `json:"preordered"`
 
 	// Quotable shows if resource is quotable.
 	Quotable bool `json:"quotable"`

@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Run tests and create a coverage profile.
+echo "==> Running go test and creating a coverage profile..."
 i=0
 for testingpkg in $(go list ./selvpcclient/.../testing); do
   coverpkg=${testingpkg::-8}
