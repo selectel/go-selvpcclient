@@ -35,8 +35,6 @@ var TestGetLicenseResponse = &licenses.License{
 	ID:        123123,
 	ProjectID: "49338ac045f448e294b25d013f890317",
 	Region:    "ru-2",
-	Status:    "ACTIVE",
-	Type:      "license_windows_2012_standard",
 	Servers: []servers.Server{
 		{
 			ID:      "253b680c-89f6-4c85-afbf-c9a67c92d3fe",
@@ -45,6 +43,8 @@ var TestGetLicenseResponse = &licenses.License{
 			Updated: licenseServerTimeStamp,
 		},
 	},
+	Status: "ACTIVE",
+	Type:   "license_windows_2012_standard",
 }
 
 // TestListLicensesResponseRaw represents a raw response from the List request.

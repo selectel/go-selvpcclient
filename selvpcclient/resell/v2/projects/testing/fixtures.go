@@ -92,9 +92,9 @@ var TestGetProjectSingleQuotaResponse = &projects.Project{
 			ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
 				{
 					Region: "ru-1",
-					Used:   2,
-					Value:  10,
 					Zone:   "ru-1b",
+					Value:  10,
+					Used:   2,
 				},
 			},
 		},
@@ -259,9 +259,9 @@ var TestCreateProjectAutoQuotasResponse = &projects.Project{
 			ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
 				{
 					Region: "ru-1",
-					Used:   2,
-					Value:  10,
 					Zone:   "ru-1b",
+					Value:  10,
+					Used:   2,
 				},
 			},
 		},
@@ -309,15 +309,15 @@ const TestUpdateProjectResponseRaw = `
 
 // TestUpdateProjectResponse represents the unmarshalled TestUpdateProjectResponseRaw response.
 var TestUpdateProjectResponse = &projects.Project{
-	ID:      "f9ede488e5f14bac8962d8c53d0af9f4",
-	Name:    "Project3",
-	URL:     "https://zzzzzz.selvpc.ru",
-	Enabled: true,
-	Theme: projects.Theme{
-		Logo:  "",
-		Color: "#581845",
-	},
+	ID:        "f9ede488e5f14bac8962d8c53d0af9f4",
+	Name:      "Project3",
+	URL:       "https://zzzzzz.selvpc.ru",
+	Enabled:   true,
 	CustomURL: "",
+	Theme: projects.Theme{
+		Color: "#581845",
+		Logo:  "",
+	},
 }
 
 // TestManyProjectsInvalidResponseRaw represents a raw invalid response with many projects.

@@ -57,22 +57,22 @@ var TestGetVRRPSubnetResponse = &vrrpsubnets.VRRPSubnet{
 			Updated: vrrpSubnetServerTimeStamp,
 		},
 	},
-	CIDR:         "203.0.113.0/24",
-	ProjectID:    "49338ac045f448e294b25d013f890317",
 	MasterRegion: "ru-2",
 	SlaveRegion:  "ru-1",
+	CIDR:         "203.0.113.0/24",
 	Subnets: []subnets.Subnet{
 		{
+			Region:    "ru-1",
 			NetworkID: "8233f12e-c47e-4f1c-953a-1ecd322a7119",
 			SubnetID:  "94425a6e-19cd-412d-9710-ff40b34a78f4",
-			Region:    "ru-1",
 		},
 		{
+			Region:    "ru-2",
 			NetworkID: "e53c5abe-8b64-4a49-83f2-a51949d9294e",
 			SubnetID:  "649231cc-a17f-4c6b-8bf3-51a8871104c5",
-			Region:    "ru-2",
 		},
 	},
+	ProjectID: "49338ac045f448e294b25d013f890317",
 }
 
 // TestListVRRPSubnetsResponseRaw represents a raw response from the List request.
@@ -130,14 +130,14 @@ var TestListVRRPSubnetsResponse = []*vrrpsubnets.VRRPSubnet{
 		SlaveRegion:  "ru-1",
 		Subnets: []subnets.Subnet{
 			{
+				Region:    "ru-1",
 				NetworkID: "8233f12e-c47e-4f1c-953a-1ecd322a7119",
 				SubnetID:  "94425a6e-19cd-412d-9710-ff40b34a78f4",
-				Region:    "ru-1",
 			},
 			{
+				Region:    "ru-2",
 				NetworkID: "e53c5abe-8b64-4a49-83f2-a51949d9294e",
 				SubnetID:  "649231cc-a17f-4c6b-8bf3-51a8871104c5",
-				Region:    "ru-2",
 			},
 		},
 	},
@@ -214,14 +214,14 @@ var TestCreateVRRPSubnetsResponse = []*vrrpsubnets.VRRPSubnet{
 		SlaveRegion:  "ru-1",
 		Subnets: []subnets.Subnet{
 			{
+				Region:    "ru-1",
 				NetworkID: "8233f12e-c47e-4f1c-953a-1ecd322a7119",
 				SubnetID:  "94425a6e-19cd-412d-9710-ff40b34a78f4",
-				Region:    "ru-1",
 			},
 			{
+				Region:    "ru-2",
 				NetworkID: "e53c5abe-8b64-4a49-83f2-a51949d9294e",
 				SubnetID:  "649231cc-a17f-4c6b-8bf3-51a8871104c5",
-				Region:    "ru-2",
 			},
 		},
 	},

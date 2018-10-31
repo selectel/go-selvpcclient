@@ -45,11 +45,11 @@ var TestGetSubnetResponse = &subnets.Subnet{
 			Updated: subnetServerTimeStamp,
 		},
 	},
+	Region:    "ru-3",
 	CIDR:      "203.0.113.0/24",
 	NetworkID: "8233f12e-c47e-4f1c-953a-1ecd322a7119",
-	ProjectID: "49338ac045f448e294b25d013f890317",
-	Region:    "ru-3",
 	SubnetID:  "94425a6e-19cd-412d-9710-ff40b34a78f4",
+	ProjectID: "49338ac045f448e294b25d013f890317",
 }
 
 // TestListSubnetsResponseRaw represents a raw response from the List request.
@@ -124,16 +124,16 @@ const TestCreateSubnetsOptsRaw = `
 var TestCreateSubnetsOpts = subnets.SubnetOpts{
 	Subnets: []subnets.SubnetOpt{
 		{
-			Type:         selvpcclient.IPv4,
-			PrefixLength: 29,
 			Region:       "ru-2",
 			Quantity:     1,
-		},
-		{
 			Type:         selvpcclient.IPv4,
 			PrefixLength: 29,
+		},
+		{
 			Region:       "ru-1",
 			Quantity:     1,
+			Type:         selvpcclient.IPv4,
+			PrefixLength: 29,
 		},
 	},
 }
