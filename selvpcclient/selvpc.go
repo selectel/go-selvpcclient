@@ -177,12 +177,9 @@ func BuildQueryParameters(opts interface{}) (string, error) {
 // isZero checks if provided value is zero.
 func isZero(v reflect.Value) bool {
 	if v.Kind() == reflect.Ptr {
-		if v.IsNil() {
-			return true
-		}
-		return false
+		return v.IsNil()
 	}
-
 	z := reflect.Zero(v.Type())
+
 	return v.Interface() == z.Interface()
 }
