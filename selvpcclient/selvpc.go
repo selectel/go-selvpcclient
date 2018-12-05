@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -28,7 +29,39 @@ const (
 
 	// DefaultUserAgent contains basic user agent that will be used in queries.
 	DefaultUserAgent = AppName + "/" + AppVersion
+
+	// defaultHTTPTimeout represents default timeout (in seconds) for HTTP
+	// requests.
+	defaultHTTPTimeout = 10
+
+	// defaultDialTimeout represents default timeout (in seconds) for HTTP
+	// connection establishments.
+	defaultDialTimeout = 5
+
+	// defaultTLSHandshakeTimeout represents default timeout (in seconds) for
+	// TSL handshake timeout.
+	defaultTLSHandshakeTimeout = 5
 )
+
+// NewHTTPClient returns a reference to an initialized HTTP client with
+// configured timeouts.
+func NewHTTPClient() *http.Client {
+	return &http.Client{
+		Timeout:   time.Second * defaultHTTPTimeout,
+		Transport: newHTTPTransport(),
+	}
+}
+
+// newHTTPTransport returns a reference to an initialized HTTP transport with
+// configured timeouts.
+func newHTTPTransport() *http.Transport {
+	return &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: time.Second * defaultDialTimeout,
+		}).Dial,
+		TLSHandshakeTimeout: time.Second * defaultTLSHandshakeTimeout,
+	}
+}
 
 // ServiceClient stores details that are needed to work with different Selectel VPC APIs.
 type ServiceClient struct {
