@@ -1,0 +1,8 @@
+linters:
+  fast: false
+  enable-all: true
+  disable:
+    - dupl
+    - gochecknoglobals
+    - gosec
+    - lll

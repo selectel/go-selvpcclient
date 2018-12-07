@@ -1,20 +1,7 @@
 #!/usr/bin/env bash
 
 echo "==> Running golangci-lint..."
-golangci-lint run \
-    --enable golint \
-    --enable interfacer \
-    --enable unconvert \
-    --enable goconst \
-    --enable gocyclo \
-    --enable gofmt \
-    --enable goimports \
-    --enable maligned \
-    --enable depguard \
-    --enable unparam \
-    --enable nakedret \
-    --enable prealloc \
-    ./...
+golangci-lint run ./...
 if [ $? -eq 1 ]; then
     echo ""
     echo "Golangci-lint found suspicious constructs. Please check the reported"; \
