@@ -3,8 +3,7 @@ language: go
 install:
   - go get github.com/mattn/goveralls
   - go get github.com/wadey/gocovmerge
-  - go get github.com/go-critic/go-critic/...
-  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin v1.11.2
+  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin v1.12.3
 go:
   - "1.11"
 script:
