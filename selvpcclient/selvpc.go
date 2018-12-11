@@ -32,7 +32,7 @@ const (
 
 	// defaultHTTPTimeout represents default timeout (in seconds) for HTTP
 	// requests.
-	defaultHTTPTimeout = 10
+	defaultHTTPTimeout = 40
 
 	// defaultDialTimeout represents default timeout (in seconds) for HTTP
 	// connection establishments.
