@@ -2,6 +2,26 @@ package testing
 
 import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/roles"
 
+// TestListResponseRaw represents a raw response from List requests.
+const TestListResponseRaw = `
+{
+    "roles": [
+        {
+            "project_id": "49338ac045f448e294b25d013f890317",
+            "user_id": "b006a55e3a904472824061d64d61be75"
+        },
+        {
+            "project_id": "49338ac045f448e294b25d013f890317",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        },
+        {
+            "project_id": "d7452adc9769422a908edfd2281d7c55",
+            "user_id": "763eecfaeb0c8e9b76ab12a82eb4c11"
+        }
+    ]
+}
+`
+
 // TestListProjectResponseRaw represents a raw response from ListProject requests.
 const TestListProjectResponseRaw = `
 {

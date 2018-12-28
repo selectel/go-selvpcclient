@@ -10,6 +10,146 @@ import (
 	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
 )
 
+func TestListRoles(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestListResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	actual, _, err := roles.List(ctx, testEnv.Client)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !endpointCalled {
+		t.Fatal("didn't get roles")
+	}
+	actualKind := reflect.TypeOf(actual).Kind()
+	if actualKind != reflect.Slice {
+		t.Errorf("expected Slice of pointers to roles, but got %v", actualKind)
+	}
+	if len(actual) != 3 {
+		t.Errorf("expected 3 roles, but got %d", len(actual))
+	}
+}
+
+func TestListRolesSingle(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestListResponseSingleRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	actual, _, err := roles.List(ctx, testEnv.Client)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := TestListResponseSingle
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	}
+}
+
+func TestListRolesHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestListResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	allRoles, httpResponse, err := roles.List(ctx, testEnv.Client)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if allRoles != nil {
+		t.Fatal("expected no roles from the Get method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Get method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadGateway, httpResponse.StatusCode)
+	}
+}
+
+func TestListRolesTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	allRoles, _, err := roles.List(ctx, testEnv.Client)
+
+	if allRoles != nil {
+		t.Fatal("expected no roles from the List method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the List method")
+	}
+}
+
+func TestListRolesUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/roles",
+		RawResponse: TestManyRolesInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	allRoles, _, err := roles.List(ctx, testEnv.Client)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if allRoles != nil {
+		t.Fatal("expected no roles from the List method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the List method")
+	}
+}
+
 func TestListRolesProject(t *testing.T) {
 	endpointCalled := false
 
