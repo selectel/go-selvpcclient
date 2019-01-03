@@ -149,3 +149,120 @@ func TestListKeypairsUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the List method")
 	}
 }
+
+func TestCreateKeypairs(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/keypairs",
+		RawResponse: TestCreateKeypairResponseRaw,
+		RawRequest:  TestCreateKeypairOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateKeypairOpts
+	actualResponse, _, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestCreateKeypairResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
+func TestCreateKeypairsHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/keypairs",
+		RawResponse: TestCreateKeypairResponseRaw,
+		RawRequest:  TestCreateKeypairOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateKeypairOpts
+	l, httpResponse, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if l != nil {
+		t.Fatal("expected no keypairs from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+	if httpResponse.StatusCode != http.StatusBadRequest {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestCreateKeypairsTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	createOpts := TestCreateKeypairOpts
+	l, _, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+
+	if l != nil {
+		t.Fatal("expected no keypairs from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}
+
+func TestCreateKeypairsUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/keypairs",
+		RawResponse: TestSingleKeypairInvalidResponseRaw,
+		RawRequest:  TestCreateKeypairOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateKeypairOpts
+	l, _, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if l != nil {
+		t.Fatal("expected no keypairs from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}

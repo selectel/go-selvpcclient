@@ -1,7 +1,9 @@
 package keypairs
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -31,4 +33,39 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Keypair, 
 	}
 
 	return result.Keypairs, responseResult, nil
+}
+
+// Create requests a creation of the keypar with the specified options.
+func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts KeypairOpts) ([]*Keypair, *selvpcclient.ResponseResult, error) {
+	// Nest create opts into additional body.
+	type nestedCreateOpts struct {
+		Keypair KeypairOpts `json:"keypair"`
+	}
+	var createKeypairOpts = nestedCreateOpts{
+		Keypair: createOpts,
+	}
+	requestBody, err := json.Marshal(&createKeypairOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract a keypair from the response body.
+	var result struct {
+		Keypair []*Keypair `json:"keypair"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Keypair, responseResult, nil
 }
