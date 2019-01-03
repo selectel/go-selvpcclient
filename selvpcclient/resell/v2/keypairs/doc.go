@@ -11,5 +11,20 @@ Example of getting keypairs in the current domain
   for _, myKeypair := range allKeypairs {
     fmt.Println(myKeypair)
   }
+
+Example of creating keypairs in all regions with the same options
+
+  newKeypairOptions := keypairs.KeypairOpts{
+    Name:      "my_keypair",
+    PublicKey: "ssh-rsa public_key_part user0@example.org",
+    UserID:    "82a026cae2104e92b999dbe00cdb9435",
+  }
+  newKeypairs, _, err := keypairs.Create(ctx, resellClient, newKeypairOptions)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, newKeypair := range newKeypairs {
+    fmt.Printf("%v\n", newKeypair)
+  }
 */
 package keypairs
