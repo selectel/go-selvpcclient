@@ -26,5 +26,14 @@ Example of creating keypairs in all regions with the same options
   for _, newKeypair := range newKeypairs {
     fmt.Printf("%v\n", newKeypair)
   }
+
+Example of deleting a single keypair of a user
+
+  keypairName := "my_keypair"
+  userID := 82a026cae2104e92b999dbe00cdb9435""
+  _, err = keypairs.Delete(ctx, resellClient, keypairName, userID)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package keypairs

@@ -69,3 +69,16 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 
 	return result.Keypair, responseResult, nil
 }
+
+// Delete deletes a single keypair by its name and user ID.
+func Delete(ctx context.Context, client *selvpcclient.ServiceClient, name, userID string) (*selvpcclient.ResponseResult, error) {
+	url := strings.Join([]string{client.Endpoint, resourceURL, name, "users", userID}, "/")
+	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	if responseResult.Err != nil {
+		err = responseResult.Err
+	}
+	return responseResult, err
+}
