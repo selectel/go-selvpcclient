@@ -266,3 +266,69 @@ func TestCreateKeypairsUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the Create method")
 	}
 }
+
+func TestDeleteKeypair(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/keypairs/key1/users/82a026cae2104e92b999dbe00cdb9435",
+		Method:   http.MethodDelete,
+		Status:   http.StatusOK,
+		CallFlag: &endpointCalled,
+	})
+
+	ctx := context.Background()
+	_, err := keypairs.Delete(ctx, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+}
+
+func TestDeleteKeypairHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/keypairs/key1/users/82a026cae2104e92b999dbe00cdb9435",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadGateway,
+		CallFlag: &endpointCalled,
+	})
+
+	ctx := context.Background()
+	httpResponse, err := keypairs.Delete(ctx, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestDeleteKeypairTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	_, err := keypairs.Delete(ctx, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+}
