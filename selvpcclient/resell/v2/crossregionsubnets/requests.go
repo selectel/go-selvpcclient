@@ -10,7 +10,7 @@ import (
 
 const resourceURL = "cross_region_subnets"
 
-//Get returns a single cross-region subnet by its id.
+// Get returns a single cross-region subnet by its id.
 func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*CrossRegionSubnet, *selvpcclient.ResponseResult, error) {
 	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
 	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
@@ -21,7 +21,7 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*C
 		return nil, responseResult, responseResult.Err
 	}
 
-	//Extract a cross-region subnet from the response body.
+	// Extract a cross-region subnet from the response body.
 	var result struct {
 		CrossRegionSubnet *CrossRegionSubnet `json:"cross_region_subnet"`
 	}
