@@ -5,6 +5,7 @@ import (
 
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/crossregionsubnets"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/servers"
+	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets"
 )
 
 // TestGetCrossRegionSubnetResponseRaw represents a raw response from the Get request.
@@ -61,7 +62,7 @@ var crossregionSubnetServerTimeStamp, _ = time.Parse(time.RFC3339, "2019-01-04T0
 var TestGetCrossRegionSubnetResponse = &crossregionsubnets.CrossRegionSubnet{
 	ID:     12,
 	CIDR:   "192.168.200.0/24",
-	VlanID: 1003,
+	VLANID: 1003,
 	Status: "ACTIVE",
 	Servers: []servers.Server{
 		{
@@ -77,26 +78,26 @@ var TestGetCrossRegionSubnetResponse = &crossregionsubnets.CrossRegionSubnet{
 			Name:    "Node02",
 		},
 	},
-	Subnets: []crossregionsubnets.Subnet{
+	Subnets: []subnets.Subnet{
 		{
-			ID:        10,
-			VlanID:    1003,
-			CIDR:      "192.168.200.0/24",
-			ProjectID: "b63ab68796e34858befb8fa2a8b1e12a",
-			NetworkID: "78c1cbe1-c34d-4685-be2d-a877a1b1dec4",
-			SubnetID:  "7db1255f-2545-4b8a-9446-22608c0f6cb8",
-			Region:    "ru-1",
-			VtepIP:    "10.10.0.101",
+			ID:            10,
+			CIDR:          "192.168.200.0/24",
+			ProjectID:     "b63ab68796e34858befb8fa2a8b1e12a",
+			NetworkID:     "78c1cbe1-c34d-4685-be2d-a877a1b1dec4",
+			SubnetID:      "7db1255f-2545-4b8a-9446-22608c0f6cb8",
+			Region:        "ru-1",
+			VLANID:        1003,
+			VTEPIPAddress: "10.10.0.101",
 		},
 		{
-			ID:        20,
-			VlanID:    1003,
-			CIDR:      "192.168.200.0/24",
-			ProjectID: "b63ab68796e34858befb8fa2a8b1e12a",
-			NetworkID: "67f7ab15-9424-4b50-999a-1c4de12372ec",
-			SubnetID:  "66ee047b-c699-4d62-9b64-363d2d77f021",
-			Region:    "ru-3",
-			VtepIP:    "10.10.0.201",
+			ID:            20,
+			CIDR:          "192.168.200.0/24",
+			ProjectID:     "b63ab68796e34858befb8fa2a8b1e12a",
+			NetworkID:     "67f7ab15-9424-4b50-999a-1c4de12372ec",
+			SubnetID:      "66ee047b-c699-4d62-9b64-363d2d77f021",
+			Region:        "ru-3",
+			VLANID:        1003,
+			VTEPIPAddress: "10.10.0.201",
 		},
 	},
 }
