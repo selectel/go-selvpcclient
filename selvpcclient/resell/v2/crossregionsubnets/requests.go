@@ -1,7 +1,9 @@
 package crossregionsubnets
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -46,6 +48,35 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient, opts ListOpts
 	}
 
 	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract cross-region subnets from the response body.
+	var result struct {
+		CrossRegionSubnets []*CrossRegionSubnet `json:"cross_region_subnets"`
+	}
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.CrossRegionSubnets, responseResult, nil
+}
+
+// Create requests a creation of the cross-region subnets in the specified project.
+func Create(ctx context.Context, client *selvpcclient.ServiceClient, projectID string, createOpts CrossRegionSubnetOpts) ([]*CrossRegionSubnet, *selvpcclient.ResponseResult, error) {
+	createCrossRegionSubnetsOpts := &createOpts
+	requestBody, err := json.Marshal(createCrossRegionSubnetsOpts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", projectID}, "/")
+	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err
 	}

@@ -19,5 +19,31 @@ Example of getting all cross-region subnets
   for _, crossRegionSubnet := range allCrossRegionSubnets {
     fmt.Println(crossRegionSubnet)
   }
+
+Example of creating cross-region subnets
+
+  createOpts := crossregionsubnets.CrossRegionSubnetOpts{
+    CrossRegionSubnets: []crossregionsubnets.CrossRegionSubnetOpt{
+      {
+        Quantity: 1,
+        Regions: []crossregionsubnets.CrossRegionOpt{
+          {
+            Region: "ru-1",
+          },
+          {
+            Region: "ru-3",
+          },
+        },
+        CIDR: "192.168.200.0/24",
+      },
+		},
+  }
+  newCrossRegionSubnets, _, err := crossregionsubnets.Create(ctx, resellClient, projectID, createOpts)
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, newCrossRegionSubnet := range newCrossRegionSubnets {
+    fmt.Printf("%v\n", newCrossRegionSubnet)
+  }
 */
 package crossregionsubnets
