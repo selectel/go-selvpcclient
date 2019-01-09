@@ -9,5 +9,15 @@ Example of getting a single cross-region subnet referenced by its id
     log.Fatal(err)
   }
   fmt.Println(crossRegionSubnet)
+
+Example of getting all cross-region subnets
+
+  allCrossRegionSubnets, _, err := crossregionsubnets.List(ctx, resellClient, crossregionsubnets.ListOpts{})
+  if err != nil {
+    log.Fatal(err)
+  }
+  for _, crossRegionSubnet := range allCrossRegionSubnets {
+    fmt.Println(crossRegionSubnet)
+  }
 */
 package crossregionsubnets
