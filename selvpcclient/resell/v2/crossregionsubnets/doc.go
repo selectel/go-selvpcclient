@@ -36,7 +36,7 @@ Example of creating cross-region subnets
         },
         CIDR: "192.168.200.0/24",
       },
-		},
+    },
   }
   newCrossRegionSubnets, _, err := crossregionsubnets.Create(ctx, resellClient, projectID, createOpts)
   if err != nil {
