@@ -45,5 +45,12 @@ Example of creating cross-region subnets
   for _, newCrossRegionSubnet := range newCrossRegionSubnets {
     fmt.Printf("%v\n", newCrossRegionSubnet)
   }
+
+Example of deleting a single cross-region subnet
+
+  _, err = crossregionsubnets.Delete(ctx, resellClient, crossRegionSubnetID)
+  if err != nil {
+    log.Fatal(err)
+  }
 */
 package crossregionsubnets
