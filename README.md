@@ -17,19 +17,19 @@ API documentation is also available at the [VPC page](https://my.selectel.ru/vpc
 
 You can use this library to work with the following objects of the Selectel VPC API:
 
-* [quotas](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas)
-* [projects](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects)
-* [users](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/users)
-* [roles](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/roles)
-* [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/tokens)
-* [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets)
-* [vrrp subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/vrrpsubnets)
+* [capabilities](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/capabilities)
 * [cross region subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/crossregionsubnets)
 * [floating ips](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/floatingips)
-* [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/licenses)
 * [keypairs](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/keypairs)
+* [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/licenses)
+* [projects](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects)
+* [quotas](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas)
+* [roles](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/roles)
+* [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets)
+* [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/tokens)
 * [traffic](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/traffic)
-* [capabilities](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/capabilities)
+* [users](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/users)
+* [vrrp subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/vrrpsubnets)
 
 Selectel VPC Cloud is based on the [OpenStack](https://www.openstack.org), so you don't need this library to work with actual servers, volumes, networks, etc.  
 You can use the [Gophercloud](https://github.com/gophercloud/gophercloud) project to work with the OpenStack objects.
