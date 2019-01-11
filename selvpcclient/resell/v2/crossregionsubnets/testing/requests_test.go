@@ -229,3 +229,121 @@ func TestListCrossRegionSubnetsUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the List method")
 	}
 }
+
+func TestCreateCrossRegionSubnets(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/cross_region_subnets/projects/b63ab68796e34858befb8fa2a8b1e12a",
+		RawResponse: TestCreateCrossRegionSubnetsResponseRaw,
+		RawRequest:  TestCreateCrossRegionSubnetsOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateCrossRegionSubnetsOpts
+	actualResponse, _, err := crossregionsubnets.Create(ctx, testEnv.Client, "b63ab68796e34858befb8fa2a8b1e12a", createOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestCreateCrossRegionSubnetsResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
+func TestCreateCrossRegionSubnetsHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/cross_region_subnets/projects/b63ab68796e34858befb8fa2a8b1e12a",
+		RawResponse: TestCreateCrossRegionSubnetsResponseRaw,
+		RawRequest:  TestCreateCrossRegionSubnetsOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusBadRequest,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateCrossRegionSubnetsOpts
+	crossregionSubnet, httpResponse, err := crossregionsubnets.Create(ctx, testEnv.Client,
+		"b63ab68796e34858befb8fa2a8b1e12a", createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if crossregionSubnet != nil {
+		t.Fatal("expected no cross-region subnet from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+	if httpResponse.StatusCode != http.StatusBadRequest {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestCreateCrossRegionSubnetsTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	createOpts := TestCreateCrossRegionSubnetsOpts
+	crossregionSubnet, _, err := crossregionsubnets.Create(ctx, testEnv.Client, "b63ab68796e34858befb8fa2a8b1e12a", createOpts)
+
+	if crossregionSubnet != nil {
+		t.Fatal("expected no cross-region subnet from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}
+
+func TestCreateCrossRegionSubnetsUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/cross_region_subnets/projects/b63ab68796e34858befb8fa2a8b1e12a",
+		RawResponse: TestManyCrossRegionSubnetsInvalidResponseRaw,
+		RawRequest:  TestCreateCrossRegionSubnetsOptsRaw,
+		Method:      http.MethodPost,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	createOpts := TestCreateCrossRegionSubnetsOpts
+	crossregionSubnet, _, err := crossregionsubnets.Create(ctx, testEnv.Client, "b63ab68796e34858befb8fa2a8b1e12a", createOpts)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if crossregionSubnet != nil {
+		t.Fatal("expected no cross-region subnet from the Create method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Create method")
+	}
+}
