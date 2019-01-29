@@ -54,10 +54,6 @@ func HandleReqWithoutBody(t *testing.T, opts *HandleReqOpts) {
 // HandleReqWithBody provides the HTTP endpoint to test requests with body.
 func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
 	opts.Mux.HandleFunc(opts.URL, func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(opts.Status)
-		fmt.Fprint(w, opts.RawResponse)
-
 		if r.Method != opts.Method {
 			t.Fatalf("expected %s method but got %s", opts.Method, r.Method)
 		}
@@ -66,12 +62,17 @@ func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
 		if err != nil {
 			t.Errorf("unable to read the request body: %v", err)
 		}
+		defer r.Body.Close()
 
 		var actualRequest interface{}
 		err = json.Unmarshal(b, &actualRequest)
 		if err != nil {
 			t.Errorf("unable to unmarshal the request body: %v", err)
 		}
+
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(opts.Status)
+		fmt.Fprint(w, opts.RawResponse)
 
 		var expectedRequest interface{}
 		err = json.Unmarshal([]byte(opts.RawRequest), &expectedRequest)
