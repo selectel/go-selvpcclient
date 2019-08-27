@@ -2,6 +2,33 @@ package testing
 
 import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/users"
 
+// TestGetUsersResponseRaw represents a raw response from the Get request.
+const TestGetUsersResponseRaw = `
+{
+    "user": {
+        "enabled": false,
+        "id": "c4b7e0581b964c52a1597fe0931eccdf",
+        "name": "User1"
+    }
+}
+`
+
+// TestGetUsersResponse represents the unmarshalled TestGetUsersResponseRaw response.
+var TestGetUsersResponse = &users.User{
+	ID:      "c4b7e0581b964c52a1597fe0931eccdf",
+	Name:    "User1",
+	Enabled: false,
+}
+
+// TestGetUserInvalidResponseRaw represents a raw invalid response with single user.
+const TestGetUserInvalidResponseRaw = `
+{
+    "user": {
+        "id": 999
+    }
+}
+`
+
 // TestListUsersResponseRaw represents a raw response from the List request.
 const TestListUsersResponseRaw = `
 {

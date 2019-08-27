@@ -10,6 +10,111 @@ import (
 	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
 )
 
+func TestGetUser(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		RawResponse: TestGetUsersResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	actualResponse, _, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectedResponse := TestGetUsersResponse
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
+func TestGetUserHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		RawResponse: TestGetUsersResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	user, httpResponse, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+	if user != nil {
+		t.Fatal("expected no users from the List method")
+	}
+}
+
+func TestGetUserTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	_, _, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+
+	if err == nil {
+		t.Fatal("expected error from the Get method")
+	}
+}
+
+func TestGetUsersUnmarshalError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
+		RawResponse: TestGetUserInvalidResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	user, _, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if user != nil {
+		t.Fatal("expected no user from the Get method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Get method")
+	}
+}
+
 func TestListUsers(t *testing.T) {
 	endpointCalled := false
 
