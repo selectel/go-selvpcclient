@@ -126,3 +126,69 @@ func TestCreateTokenUnmarshalError(t *testing.T) {
 		t.Fatal("expected error from the Create method")
 	}
 }
+
+func TestDeleteToken(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/tokens/dAFaSLSbK06iJ-iiq9x19A",
+		Method:   http.MethodDelete,
+		Status:   http.StatusNoContent,
+		CallFlag: &endpointCalled,
+	})
+
+	ctx := context.Background()
+	_, err := tokens.Delete(ctx, testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+}
+
+func TestDeleteNotOwnToken(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:      testEnv.Mux,
+		URL:      "/resell/v2/tokens/dAFaSLSbK06iJ-iiq9x19A",
+		Method:   http.MethodDelete,
+		Status:   http.StatusBadRequest,
+		CallFlag: &endpointCalled,
+	})
+
+	ctx := context.Background()
+	httpResponse, err := tokens.Delete(ctx, testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+	if httpResponse.StatusCode != http.StatusBadRequest {
+		t.Fatalf("expected %d status in the HTTP response, but got %d", http.StatusBadRequest, httpResponse.StatusCode)
+	}
+}
+
+func TestDeleteUserTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestEnv()
+	testEnv.Server.Close()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+
+	ctx := context.Background()
+	_, err := tokens.Delete(ctx, testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
+
+	if err == nil {
+		t.Fatal("expected error from the Delete method")
+	}
+}
