@@ -18,7 +18,6 @@ API documentation is also available at the [VPC page](https://my.selectel.ru/vpc
 You can use this library to work with the following objects of the Selectel VPC API:
 
 * [capabilities](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/capabilities)
-* [cross region subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/crossregionsubnets)
 * [floating ips](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/floatingips)
 * [keypairs](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/keypairs)
 * [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/licenses)
