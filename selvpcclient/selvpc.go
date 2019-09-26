@@ -172,9 +172,9 @@ func (client *ServiceClient) DoRequest(ctx context.Context, method, path string,
 	if response.StatusCode >= 400 && response.StatusCode <= 599 {
 		extendedError, err := responseResult.ExtractErr()
 		if err != nil {
-			responseResult.Err = fmt.Errorf("selvpcclient: got the %d status code from the server: %s", response.StatusCode, extendedError)
-		} else {
 			responseResult.Err = fmt.Errorf("selvpcclient: got the %d status code from the server", response.StatusCode)
+		} else {
+			responseResult.Err = fmt.Errorf("selvpcclient: got the %d status code from the server: %s", response.StatusCode, extendedError)
 		}
 	}
 
