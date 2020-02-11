@@ -12,9 +12,9 @@ func TestNewV2ResellClient(t *testing.T) {
 	token := "fakeID"
 
 	expected := &selvpcclient.ServiceClient{
-		Endpoint:   resell.Endpoint + "/" + APIVersion,
-		TokenID:    token,
-		UserAgent:  resell.UserAgent,
+		Endpoint:  resell.Endpoint + "/" + APIVersion,
+		TokenID:   token,
+		UserAgent: resell.UserAgent,
 	}
 
 	actual := NewV2ResellClient(token)
@@ -29,9 +29,9 @@ func TestNewV2ResellClientWithEndpoint(t *testing.T) {
 	token := "fakeID"
 	endpoint := "http://example.org"
 	expected := &selvpcclient.ServiceClient{
-		Endpoint:   endpoint,
-		TokenID:    token,
-		UserAgent:  resell.UserAgent,
+		Endpoint:  endpoint,
+		TokenID:   token,
+		UserAgent: resell.UserAgent,
 	}
 
 	actual := NewV2ResellClientWithEndpoint(token, endpoint)
