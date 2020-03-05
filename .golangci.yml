@@ -3,7 +3,9 @@ linters:
   enable-all: true
   disable:
     - bodyclose
+    - gomnd
     - dupl
     - gochecknoglobals
     - gosec
     - lll
+    - wsl
