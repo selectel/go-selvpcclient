@@ -12,6 +12,8 @@ const TestGetLicenseResponseRaw = `
 {
     "license": {
         "id": 123123,
+        "network_id": "69dc895a-6d2a-4aa7-b2a1-dc1c827a365c",
+        "subnet_id": "74aadf51-26ba-44b3-af26-a248a9b271e8",
         "project_id": "49338ac045f448e294b25d013f890317",
         "region": "ru-2",
         "servers": [
@@ -43,8 +45,10 @@ var TestGetLicenseResponse = &licenses.License{
 			Updated: licenseServerTimeStamp,
 		},
 	},
-	Status: "ACTIVE",
-	Type:   "license_windows_2012_standard",
+	Status:    "ACTIVE",
+	NetworkID: "69dc895a-6d2a-4aa7-b2a1-dc1c827a365c",
+	SubnetID:  "74aadf51-26ba-44b3-af26-a248a9b271e8",
+	Type:      "license_windows_2012_standard",
 }
 
 // TestListLicensesResponseRaw represents a raw response from the List request.
@@ -53,6 +57,8 @@ const TestListLicensesResponseRaw = `
     "licenses": [
         {
             "id": 1123123,
+            "network_id": "c89c7ff7-60ba-40b7-a687-94fa0c5a0c26",
+            "subnet_id": "33990fd9-6972-4e20-8244-4a207e8f6036",
             "project_id": "49338ac045f448e294b25d013f890317",
             "region": "ru-1",
             "status": "DOWN",
@@ -60,6 +66,8 @@ const TestListLicensesResponseRaw = `
         },
         {
             "id": 124123,
+            "network_id": "01a27156-d3a8-4859-902e-48271c4dfb1b",
+            "subnet_id": "bcb96510-60e9-4b24-a0b0-c9d0f29a687d",
             "project_id": "49338ac045f448e294b25d013f890317",
             "region": "ru-3",
             "status": "DOWN",
@@ -67,6 +75,8 @@ const TestListLicensesResponseRaw = `
         },
         {
             "id": 13212,
+            "network_id": "75174ee2-4731-45ea-9c15-98ead1f0c78c",
+            "subnet_id": "d9ccb4ca-ebc2-44f1-b838-af608e900d61",
             "project_id": "49338ac045f448e294b25d013f890317",
             "region": "ru-2",
             "status": "DOWN",
@@ -82,6 +92,8 @@ const TestListLicensesSingleResponseRaw = `
     "licenses": [
         {
             "id": 1123123,
+            "network_id": "72e78fbe-131a-403a-a4a5-0d04c074d6c7",
+            "subnet_id": "e32eb719-fdc5-4e1e-83fe-42860f0d51b1",
             "project_id": "49338ac045f448e294b25d013f890317",
             "region": "ru-1",
 			"status": "DOWN",
@@ -98,6 +110,8 @@ var TestListLicensesSingleResponse = []*licenses.License{
 		ProjectID: "49338ac045f448e294b25d013f890317",
 		Region:    "ru-1",
 		Status:    "DOWN",
+		NetworkID: "72e78fbe-131a-403a-a4a5-0d04c074d6c7",
+		SubnetID:  "e32eb719-fdc5-4e1e-83fe-42860f0d51b1",
 		Type:      "license_windows_2012_standard",
 	},
 }
@@ -132,6 +146,8 @@ const TestCreateLicenseResponseRaw = `
     "licenses": [
         {
             "type": "license_windows_2016_standard",
+            "network_id": "f40a1c7e-cde8-4059-8f7d-49122e08229e",
+            "subnet_id": "9263c811-9a4d-48e6-a7cb-48561f742b39",
             "status": "DOWN",
             "region": "ru-2",
             "project_id": "49338ac045f448e294b25d013f890317",
@@ -145,6 +161,8 @@ const TestCreateLicenseResponseRaw = `
 var TestCreateLicenseResponse = []*licenses.License{
 	{
 		ID:        1123123,
+		NetworkID: "f40a1c7e-cde8-4059-8f7d-49122e08229e",
+		SubnetID:  "9263c811-9a4d-48e6-a7cb-48561f742b39",
 		ProjectID: "49338ac045f448e294b25d013f890317",
 		Region:    "ru-2",
 		Status:    "DOWN",
