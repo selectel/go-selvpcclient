@@ -255,7 +255,11 @@ var TestGetProjectQuotasResponseSingle = []*quotas.Quota{
 	},
 }
 
-var ramQuotaValue = 64000
+var (
+	ramQuotaRegion = "ru-2"
+	ramQuotaZone   = "ru-2a"
+	ramQuotaValue  = 64000
+)
 
 // TestUpdateQuotasOpts represents options for the UpdateProjectQuotas request.
 var TestUpdateQuotasOpts = quotas.UpdateProjectQuotasOpts{
@@ -264,8 +268,8 @@ var TestUpdateQuotasOpts = quotas.UpdateProjectQuotasOpts{
 			Name: "compute_ram",
 			ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
 				{
-					Region: "ru-2",
-					Zone:   "ru-2a",
+					Region: &ramQuotaRegion,
+					Zone:   &ramQuotaZone,
 					Value:  &ramQuotaValue,
 				},
 			},
@@ -317,6 +321,66 @@ var TestUpdateProjectQuotasResponse = []*quotas.Quota{
 	},
 }
 
+// TestUpdateQuotasOptsNilLocationParams represents options for the UpdateProjectQuotas request
+// with "null" in region and zone.
+var TestUpdateQuotasOptsNilLocationParams = quotas.UpdateProjectQuotasOpts{
+	QuotasOpts: []quotas.QuotaOpts{
+		{
+			Name: "compute_ram",
+			ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+				{
+					Value: &ramQuotaValue,
+				},
+			},
+		},
+	},
+}
+
+// TestUpdateQuotasOptsNilLocationParamsRaw represents unmarshalled options for the
+// UpdateProjectQuotas request with "null" in region and zone.
+const TestUpdateQuotasOptsRawNilLocationParams = `
+{
+    "quotas": {
+        "compute_ram": [
+            {
+                "region": null,
+                "value": 64000,
+                "zone": null
+            }
+        ]
+    }
+}
+`
+
+// TestUpdateProjectQuotasResponseRawNilLocationParams represents a raw response from the
+// UpdateProjectQuotas request with "null" in region and zone.
+const TestUpdateProjectQuotasResponseRawNilLocationParams = `
+{
+    "quotas": {
+        "compute_ram": [
+            {
+                "region": null,
+                "value": 64000,
+                "zone": null
+            }
+        ]
+    }
+}
+`
+
+// TestUpdateProjectQuotasResponseNilLocationParams represents the unmarshalled
+// TestUpdateProjectQuotasResponseRaw response with "null" in region and zone.
+var TestUpdateProjectQuotasResponseNilLocationParams = []*quotas.Quota{
+	{
+		Name: "compute_ram",
+		ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+			{
+				Value: 64000,
+			},
+		},
+	},
+}
+
 // TestQuotasInvalidResponseRaw represents a raw invalid quotas response.
 const TestQuotasInvalidResponseRaw = `
 {
@@ -329,13 +393,6 @@ const TestQuotasInvalidResponseRaw = `
             }
         ]
     }
-}
-`
-
-// TestUpdateQuotasInvalidOptsRaw represents a raw request body without quotas.
-const TestUpdateQuotasInvalidOptsRaw = `
-{
-    "quotas": {}
 }
 `
 
