@@ -647,6 +647,39 @@ func TestUpdateProjectQuotas(t *testing.T) {
 	}
 }
 
+func TestUpdateProjectQuotasNilLocation(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		RawResponse: TestUpdateProjectQuotasResponseRawNilLocationParams,
+		RawRequest:  TestUpdateQuotasOptsRawNilLocationParams,
+		Method:      http.MethodPatch,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	updateOpts := TestUpdateQuotasOptsNilLocationParams
+	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResponse := TestUpdateProjectQuotasResponseNilLocationParams
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actualResponse, expectedResponse) {
+		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+	}
+}
+
 func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
