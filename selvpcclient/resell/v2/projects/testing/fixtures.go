@@ -159,7 +159,8 @@ const TestCreateProjectOptsRaw = `
             "image_gigabytes": [
                 {
                     "region": "ru-1",
-                    "value": 12
+                    "value": 12,
+                    "zone": null
                 }
             ]
         }
@@ -167,7 +168,10 @@ const TestCreateProjectOptsRaw = `
 }
 `
 
-var imageGigabytesValue = 12
+var (
+	regionValue         = "ru-1"
+	imageGigabytesValue = 12
+)
 
 // TestCreateProjectOpts represent options for the Create request.
 var TestCreateProjectOpts = projects.CreateOpts{
@@ -177,7 +181,7 @@ var TestCreateProjectOpts = projects.CreateOpts{
 			Name: "image_gigabytes",
 			ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
 				{
-					Region: "ru-1",
+					Region: &regionValue,
 					Value:  &imageGigabytesValue,
 				},
 			},
