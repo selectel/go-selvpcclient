@@ -54,8 +54,10 @@ const TestGetTrafficUsedRaw = `
 }
 `
 
-var trafficStartTimeStamp, _ = time.Parse(selvpcclient.RFC3339NoZ, "2018-04-01T00:00:00")
-var trafficStopTimeStamp, _ = time.Parse(selvpcclient.RFC3339NoZ, "2018-04-30T23:59:59")
+var (
+	trafficStartTimeStamp, _ = time.Parse(selvpcclient.RFC3339NoZ, "2018-04-01T00:00:00")
+	trafficStopTimeStamp, _  = time.Parse(selvpcclient.RFC3339NoZ, "2018-04-30T23:59:59")
+)
 
 // TestGetTrafficUsed represents the unmarshalled TestGetTrafficUsedRaw response.
 var TestGetTrafficUsed = &traffic.DomainTraffic{
