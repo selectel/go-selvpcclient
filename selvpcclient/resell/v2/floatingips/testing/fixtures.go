@@ -30,6 +30,26 @@ const TestGetFloatingIPResponseRaw = `
 }
 `
 
+// TestGetFloatingIPResponseWithLBRaw represents a raw response from the Get request.
+const TestGetFloatingIPResponseWithLBRaw = `
+{
+    "floatingip": {
+        "fixed_ip_address": "10.0.0.4",
+        "floating_ip_address": "203.0.113.11",
+        "id": "5232d5f3-4950-454b-bd41-78c5295622cd",
+        "port_id": "f7376dd2-c70f-4465-a5a8-e1a89b665d30",
+        "project_id": "49338ac045f448e294b25d013f890317",
+        "region": "ru-3",
+        "servers": [],
+		"loadbalancer": {
+			"id": "febbc3ea-0b03-4e7a-bf04-9f1caca8df3d",
+			"name": "Sheila"
+		}, 
+        "status": "ACTIVE"
+    }
+}
+`
+
 var floatingIPServerTimeStamp, _ = time.Parse(time.RFC3339, "2018-02-20T22:02:21Z")
 
 // TestGetFloatingIPResponse represents an unmarshalled TestGetFloatingIPResponseRaw.
@@ -48,6 +68,22 @@ var TestGetFloatingIPResponse = &floatingips.FloatingIP{
 			Status:  "ACTIVE",
 			Updated: floatingIPServerTimeStamp,
 		},
+	},
+}
+
+// TestGetFloatingIPResponseWithLB represents an unmarshalled TestGetFloatingIPResponseWithLBRaw.
+var TestGetFloatingIPResponseWithLB = &floatingips.FloatingIP{
+	FloatingIPAddress: "203.0.113.11",
+	ID:                "5232d5f3-4950-454b-bd41-78c5295622cd",
+	ProjectID:         "49338ac045f448e294b25d013f890317",
+	PortID:            "f7376dd2-c70f-4465-a5a8-e1a89b665d30",
+	FixedIPAddress:    "10.0.0.4",
+	Region:            "ru-3",
+	Status:            "ACTIVE",
+	Servers:           []servers.Server{},
+	LoadBalancer: &floatingips.LoadBalancer{
+		ID:   "febbc3ea-0b03-4e7a-bf04-9f1caca8df3d",
+		Name: "Sheila",
 	},
 }
 

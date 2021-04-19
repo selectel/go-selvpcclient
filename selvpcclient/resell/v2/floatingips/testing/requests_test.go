@@ -41,6 +41,37 @@ func TestGetFloatingIP(t *testing.T) {
 	}
 }
 
+func TestGetFloatingIPWithLB(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewTestResellV2Client()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
+		RawResponse: TestGetFloatingIPResponseWithLBRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	ctx := context.Background()
+	actual, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := TestGetFloatingIPResponseWithLB
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	}
+}
+
 func TestGetFloatingIPHTTPError(t *testing.T) {
 	endpointCalled := false
 

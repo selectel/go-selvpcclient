@@ -28,4 +28,16 @@ type FloatingIP struct {
 
 	// Servers contains info about servers to which floating ip is associated to.
 	Servers []servers.Server `json:"servers"`
+
+	// LoadBalancer contains info about load balancer to which floating ip is associated to.
+	LoadBalancer *LoadBalancer `json:"loadbalancer"`
+}
+
+// LoadBalancer represents a Load Balancer.
+type LoadBalancer struct {
+	// ID is a unique id of the load balancer.
+	ID string `json:"id"`
+
+	// Name is a human-readable name of the load balancer.
+	Name string `json:"name"`
 }
