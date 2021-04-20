@@ -41,10 +41,10 @@ const TestGetFloatingIPResponseWithLBRaw = `
         "project_id": "49338ac045f448e294b25d013f890317",
         "region": "ru-3",
         "servers": [],
-		"loadbalancer": {
-			"id": "febbc3ea-0b03-4e7a-bf04-9f1caca8df3d",
-			"name": "Sheila"
-		}, 
+        "loadbalancer": {
+            "id": "febbc3ea-0b03-4e7a-bf04-9f1caca8df3d",
+            "name": "Sheila"
+        }, 
         "status": "ACTIVE"
     }
 }
