@@ -2,8 +2,6 @@ package projects
 
 import (
 	"encoding/json"
-
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
 )
 
 // Project represents a single Identity service project.
@@ -25,23 +23,20 @@ type Project struct {
 
 	// Theme represents project theme settings.
 	Theme Theme `json:"-"`
-
-	// Quotas contains information about project quotas.
-	Quotas []quotas.Quota `json:"-"`
 }
 
 // UnmarshalJSON implements custom unmarshalling method for the Project type.
 func (result *Project) UnmarshalJSON(b []byte) error {
 	// Populate temporary structure with resource quotas represented as maps.
 	var s struct {
-		ID        string                                  `json:"id"`
-		Name      string                                  `json:"name"`
-		URL       string                                  `json:"url"`
-		Enabled   bool                                    `json:"enabled"`
-		CustomURL string                                  `json:"custom_url"`
-		Theme     Theme                                   `json:"theme"`
-		Quotas    map[string][]quotas.ResourceQuotaEntity `json:"quotas"`
+		ID        string `json:"id"`
+		Name      string `json:"name"`
+		URL       string `json:"url"`
+		Enabled   bool   `json:"enabled"`
+		CustomURL string `json:"custom_url"`
+		Theme     Theme  `json:"theme"`
 	}
+
 	err := json.Unmarshal(b, &s)
 	if err != nil {
 		return err
@@ -55,24 +50,6 @@ func (result *Project) UnmarshalJSON(b []byte) error {
 		Enabled:   s.Enabled,
 		CustomURL: s.CustomURL,
 		Theme:     s.Theme,
-	}
-
-	if len(s.Quotas) != 0 {
-		// Convert resource quota maps to the slice of Quota types.
-		// Here we're allocating memory in advance because we already know the length
-		// of a result slice from the JSON bytearray.
-		resourceQuotasSlice := make([]quotas.Quota, len(s.Quotas))
-		i := 0
-		for resourceName, resourceQuotas := range s.Quotas {
-			resourceQuotasSlice[i] = quotas.Quota{
-				Name:                   resourceName,
-				ResourceQuotasEntities: resourceQuotas,
-			}
-			i++
-		}
-
-		// Add the unmarshalled quotas slice to the result.
-		result.Quotas = resourceQuotasSlice
 	}
 
 	return nil

@@ -2,74 +2,64 @@
 Package quotas provides the ability to retrieve and update quotas through the
 Resell v2 API.
 
-Example of getting all quotas for a domain
+Example of creating QuotaRegional client
 
-  allQuotas, _, err := quotas.GetAll(ctx, resellClient)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, myQuota := range allQuotas {
-    fmt.Println(myQuota)
-  }
+	  resellClient := resell.NewV2ResellClient(APIToken)
+	  ctx := context.Background()
+	  accountName := "123456"
+	  token, _, _ := reselTokens.Create(ctx, resellClient, reselTokens.TokenOpts{
+		  AccountName: accountName,
+	  })
 
-Example of getting free quotas for a domain
+	  OpenstackClient := resell.NewOpenstackClient(token.ID)
+	  identity := quotas.NewIdentityManager(resellClient, OpenstackClient, accountName)
+	  quotaMgr := quotas.NewQuotaRegionalClient(selvpcclient.NewHTTPClient(), identity)
 
-  freeQuotas, _, err := quotas.GetFree(ctx, resellClient)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, myQuota := range allQuotas {
-    fmt.Println(myQuota)
-  }
+Example of getting quota limits for a single project
 
-Example of getting projects quotas for a domain
+	limits, _, err := quotas.GetLimits(ctx, QuotaRegionalClient)
+	if err != nil {
+	  log.Fatal(err)
+	}
+	for _, limit := range limits {
+	  fmt.Println(limit)
+	}
 
-  projectsQuotas, _, err := quotas.GetProjectsQuotas(ctx, resellClient)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, projectQuota := range projectsQuotas {
-    fmt.Printf("quotas for %s:\n", projectQuota.ID)
-    for _, resourceQuota := range projectQuota.ProjectQuotas {
-      fmt.Println(resourceQuota)
-    }
-  }
+Example of getting quotas for a single project in specific region
 
-Example of getting quotas for a single project
+	singleProjectQuotas, _, err := quotas.GetProjectQuotas(ctx, ResellClient, QuotaRegionalClient, projectID, regionName)
+	if err != nil {
+	  log.Fatal(err)
+	}
+	for _, singleProjectQuota := range singleProjectQuotas {
+	  fmt.Println(singleProjectQuota)
+	}
 
-  singleProjectQuotas, _, err := quotas.GetProjectQuotas(ctx, resellClient, updateProjectID)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, singleProjectQuota := range singleProjectQuotas {
-    fmt.Println(singleProjectQuota)
-  }
+Example of updating quotas for a single project in specific region
 
-Example of updating quotas for a single project
-
-  projectQuotaUpdateOpts := quotas.UpdateProjectQuotasOpts{
-    QuotasOpts: []*quotas.QuotaOpts{
-      {
-        Name: "image_gigabytes",
-        ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
-          {
-            Region: "ru-1",
-            Value:  10,
-          },
-          {
-            Region: "ru-2",
-            Value:  20,
-          },
-        },
-      },
-    },
-  }
-  updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, resellClient, updateProjectID, projectQuotaUpdateOpts)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, updatedProjectQuota := range updatedProjectQuotas {
-    fmt.Println(updatedProjectQuota)
-  }
+	projectQuotaUpdateOpts := quotas.UpdateProjectQuotasOpts{
+	  QuotasOpts: []*quotas.QuotaOpts{
+	    {
+	      Name: "image_gigabytes",
+	      ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+	        {
+	          Region: "ru-1",
+	          Value:  10,
+	        },
+	        {
+	          Region: "ru-2",
+	          Value:  20,
+	        },
+	      },
+	    },
+	  },
+	}
+	updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, ResellClient, QuotaRegionalClient, projectID, regionName, projectQuotaUpdateOpts)
+	if err != nil {
+	  log.Fatal(err)
+	}
+	for _, updatedProjectQuota := range updatedProjectQuotas {
+	  fmt.Println(updatedProjectQuota)
+	}
 */
 package quotas

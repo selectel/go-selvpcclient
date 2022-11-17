@@ -5,16 +5,43 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"strings"
-
-	"github.com/selectel/go-selvpcclient/selvpcclient"
 )
 
-const resourceURL = "quotas"
+// GetLimits returns limits for a single project referenced by id in specific region.
+func GetLimits(ctx context.Context, client *QuotaRegionalClient, projectID, region string,
+) ([]*Quota, *ResponseResult, error) {
+	url, err := client.BuildPath(region, projectID, "limits")
+	if err != nil {
+		return nil, nil, err
+	}
 
-// GetAll returns the total amount of resources available to be allocated to projects.
-func GetAll(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Quota, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if responseResult.Err != nil {
+		return nil, responseResult, responseResult.Err
+	}
+
+	// Extract quotas from the response body.
+	var result ResourcesQuotas
+	err = responseResult.ExtractResult(&result)
+	if err != nil {
+		return nil, responseResult, err
+	}
+
+	return result.Quotas, responseResult, nil
+}
+
+// GetProjectQuotas returns the quotas info for a single project referenced by id in specific region.
+func GetProjectQuotas(ctx context.Context, client *QuotaRegionalClient, projectID, region string,
+) ([]*Quota, *ResponseResult, error) {
+	url, err := client.BuildPath(region, projectID, "quotas")
+	if err != nil {
+		return nil, nil, err
+	}
+
 	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
@@ -33,77 +60,20 @@ func GetAll(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Quota, 
 	return result.Quotas, responseResult, nil
 }
 
-// GetFree returns the current amount of resources available to be allocated to projects.
-func GetFree(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Quota, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "free"}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
-	if responseResult.Err != nil {
-		return nil, responseResult, responseResult.Err
-	}
-
-	// Extract quotas from the response body.
-	var result ResourcesQuotas
-	err = responseResult.ExtractResult(&result)
-	if err != nil {
-		return nil, responseResult, err
-	}
-
-	return result.Quotas, responseResult, nil
-}
-
-// GetProjectsQuotas returns the quotas info for all domain projects.
-func GetProjectsQuotas(ctx context.Context, client *selvpcclient.ServiceClient) ([]*ProjectQuota, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects"}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
-	if responseResult.Err != nil {
-		return nil, responseResult, responseResult.Err
-	}
-
-	// Extract quotas from the response body.
-	var result ProjectsQuotas
-	err = responseResult.ExtractResult(&result)
-	if err != nil {
-		return nil, responseResult, err
-	}
-
-	return result.ProjectQuotas, responseResult, nil
-}
-
-// GetProjectQuotas returns the quotas info for a single project referenced by id.
-func GetProjectQuotas(ctx context.Context, client *selvpcclient.ServiceClient, id string) ([]*Quota, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, nil, err
-	}
-	if responseResult.Err != nil {
-		return nil, responseResult, responseResult.Err
-	}
-
-	// Extract quotas from the response body.
-	var result ResourcesQuotas
-	err = responseResult.ExtractResult(&result)
-	if err != nil {
-		return nil, responseResult, err
-	}
-
-	return result.Quotas, responseResult, nil
-}
-
-// UpdateProjectQuotas updates the quotas info for a single project referenced by id.
-func UpdateProjectQuotas(ctx context.Context, client *selvpcclient.ServiceClient, id string, updateOpts UpdateProjectQuotasOpts) ([]*Quota, *selvpcclient.ResponseResult, error) {
+// UpdateProjectQuotas updates the quotas info for a single project referenced by id in specific region.
+func UpdateProjectQuotas(ctx context.Context, client *QuotaRegionalClient, projectID, region string,
+	updateOpts UpdateProjectQuotasOpts,
+) ([]*Quota, *ResponseResult, error) {
 	requestBody, err := json.Marshal(&updateOpts)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", id}, "/")
+	url, err := client.BuildPath(region, projectID, "quotas")
+	if err != nil {
+		return nil, nil, err
+	}
+
 	responseResult, err := client.DoRequest(ctx, http.MethodPatch, url, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, nil, err

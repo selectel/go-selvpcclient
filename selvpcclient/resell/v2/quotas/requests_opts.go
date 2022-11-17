@@ -20,11 +20,8 @@ type QuotaOpts struct {
 // ResourceQuotaOpts represents update options for the resource quota value
 // in the specific region and zone.
 type ResourceQuotaOpts struct {
-	// Region contains the quota region data.
-	Region *string `json:"region"`
-
 	// Zone contains the quota zone data.
-	Zone *string `json:"zone"`
+	Zone *string `json:"zone,omitempty"`
 
 	// Value contans value of resource quota in the specific region and zone.
 	Value *int `json:"value"`
@@ -39,19 +36,18 @@ type UpdateProjectQuotasOpts struct {
 /*
 MarshalJSON implements custom marshalling method for the UpdateProjectQuotasOpts.
 
-We need it to marshal structure to a a JSON that the Resell v2 API wants:
+We need it to marshal structure to a JSON that the quota manager v1 API wants:
 
-    "quotas": {
-        "compute_cores": [
-            {
-                "region": "ru-2",
-                "value": 200,
-                "zone": "ru-2a"
-            },
-            ...
-        ],
-        ...
-    }
+	"quotas": {
+	    "compute_cores": [
+	        {
+	            "value": 200,
+	            "zone": "ru-2a"
+	        },
+	        ...
+	    ],
+	    ...
+	}
 */
 func (opts *UpdateProjectQuotasOpts) MarshalJSON() ([]byte, error) {
 	// Check the opts.

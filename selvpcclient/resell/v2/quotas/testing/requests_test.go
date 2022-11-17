@@ -4,29 +4,36 @@ import (
 	"context"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
 	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
 )
 
-func TestGetAllQuotas(t *testing.T) {
+const (
+	testBaseURL   = "/projects/c83243b3c18a4d109a5f0fe45336af85"
+	testProjectID = "c83243b3c18a4d109a5f0fe45336af85"
+	testRegion    = "ru-1"
+)
+
+func TestGetLimitsQuotas(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas",
-		RawResponse: TestGetAllQuotasResponseRaw,
+		URL:         strings.Join([]string{testBaseURL, "limits"}, "/"),
+		RawResponse: TestGetLimitsQuotasResponseRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusOK,
 		CallFlag:    &endpointCalled,
 	})
 
 	ctx := context.Background()
-	actual, _, err := quotas.GetAll(ctx, testEnv.Client)
+	actual, _, err := quotas.GetLimits(ctx, testEnv.Client, testProjectID, testRegion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,59 +58,28 @@ func TestGetAllQuotas(t *testing.T) {
 	}
 }
 
-func TestGetAllQuotasSingle(t *testing.T) {
+func TestGetLimitsQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas",
-		RawResponse: TestGetAllQuotasResponseSingleRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	actual, _, err := quotas.GetAll(ctx, testEnv.Client)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expected := TestGetAllQuotasResponseSingle
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("expected %#v, but got %#v", expected, actual)
-	}
-}
-
-func TestGetAllQuotasHTTPError(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas",
-		RawResponse: TestGetAllQuotasResponseRaw,
+		URL:         strings.Join([]string{testBaseURL, "limits"}, "/"),
+		RawResponse: TestGetLimitsQuotasResponseRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusBadGateway,
 		CallFlag:    &endpointCalled,
 	})
 
 	ctx := context.Background()
-	allQuotas, httpResponse, err := quotas.GetAll(ctx, testEnv.Client)
+	actual, httpResponse, err := quotas.GetLimits(ctx, testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
 	}
-	if allQuotas != nil {
+	if actual != nil {
 		t.Fatal("expected no quotas from the GetAll method")
 	}
 	if err == nil {
@@ -115,14 +91,14 @@ func TestGetAllQuotasHTTPError(t *testing.T) {
 	}
 }
 
-func TestGetAllQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestEnv()
+func TestGetLimitsQuotasTimeoutError(t *testing.T) {
+	testEnv := testutils.SetupTestQuotasEnv()
 	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 
 	ctx := context.Background()
-	allQuotas, _, err := quotas.GetAll(ctx, testEnv.Client)
+	allQuotas, _, err := quotas.GetLimits(ctx, testEnv.Client, "", "ru-1")
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the GetAll method")
@@ -132,15 +108,15 @@ func TestGetAllQuotasTimeoutError(t *testing.T) {
 	}
 }
 
-func TestGetAllQuotasUnmarshalError(t *testing.T) {
+func TestGetLimitsQuotasUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas",
+		URL:         strings.Join([]string{testBaseURL, "limits"}, "/"),
 		RawResponse: TestQuotasInvalidResponseRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusOK,
@@ -148,7 +124,7 @@ func TestGetAllQuotasUnmarshalError(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	allQuotas, _, err := quotas.GetAll(ctx, testEnv.Client)
+	allQuotas, _, err := quotas.GetLimits(ctx, testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -158,320 +134,18 @@ func TestGetAllQuotasUnmarshalError(t *testing.T) {
 	}
 	if err == nil {
 		t.Fatal("expected error from the GetAll method")
-	}
-}
-
-func TestGetFreeQuotas(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/free",
-		RawResponse: TestGetFreeQuotasResponseRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	actual, _, err := quotas.GetFree(ctx, testEnv.Client)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if actual == nil {
-		t.Fatal("didn't get quotas")
-	}
-	actualKind := reflect.TypeOf(actual).Kind()
-	if actualKind != reflect.Slice {
-		t.Errorf("expected slice of pointers to quotas, but got %v", actualKind)
-	}
-	if len(actual) != 2 {
-		t.Errorf("expected 2 quotas, but got %d", len(actual))
-	}
-	for _, quota := range actual {
-		if len(quota.ResourceQuotasEntities) != 2 {
-			t.Errorf("expected 2 quota entities for quota %v, but got %d", quota, len(quota.ResourceQuotasEntities))
-		}
-	}
-}
-
-func TestGetFreeQuotasSingle(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/free",
-		RawResponse: TestGetFreeQuotasResponseSingleRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	actual, _, err := quotas.GetFree(ctx, testEnv.Client)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expected := TestGetFreeQuotasResponseSingle
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("expected %#v, but got %#v", expected, actual)
-	}
-}
-
-func TestGetFreeQuotasHTTPError(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/free",
-		RawResponse: TestGetFreeQuotasResponseRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusBadGateway,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	allQuotas, httpResponse, err := quotas.GetFree(ctx, testEnv.Client)
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if allQuotas != nil {
-		t.Fatal("expected no quotas from the GetFree method")
-	}
-	if err == nil {
-		t.Fatal("expected error from the GetFree method")
-	}
-	if httpResponse.StatusCode != http.StatusBadGateway {
-		t.Fatalf("expected %d status in the HTTP response, but got %d",
-			http.StatusBadGateway, httpResponse.StatusCode)
-	}
-}
-
-func TestGetFreeQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetFree(ctx, testEnv.Client)
-
-	if allQuotas != nil {
-		t.Fatal("expected no quotas from the GetFree method")
-	}
-	if err == nil {
-		t.Fatal("expected error from the GetFree method")
-	}
-}
-
-func TestGetFreeQuotasUnmarshalError(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/free",
-		RawResponse: TestQuotasInvalidResponseRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetFree(ctx, testEnv.Client)
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if allQuotas != nil {
-		t.Fatal("expected no quotas from the GetFree method")
-	}
-	if err == nil {
-		t.Fatal("expected error from the GetFree method")
-	}
-}
-
-func TestGetProjectsQuotas(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects",
-		RawResponse: TestGetProjectsQuotasResponseRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	actual, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if actual == nil {
-		t.Fatal("didn't get quotas")
-	}
-	actualKind := reflect.TypeOf(actual).Kind()
-	if actualKind != reflect.Slice {
-		t.Errorf("expected slice of pointers to quotas, but got %v", actualKind)
-	}
-	if len(actual) != 2 {
-		t.Errorf("expected 2 quotas, but got %d", len(actual))
-	}
-	for _, project := range actual {
-		if len(project.ProjectQuotas) != 2 {
-			t.Errorf("expected 2 project quotas for project %s, but got %d", project.ID, len(project.ProjectQuotas))
-		}
-	}
-}
-
-func TestGetProjectsQuotasSingle(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects",
-		RawResponse: TestGetProjectsQuotasResponseSingleRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	actual, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expected := TestGetProjectsQuotasResponseSingle
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if !reflect.DeepEqual(actual, expected) {
-		t.Fatalf("expected %#v, but got %#v", expected, actual)
-	}
-}
-
-func TestGetProjectsQuotasHTTPError(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects",
-		RawResponse: TestGetProjectsQuotasResponseRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusBadGateway,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	allQuotas, httpResponse, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if allQuotas != nil {
-		t.Fatal("expected no quotas from the GetProjectsQuotas method")
-	}
-	if err == nil {
-		t.Fatal("expected error from the GetProjectsQuotas method")
-	}
-	if httpResponse.StatusCode != http.StatusBadGateway {
-		t.Fatalf("expected %d status in the HTTP response, but got %d",
-			http.StatusBadGateway, httpResponse.StatusCode)
-	}
-}
-
-func TestGetProjectsQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
-
-	if allQuotas != nil {
-		t.Fatal("expected no quotas from the GetProjectsQuotas method")
-	}
-	if err == nil {
-		t.Fatal("expected error from the GetProjectsQuotas method")
-	}
-}
-
-func TestGetProjectsQuotasUnmarshalError(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects",
-		RawResponse: TestQuotasInvalidResponseRaw,
-		Method:      http.MethodGet,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetProjectsQuotas(ctx, testEnv.Client)
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if allQuotas != nil {
-		t.Fatal("expected no quotas from the GetProjectsQuotas method")
-	}
-	if err == nil {
-		t.Fatal("expected error from the GetProjectsQuotas method")
 	}
 }
 
 func TestGetProjectQuotas(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawResponse: TestGetProjectQuotasResponseRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusOK,
@@ -479,7 +153,7 @@ func TestGetProjectQuotas(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
+	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -507,12 +181,12 @@ func TestGetProjectQuotas(t *testing.T) {
 func TestGetProjectQuotasSingle(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawResponse: TestGetProjectQuotasResponseSingleRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusOK,
@@ -520,7 +194,7 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
+	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -538,12 +212,12 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 func TestGetProjectQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawResponse: TestGetProjectQuotasResponseRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusBadGateway,
@@ -551,7 +225,7 @@ func TestGetProjectQuotasHTTPError(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	allQuotas, httpResponse, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
+	allQuotas, httpResponse, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -569,13 +243,13 @@ func TestGetProjectQuotasHTTPError(t *testing.T) {
 }
 
 func TestGetProjectQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 
 	ctx := context.Background()
-	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
+	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the GetProjectQuotas method")
@@ -588,12 +262,12 @@ func TestGetProjectQuotasTimeoutError(t *testing.T) {
 func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawResponse: TestQuotasInvalidResponseRaw,
 		Method:      http.MethodGet,
 		Status:      http.StatusOK,
@@ -601,7 +275,7 @@ func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85")
+	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -617,12 +291,12 @@ func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 func TestUpdateProjectQuotas(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         "/projects/c83243b3c18a4d109a5f0fe45336af85/quotas",
 		RawResponse: TestUpdateProjectQuotasResponseRaw,
 		RawRequest:  TestUpdateQuotasOptsRaw,
 		Method:      http.MethodPatch,
@@ -632,7 +306,7 @@ func TestUpdateProjectQuotas(t *testing.T) {
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -650,12 +324,12 @@ func TestUpdateProjectQuotas(t *testing.T) {
 func TestUpdateProjectQuotasNilLocation(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawResponse: TestUpdateProjectQuotasResponseRawNilLocationParams,
 		RawRequest:  TestUpdateQuotasOptsRawNilLocationParams,
 		Method:      http.MethodPatch,
@@ -665,7 +339,7 @@ func TestUpdateProjectQuotasNilLocation(t *testing.T) {
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOptsNilLocationParams
-	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -683,12 +357,12 @@ func TestUpdateProjectQuotasNilLocation(t *testing.T) {
 func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
-		URL:        "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:        strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawRequest: TestUpdateQuotasOptsRaw,
 		Method:     http.MethodPatch,
 		Status:     http.StatusBadRequest,
@@ -697,7 +371,7 @@ func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	allQuotas, httpResponse, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	allQuotas, httpResponse, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -714,14 +388,14 @@ func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 }
 
 func TestUpdateProjectQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the Update method")
@@ -734,12 +408,12 @@ func TestUpdateProjectQuotasTimeoutError(t *testing.T) {
 func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/quotas/projects/c83243b3c18a4d109a5f0fe45336af85",
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
 		RawResponse: TestQuotasInvalidResponseRaw,
 		RawRequest:  TestUpdateQuotasOptsRaw,
 		Method:      http.MethodPatch,
@@ -749,7 +423,7 @@ func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -763,13 +437,13 @@ func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 }
 
 func TestUpdateProjectQuotasMarshallError(t *testing.T) {
-	testEnv := testutils.SetupTestEnv()
+	testEnv := testutils.SetupTestQuotasEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewTestRegionalClient()
 
 	ctx := context.Background()
 	updateOpts := TestUpdateQuotasInvalidOpts
-	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, "c83243b3c18a4d109a5f0fe45336af85", updateOpts)
+	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the Update method")

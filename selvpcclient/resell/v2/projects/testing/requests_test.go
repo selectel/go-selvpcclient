@@ -37,9 +37,6 @@ func TestGetProject(t *testing.T) {
 	if actual == nil {
 		t.Fatal("didn't get project")
 	}
-	if len(actual.Quotas) != 3 {
-		t.Errorf("expected 3 quotas in project, but got %d", len(actual.Quotas))
-	}
 }
 
 func TestGetProjectSingleQuota(t *testing.T) {
@@ -323,40 +320,7 @@ func TestCreateProject(t *testing.T) {
 		t.Fatal("endpoint wasn't called")
 	}
 	if !reflect.DeepEqual(actualResponse, expectedResponse) {
-		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
-	}
-}
-
-func TestCreateProjectAutoQuotas(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/projects",
-		RawResponse: TestCreateProjectAutoQuotasResponseRaw,
-		RawRequest:  TestCreateProjectAutoQuotasOptsRaw,
-		Method:      http.MethodPost,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	createOpts := TestCreateProjectAutoQuotasOpts
-	actualResponse, _, err := projects.Create(ctx, testEnv.Client, createOpts)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expectedResponse := TestCreateProjectAutoQuotasResponse
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if !reflect.DeepEqual(actualResponse, expectedResponse) {
-		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
+		t.Fatalf("expected %#v, but got %#v", expectedResponse, actualResponse)
 	}
 }
 
@@ -441,39 +405,6 @@ func TestCreateProjectsUnmarshalError(t *testing.T) {
 	}
 	if err == nil {
 		t.Fatal("expected error from the Create method")
-	}
-}
-
-func TestCreateProjectsNoQuotas(t *testing.T) {
-	endpointCalled := false
-
-	testEnv := testutils.SetupTestEnv()
-	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
-	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
-		Mux:         testEnv.Mux,
-		URL:         "/resell/v2/projects",
-		RawResponse: TestCreateProjectResponseRaw,
-		RawRequest:  TestCreateProjectNoQuotasOptsRaw,
-		Method:      http.MethodPost,
-		Status:      http.StatusOK,
-		CallFlag:    &endpointCalled,
-	})
-
-	ctx := context.Background()
-	createOpts := TestCreateProjectNoQuotasOpts
-	actualResponse, _, err := projects.Create(ctx, testEnv.Client, createOpts)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	expectedResponse := TestCreateProjectResponse
-
-	if !endpointCalled {
-		t.Fatal("endpoint wasn't called")
-	}
-	if !reflect.DeepEqual(actualResponse, expectedResponse) {
-		t.Fatalf("expected %#v, but got %#v", actualResponse, expectedResponse)
 	}
 }
 

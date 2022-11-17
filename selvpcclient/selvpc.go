@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil" //nolint:staticcheck
 	"net"
 	"net/http"
 	"net/url"
@@ -20,13 +20,15 @@ import (
 
 const (
 	// AppVersion is a version of the application.
-	AppVersion = "1.12.0"
+	AppVersion = "2.0.0"
 
 	// AppName is a global application name.
 	AppName = "go-selvpcclient"
 
 	// DefaultEndpoint contains basic endpoint for queries.
 	DefaultEndpoint = "https://api.selectel.ru/vpc"
+
+	DefaultOpenstackIdentityEndpoint = "https://api.selvpc.ru/identity/v3/"
 
 	// DefaultUserAgent contains basic user agent that will be used in queries.
 	DefaultUserAgent = AppName + "/" + AppVersion

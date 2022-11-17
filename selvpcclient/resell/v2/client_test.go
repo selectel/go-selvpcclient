@@ -3,14 +3,19 @@ package v2
 import (
 	"testing"
 
+	"github.com/gophercloud/gophercloud/testhelper"
+
 	"github.com/selectel/go-selvpcclient/selvpcclient"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
 	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
 )
 
-func TestNewV2ResellClient(t *testing.T) {
-	token := "fakeID"
+const (
+	token    = "fakeID"
+	endpoint = "http://example.org"
+)
 
+func TestNewV2ResellClient(t *testing.T) {
 	expected := &selvpcclient.ServiceClient{
 		Endpoint:  resell.Endpoint + "/" + APIVersion,
 		TokenID:   token,
@@ -26,8 +31,6 @@ func TestNewV2ResellClient(t *testing.T) {
 }
 
 func TestNewV2ResellClientWithEndpoint(t *testing.T) {
-	token := "fakeID"
-	endpoint := "http://example.org"
 	expected := &selvpcclient.ServiceClient{
 		Endpoint:  endpoint,
 		TokenID:   token,
@@ -40,4 +43,16 @@ func TestNewV2ResellClientWithEndpoint(t *testing.T) {
 	}
 
 	testutils.CompareClients(t, expected, actual)
+}
+
+func TestNewOpenstackClient(t *testing.T) {
+	actual := NewOpenstackClient(token)
+
+	testhelper.AssertEquals(t, selvpcclient.DefaultOpenstackIdentityEndpoint, actual.Endpoint)
+}
+
+func TestNewOpenstackClientWithEndpoint(t *testing.T) {
+	actual := NewOpenstackClientWithEndpoint(token, endpoint)
+
+	testhelper.AssertEquals(t, endpoint, actual.Endpoint)
 }
