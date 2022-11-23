@@ -1,6 +1,8 @@
 package testing
 
-import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
+import (
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager/quotas"
+)
 
 // TestGetLimitsQuotasResponseRaw represents a raw response from the GetAll request.
 const TestGetLimitsQuotasResponseRaw = `

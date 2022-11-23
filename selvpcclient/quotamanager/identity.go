@@ -1,8 +1,9 @@
-package quotas
+package quotamanager
 
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/gophercloud/gophercloud"
@@ -36,6 +37,7 @@ type IdentityManager struct {
 	Token           *tokens.Token
 	OpenstackClient *gophercloud.ServiceClient
 	ResellClient    *selvpcclient.ServiceClient
+	syncer          *sync.Mutex
 }
 
 // NewIdentityManager creates client for Openstack authentication.
@@ -46,6 +48,7 @@ func NewIdentityManager(resellClient *selvpcclient.ServiceClient, openstackClien
 		AccountName:     accountName,
 		OpenstackClient: openstackClient,
 		ResellClient:    resellClient,
+		syncer:          &sync.Mutex{},
 	}
 
 	return mgr
@@ -53,6 +56,9 @@ func NewIdentityManager(resellClient *selvpcclient.ServiceClient, openstackClien
 
 // GetToken returns Openstack token.
 func (mgr *IdentityManager) GetToken() (string, error) {
+	mgr.syncer.Lock()
+	defer mgr.syncer.Unlock()
+
 	if mgr.needReAuth() {
 		err := mgr.auth(context.Background())
 		if err != nil {
@@ -100,11 +106,7 @@ func (mgr *IdentityManager) auth(ctx context.Context) error {
 }
 
 func (mgr *IdentityManager) needReAuth() bool {
-	if mgr.Token == nil {
-		return true
-	}
-
-	return time.Until(mgr.Token.ExpiresAt).Minutes() <= MinTokenTTL
+	return mgr.Token == nil || time.Until(mgr.Token.ExpiresAt).Minutes() <= MinTokenTTL
 }
 
 func getEndpoints(catalog *tokens.ServiceCatalog) []tokens.Endpoint {

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
 )
 
 // NewTestResellV2Client prepares a client for the Resell V2 API tests.
@@ -38,7 +38,7 @@ func (testEnv *TestQuotasEnv) NewTestRegionalClient() {
 	identity := TestIdentityMgr{
 		ServerURL: testEnv.Server.URL,
 	}
-	regionalClient := quotas.NewQuotaRegionalClient(&http.Client{}, identity)
+	regionalClient := quotamanager.NewQuotaRegionalClient(&http.Client{}, identity)
 	testEnv.Client = regionalClient
 }
 

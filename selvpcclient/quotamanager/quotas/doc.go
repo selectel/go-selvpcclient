@@ -12,12 +12,12 @@ Example of creating QuotaRegional client
 	  })
 
 	  OpenstackClient := resell.NewOpenstackClient(token.ID)
-	  identity := quotas.NewIdentityManager(resellClient, OpenstackClient, accountName)
-	  quotaMgr := quotas.NewQuotaRegionalClient(selvpcclient.NewHTTPClient(), identity)
+	  identity := quota-manager.NewIdentityManager(resellClient, OpenstackClient, accountName)
+	  quotaMgr := quota-manager.NewQuotaRegionalClient(selvpcclient.NewHTTPClient(), identity)
 
 Example of getting quota limits for a single project
 
-	limits, _, err := quotas.GetLimits(ctx, QuotaRegionalClient)
+	limits, _, err := quota-manager.GetLimits(ctx, QuotaRegionalClient)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -27,7 +27,7 @@ Example of getting quota limits for a single project
 
 Example of getting quotas for a single project in specific region
 
-	singleProjectQuotas, _, err := quotas.GetProjectQuotas(ctx, ResellClient, QuotaRegionalClient, projectID, regionName)
+	singleProjectQuotas, _, err := quota-manager.GetProjectQuotas(ctx, ResellClient, QuotaRegionalClient, projectID, regionName)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -37,11 +37,11 @@ Example of getting quotas for a single project in specific region
 
 Example of updating quotas for a single project in specific region
 
-	projectQuotaUpdateOpts := quotas.UpdateProjectQuotasOpts{
-	  QuotasOpts: []*quotas.QuotaOpts{
+	projectQuotaUpdateOpts := quota-manager.UpdateProjectQuotasOpts{
+	  QuotasOpts: []*quota-manager.QuotaOpts{
 	    {
 	      Name: "image_gigabytes",
-	      ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+	      ResourceQuotasOpts: []quota-manager.ResourceQuotaOpts{
 	        {
 	          Region: "ru-1",
 	          Value:  10,
@@ -54,7 +54,7 @@ Example of updating quotas for a single project in specific region
 	    },
 	  },
 	}
-	updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, ResellClient, QuotaRegionalClient, projectID, regionName, projectQuotaUpdateOpts)
+	updatedProjectQuotas, _, err := quota-manager.UpdateProjectQuotas(context, ResellClient, QuotaRegionalClient, projectID, regionName, projectQuotaUpdateOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}

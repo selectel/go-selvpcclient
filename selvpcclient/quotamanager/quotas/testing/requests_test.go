@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager/quotas"
 	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
 )
 

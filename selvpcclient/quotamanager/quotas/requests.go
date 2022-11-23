@@ -5,11 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
 )
 
 // GetLimits returns limits for a single project referenced by id in specific region.
-func GetLimits(ctx context.Context, client *QuotaRegionalClient, projectID, region string,
-) ([]*Quota, *ResponseResult, error) {
+func GetLimits(ctx context.Context, client *quotamanager.QuotaRegionalClient, projectID, region string,
+) ([]*Quota, *quotamanager.ResponseResult, error) {
 	url, err := client.BuildPath(region, projectID, "limits")
 	if err != nil {
 		return nil, nil, err
@@ -35,8 +37,8 @@ func GetLimits(ctx context.Context, client *QuotaRegionalClient, projectID, regi
 }
 
 // GetProjectQuotas returns the quotas info for a single project referenced by id in specific region.
-func GetProjectQuotas(ctx context.Context, client *QuotaRegionalClient, projectID, region string,
-) ([]*Quota, *ResponseResult, error) {
+func GetProjectQuotas(ctx context.Context, client *quotamanager.QuotaRegionalClient, projectID, region string,
+) ([]*Quota, *quotamanager.ResponseResult, error) {
 	url, err := client.BuildPath(region, projectID, "quotas")
 	if err != nil {
 		return nil, nil, err
@@ -61,9 +63,9 @@ func GetProjectQuotas(ctx context.Context, client *QuotaRegionalClient, projectI
 }
 
 // UpdateProjectQuotas updates the quotas info for a single project referenced by id in specific region.
-func UpdateProjectQuotas(ctx context.Context, client *QuotaRegionalClient, projectID, region string,
+func UpdateProjectQuotas(ctx context.Context, client *quotamanager.QuotaRegionalClient, projectID, region string,
 	updateOpts UpdateProjectQuotasOpts,
-) ([]*Quota, *ResponseResult, error) {
+) ([]*Quota, *quotamanager.ResponseResult, error) {
 	requestBody, err := json.Marshal(&updateOpts)
 	if err != nil {
 		return nil, nil, err

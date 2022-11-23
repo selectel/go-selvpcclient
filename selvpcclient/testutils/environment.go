@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas"
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
 )
 
 // TestEnv represents a testing environment for all resources.
@@ -39,7 +39,7 @@ func (testEnv *TestEnv) TearDownTestEnv() {
 type TestQuotasEnv struct {
 	Mux    *http.ServeMux
 	Server *httptest.Server
-	Client *quotas.QuotaRegionalClient
+	Client *quotamanager.QuotaRegionalClient
 }
 
 // SetupTestQuotasEnv prepares the new quotas testing environment.
