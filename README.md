@@ -22,7 +22,7 @@ You can use this library to work with the following objects of the Selectel VPC 
 * [keypairs](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/keypairs)
 * [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/licenses)
 * [projects](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects)
-* [quotas](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/quotas)
+* [quotas](https://godoc.org/github.com/selectel/go-selvpcclient/quotamanager/quotas)
 * [roles](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/roles)
 * [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets)
 * [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/tokens)
@@ -56,29 +56,119 @@ To work with the Selectel VPC API you first need to:
 package main
 
 import (
-  "context"
-  "fmt"
-  "log"
+	"context"
+	"fmt"
+	"log"
 
-  resell "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2"
-  "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects"
+	resell "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2"
+	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects"
 )
 
 // API token from the https://my.selectel.ru.
 var token = "token_key"
 
 func main() {
-  // Initialize the Resell V2 client.
-  resellClient := resell.NewV2ResellClient(token)
+	// Initialize the Resell V2 client.
+	resellClient := resell.NewV2ResellClient(token)
 
-  // Get and print all projects.
-  ctx := context.Background()
-  allProjects, _, err := projects.List(ctx, resellClient)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, myProject := range allProjects {
-    fmt.Println(myProject)
-  }
+	// Get and print all projects.
+	ctx := context.Background()
+	allProjects, _, err := projects.List(ctx, resellClient)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, myProject := range allProjects {
+		fmt.Println(myProject)
+	}
+}
+```
+
+### Quota usage example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/selectel/go-selvpcclient/selvpcclient"
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager/quotas"
+	resell "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2"
+	reselTokens "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/tokens"
+)
+
+// token from the https://my.selectel.ru.
+var (
+	token         = "token_key"
+	accountName   = "account_name"
+	projectID     = "project_uuid"
+	region        = "region_name"
+	ramQuotaZone  = "zone_name"
+	ramQuotaValue = 123
+)
+
+func main() {
+	// Init resell client with API token.
+	resellClient := resell.NewV2ResellClient(token)
+	ctx := context.Background()
+
+	APIToken, _, err := reselTokens.Create(ctx, resellClient, reselTokens.TokenOpts{
+		AccountName: accountName,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Init Identity and Quota Manager.
+	client := resell.NewOpenstackClient(APIToken.ID)
+	identity := quotamanager.NewIdentityManager(resellClient, client, accountName)
+	quotaMgr := quotamanager.NewQuotaRegionalClient(selvpcclient.NewHTTPClient(), identity)
+
+	// Get limits for project <projectID> in region <region>.
+	limits, _, err := quotas.GetLimits(ctx, quotaMgr, projectID, region)
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	for _, limit := range limits {
+		fmt.Println(limit.Name, limit.ResourceQuotasEntities)
+	}
+
+	// Get quotas for project <projectID> in region <region>.
+	quotasData, _, err := quotas.GetProjectQuotas(ctx, quotaMgr, projectID, region)
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	for _, quota := range quotasData {
+		fmt.Println(quota.Name, quota.ResourceQuotasEntities)
+	}
+
+	// Update quotas for project <projectID> in region <region>.
+	UpdateQuotasOpts := quotas.UpdateProjectQuotasOpts{
+		QuotasOpts: []quotas.QuotaOpts{
+			{
+				Name: "compute_cores",
+				ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
+					{
+						Zone:  &ramQuotaZone,
+						Value: &ramQuotaValue,
+					},
+				},
+			},
+		},
+	}
+	updatedQuotasData, _, err := quotas.UpdateProjectQuotas(ctx, quotaMgr,
+		projectID, region, UpdateQuotasOpts)
+	if err != nil {
+		log.Fatal(err)
+	}
+	
+	for _, quota := range updatedQuotasData {
+		fmt.Println(quota.Name, quota.ResourceQuotasEntities)
+	}
 }
 ```

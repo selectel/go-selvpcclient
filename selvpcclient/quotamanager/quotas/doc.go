@@ -1,23 +1,10 @@
 /*
 Package quotas provides the ability to retrieve and update quotas through the
-Resell v2 API.
-
-Example of creating QuotaRegional client
-
-	  resellClient := resell.NewV2ResellClient(APIToken)
-	  ctx := context.Background()
-	  accountName := "123456"
-	  token, _, _ := reselTokens.Create(ctx, resellClient, reselTokens.TokenOpts{
-		  AccountName: accountName,
-	  })
-
-	  OpenstackClient := resell.NewOpenstackClient(token.ID)
-	  identity := quota-manager.NewIdentityManager(resellClient, OpenstackClient, accountName)
-	  quotaMgr := quota-manager.NewQuotaRegionalClient(selvpcclient.NewHTTPClient(), identity)
+Quota Manager API.
 
 Example of getting quota limits for a single project
 
-	limits, _, err := quota-manager.GetLimits(ctx, QuotaRegionalClient)
+	limits, _, err := quotas.GetLimits(ctx, QuotaRegionalClient)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -27,7 +14,7 @@ Example of getting quota limits for a single project
 
 Example of getting quotas for a single project in specific region
 
-	singleProjectQuotas, _, err := quota-manager.GetProjectQuotas(ctx, ResellClient, QuotaRegionalClient, projectID, regionName)
+	singleProjectQuotas, _, err := quotas.GetProjectQuotas(ctx, ResellClient, QuotaRegionalClient, projectID, regionName)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -37,11 +24,11 @@ Example of getting quotas for a single project in specific region
 
 Example of updating quotas for a single project in specific region
 
-	projectQuotaUpdateOpts := quota-manager.UpdateProjectQuotasOpts{
+	projectQuotaUpdateOpts := quotas.UpdateProjectQuotasOpts{
 	  QuotasOpts: []*quota-manager.QuotaOpts{
 	    {
 	      Name: "image_gigabytes",
-	      ResourceQuotasOpts: []quota-manager.ResourceQuotaOpts{
+	      ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
 	        {
 	          Region: "ru-1",
 	          Value:  10,
@@ -54,7 +41,7 @@ Example of updating quotas for a single project in specific region
 	    },
 	  },
 	}
-	updatedProjectQuotas, _, err := quota-manager.UpdateProjectQuotas(context, ResellClient, QuotaRegionalClient, projectID, regionName, projectQuotaUpdateOpts)
+	updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, ResellClient, QuotaRegionalClient, projectID, regionName, projectQuotaUpdateOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}

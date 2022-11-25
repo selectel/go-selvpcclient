@@ -60,12 +60,11 @@ type ResourcesQuotas struct {
 /*
 UnmarshalJSON implements custom unmarshalling method for the ResourcesQuotas type.
 
-We need it to work with a JSON structure that the Resell v2 API responses with:
+We need it to work with a JSON structure that the Quota Manager API responses with:
 
 	"quotas": {
 	    "compute_cores": [
 	        {
-	            "region": "ru-2",
 	            "value": 200,
 	            "zone": "ru-2a"
 	        },

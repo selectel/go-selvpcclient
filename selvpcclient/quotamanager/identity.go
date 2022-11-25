@@ -106,7 +106,7 @@ func (mgr *IdentityManager) auth(ctx context.Context) error {
 }
 
 func (mgr *IdentityManager) needReAuth() bool {
-	return mgr.Token == nil || time.Until(mgr.Token.ExpiresAt).Minutes() <= MinTokenTTL
+	return mgr.Token == nil || time.Until(mgr.Token.ExpiresAt).Seconds() <= MinTokenTTL
 }
 
 func getEndpoints(catalog *tokens.ServiceCatalog) []tokens.Endpoint {
