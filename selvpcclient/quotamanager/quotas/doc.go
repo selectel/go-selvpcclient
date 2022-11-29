@@ -30,11 +30,9 @@ Example of updating quotas for a single project in specific region
 	      Name: "image_gigabytes",
 	      ResourceQuotasOpts: []quotas.ResourceQuotaOpts{
 	        {
-	          Region: "ru-1",
 	          Value:  10,
 	        },
 	        {
-	          Region: "ru-2",
 	          Value:  20,
 	        },
 	      },

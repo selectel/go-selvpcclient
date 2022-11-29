@@ -41,7 +41,6 @@ const TestGetProjectQuotasResponseRaw = `
         ],
         "network_floatingips": [
             {
-                "region": "ru-1",
                 "value": 2
             }
         ]
@@ -140,7 +139,7 @@ var TestUpdateProjectQuotasResponse = []*quotas.Quota{
 }
 
 // TestUpdateQuotasOptsNilLocationParams represents options for the UpdateProjectQuotas request
-// with "null" in region and zone.
+// with "null" in zone.
 var TestUpdateQuotasOptsNilLocationParams = quotas.UpdateProjectQuotasOpts{
 	QuotasOpts: []quotas.QuotaOpts{
 		{
@@ -154,8 +153,8 @@ var TestUpdateQuotasOptsNilLocationParams = quotas.UpdateProjectQuotasOpts{
 	},
 }
 
-// TestUpdateQuotasOptsNilLocationParamsRaw represents unmarshalled options for the
-// UpdateProjectQuotas request with "null" in region and zone.
+// TestUpdateQuotasOptsRawNilLocationParams represents unmarshalled options for the
+// UpdateProjectQuotas request with "null" in  zone.
 const TestUpdateQuotasOptsRawNilLocationParams = `
 {
     "quotas": {
@@ -169,7 +168,7 @@ const TestUpdateQuotasOptsRawNilLocationParams = `
 `
 
 // TestUpdateProjectQuotasResponseRawNilLocationParams represents a raw response from the
-// UpdateProjectQuotas request with "null" in region and zone.
+// UpdateProjectQuotas request with "null" in zone.
 const TestUpdateProjectQuotasResponseRawNilLocationParams = `
 {
     "quotas": {
@@ -184,7 +183,7 @@ const TestUpdateProjectQuotasResponseRawNilLocationParams = `
 `
 
 // TestUpdateProjectQuotasResponseNilLocationParams represents the unmarshalled
-// TestUpdateProjectQuotasResponseRaw response with "null" in region and zone.
+// TestUpdateProjectQuotasResponseRaw response with "null" in zone.
 var TestUpdateProjectQuotasResponseNilLocationParams = []*quotas.Quota{
 	{
 		Name: "compute_ram",

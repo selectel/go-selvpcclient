@@ -23,7 +23,7 @@ type ResourceQuotaOpts struct {
 	// Zone contains the quota zone data.
 	Zone *string `json:"zone,omitempty"`
 
-	// Value contans value of resource quota in the specific region and zone.
+	// Value contains value of resource quota in the specific region and zone.
 	Value *int `json:"value"`
 }
 
