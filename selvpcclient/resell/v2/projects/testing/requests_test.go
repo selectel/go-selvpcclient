@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/projects"
-	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/projects"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
 )
 
 func TestGetProject(t *testing.T) {

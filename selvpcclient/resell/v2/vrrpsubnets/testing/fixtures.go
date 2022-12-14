@@ -3,10 +3,10 @@ package testing
 import (
 	"time"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/servers"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/subnets"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/vrrpsubnets"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/servers"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/subnets"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/vrrpsubnets"
 )
 
 // TestGetVRRPSubnetResponseRaw represents a raw response from the Get request.

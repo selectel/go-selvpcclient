@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager/quotas"
-	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/quotamanager/quotas"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
 )
 
 const (

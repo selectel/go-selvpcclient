@@ -3,8 +3,8 @@ package v2
 import (
 	"github.com/gophercloud/gophercloud"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell"
 )
 
 // APIVersion sets the version of the Resell client.

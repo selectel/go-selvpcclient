@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
 )
 
 const resourceURL = "tokens"

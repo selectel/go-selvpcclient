@@ -3,8 +3,8 @@ package testing
 import (
 	"time"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/traffic"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/traffic"
 )
 
 // TestGetTrafficRaw represents a raw response from the Get request.

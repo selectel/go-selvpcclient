@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/keypairs"
-	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/keypairs"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
 )
 
 func TestListKeypairs(t *testing.T) {

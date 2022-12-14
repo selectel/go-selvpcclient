@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell"
 )
 
 var errServiceResponse = errors.New("status code from the server")

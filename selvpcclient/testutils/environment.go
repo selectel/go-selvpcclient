@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/quotamanager"
 )
 
 // TestEnv represents a testing environment for all resources.

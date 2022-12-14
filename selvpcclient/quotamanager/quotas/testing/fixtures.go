@@ -1,7 +1,7 @@
 package testing
 
 import (
-	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager/quotas"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/quotamanager/quotas"
 )
 
 // TestGetLimitsQuotasResponseRaw represents a raw response from the GetAll request.

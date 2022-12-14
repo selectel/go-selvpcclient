@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/floatingips"
-	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/floatingips"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
 )
 
 func TestGetFloatingIP(t *testing.T) {

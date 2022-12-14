@@ -9,8 +9,8 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	reselTokens "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/tokens"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	reselTokens "github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/tokens"
 )
 
 var (

@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
 )
 
 func TestDoGetRequest(t *testing.T) {
