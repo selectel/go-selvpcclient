@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/selectel/go-selvpcclient/selvpcclient"
+	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
 )
 
@@ -18,6 +19,27 @@ func (testEnv *TestEnv) NewTestResellV2Client() {
 		UserAgent:  resell.UserAgent,
 	}
 	testEnv.Client = resellClient
+}
+
+type TestIdentityMgr struct {
+	ServerURL string
+}
+
+func (mgr TestIdentityMgr) GetToken() (string, error) {
+	return "some_token", nil
+}
+
+func (mgr TestIdentityMgr) GetEndpointForRegion(region string) (string, error) {
+	return mgr.ServerURL, nil
+}
+
+// NewTestRegionalClient prepares a client for the quota V1 API tests.
+func (testEnv *TestQuotasEnv) NewTestRegionalClient() {
+	identity := TestIdentityMgr{
+		ServerURL: testEnv.Server.URL,
+	}
+	regionalClient := quotamanager.NewQuotaRegionalClient(&http.Client{}, identity)
+	testEnv.Client = regionalClient
 }
 
 // CompareClients compares two ServiceClients.

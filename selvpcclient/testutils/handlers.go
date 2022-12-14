@@ -3,7 +3,7 @@ package testutils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil" //nolint:staticcheck
 	"net/http"
 	"reflect"
 	"testing"

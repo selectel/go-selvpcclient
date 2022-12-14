@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil" //nolint:staticcheck
 	"log"
 	"net/http"
 	"testing"
@@ -37,7 +37,7 @@ func TestDoGetRequest(t *testing.T) {
 	ctx := context.Background()
 	response, err := client.DoRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		log.Fatalf("unexpected error: %v", err)
+		log.Fatalf("unexpected error: %v", err) //nolint:gocritic
 	}
 	if response.Body == nil {
 		log.Fatal("response body is empty")
@@ -78,7 +78,7 @@ func TestDoPostRequest(t *testing.T) {
 		ID: "uuid",
 	})
 	if err != nil {
-		log.Fatalf("can't marshal JSON: %v", err)
+		log.Fatalf("can't marshal JSON: %v", err) //nolint:gocritic
 	}
 
 	ctx := context.Background()

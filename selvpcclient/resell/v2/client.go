@@ -1,6 +1,8 @@
 package v2
 
 import (
+	"github.com/gophercloud/gophercloud"
+
 	"github.com/selectel/go-selvpcclient/selvpcclient"
 	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
 )
@@ -30,4 +32,26 @@ func NewV2ResellClientWithEndpoint(tokenID, endpoint string) *selvpcclient.Servi
 	}
 
 	return resellClient
+}
+
+func NewOpenstackClient(tokenID string) *gophercloud.ServiceClient {
+	return &gophercloud.ServiceClient{
+		ProviderClient: &gophercloud.ProviderClient{
+			TokenID:    tokenID,
+			HTTPClient: *selvpcclient.NewHTTPClient(),
+		},
+		Endpoint:    selvpcclient.DefaultOpenstackIdentityEndpoint,
+		MoreHeaders: map[string]string{"User-agent": selvpcclient.DefaultUserAgent},
+	}
+}
+
+func NewOpenstackClientWithEndpoint(tokenID, endpoint string) *gophercloud.ServiceClient {
+	return &gophercloud.ServiceClient{
+		ProviderClient: &gophercloud.ProviderClient{
+			TokenID:    tokenID,
+			HTTPClient: *selvpcclient.NewHTTPClient(),
+		},
+		Endpoint:    endpoint,
+		MoreHeaders: map[string]string{"User-agent": selvpcclient.DefaultUserAgent},
+	}
 }
