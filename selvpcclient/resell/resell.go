@@ -1,6 +1,6 @@
 package resell
 
-import "github.com/selectel/go-selvpcclient/selvpcclient"
+import "github.com/selectel/go-selvpcclient/v2/selvpcclient"
 
 const (
 	// ServiceType contains the name of the Selectel VPC service for which this

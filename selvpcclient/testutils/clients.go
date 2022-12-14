@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/quotamanager"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell"
 )
 
 // NewTestResellV2Client prepares a client for the Resell V2 API tests.

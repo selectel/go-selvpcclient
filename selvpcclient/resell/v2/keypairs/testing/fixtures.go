@@ -1,6 +1,6 @@
 package testing
 
-import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/keypairs"
+import "github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/keypairs"
 
 // TestListResponseRaw represents a raw response from List requests.
 const TestListResponseRaw = `

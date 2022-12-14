@@ -1,6 +1,6 @@
 package subnets
 
-import "github.com/selectel/go-selvpcclient/selvpcclient/resell/v2/servers"
+import "github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/servers"
 
 // Subnet represents a single Resell subnet.
 type Subnet struct {

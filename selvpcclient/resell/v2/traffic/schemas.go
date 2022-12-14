@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
 )
 
 // Traffic contains information about used and paid traffic.
@@ -63,26 +63,26 @@ UnmarshalJSON implements custom unmarshalling method for the DomainTraffic type.
 
 We need it to work with a JSON structure that the Resell v2 API responses with:
 
-    "domain": {
-        "paid": {
-            "start": "2018-04-01T00:00:00",
-            "stop": "2018-04-30T23:59:59",
-            "unit": "B",
-            "value": 0
-        },
-        "prepaid": {
-            "start": "2018-04-01T00:00:00",
-            "stop": "2018-04-30T23:59:59",
-            "unit": "B",
-            "value": 3000000000000
-        },
-        "used": {
-            "start": "2018-04-01T00:00:00",
-            "stop": "2018-04-30T23:59:59",
-            "unit": "B",
-            "value": 658003816
-        }
-    }
+	"domain": {
+	    "paid": {
+	        "start": "2018-04-01T00:00:00",
+	        "stop": "2018-04-30T23:59:59",
+	        "unit": "B",
+	        "value": 0
+	    },
+	    "prepaid": {
+	        "start": "2018-04-01T00:00:00",
+	        "stop": "2018-04-30T23:59:59",
+	        "unit": "B",
+	        "value": 3000000000000
+	    },
+	    "used": {
+	        "start": "2018-04-01T00:00:00",
+	        "stop": "2018-04-30T23:59:59",
+	        "unit": "B",
+	        "value": 658003816
+	    }
+	}
 */
 func (result *DomainTraffic) UnmarshalJSON(b []byte) error {
 	// Populate temporary structure with resource quotas represented as maps.

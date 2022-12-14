@@ -1,6 +1,6 @@
 package subnets
 
-import "github.com/selectel/go-selvpcclient/selvpcclient"
+import "github.com/selectel/go-selvpcclient/v2/selvpcclient"
 
 // SubnetOpts represents options for the subnets Create request.
 type SubnetOpts struct {

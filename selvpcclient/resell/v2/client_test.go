@@ -5,9 +5,9 @@ import (
 
 	"github.com/gophercloud/gophercloud/testhelper"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient"
-	"github.com/selectel/go-selvpcclient/selvpcclient/resell"
-	"github.com/selectel/go-selvpcclient/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
 )
 
 const (

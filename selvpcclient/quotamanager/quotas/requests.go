@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/selectel/go-selvpcclient/selvpcclient/quotamanager"
+	"github.com/selectel/go-selvpcclient/v2/selvpcclient/quotamanager"
 )
 
 // GetLimits returns limits for a single project referenced by id in specific region.
