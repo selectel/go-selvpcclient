@@ -8,16 +8,19 @@ import (
 type CreateOpts struct {
 	// Name sets the name for a new project.
 	Name string `json:"-"`
+	// SkipQuotasInit disables quotas initialization for project.
+	SkipQuotasInit bool `json:"-"`
 }
 
 // MarshalJSON implements custom marshalling method for the CreateOpts.
 func (opts *CreateOpts) MarshalJSON() ([]byte, error) {
-	// Return create options with only name and auto_quotas parameters if quotas
-	// parameter hadn't been provided.
+	// Return create options with only name and skip_quotas_init parameters.
 	return json.Marshal(&struct {
-		Name string `json:"name"`
+		Name           string `json:"name"`
+		SkipQuotasInit bool   `json:"skip_quotas_init"`
 	}{
-		Name: opts.Name,
+		Name:           opts.Name,
+		SkipQuotasInit: opts.SkipQuotasInit,
 	})
 }
 
