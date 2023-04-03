@@ -41,17 +41,17 @@ UnmarshalJSON implements custom unmarshalling method for the ResourcesQuotas typ
 
 We need it to work with a JSON structure that the Resell v2 API responses with:
 
-    "quotas": {
-        "compute_cores": [
-            {
-                "region": "ru-2",
-                "value": 200,
-                "zone": "ru-2a"
-            },
-            ...
-        ],
-        ...
-    }
+	"quotas": {
+	    "compute_cores": [
+	        {
+	            "region": "ru-2",
+	            "value": 200,
+	            "zone": "ru-2a"
+	        },
+	        ...
+	    ],
+	    ...
+	}
 */
 func (result *ResourcesQuotas) UnmarshalJSON(b []byte) error {
 	// Populate temporary structure with resource quotas represented as maps.
@@ -109,20 +109,20 @@ UnmarshalJSON implements custom unmarshalling method for the ProjectsQuotas type
 
 We need it to work with a JSON structure that the Resell v2 API responses with:
 
-    "quotas": {
-        "6d23928357bb4e0eb302794bc57fb8fd": {
-            "compute_cores": [
-                {
-                   "region": "ru-1",
-                   "used": 2,
-                   "value": 10,
-                   "zone": "ru-1b"
-                },
-                ...
-            ]
-        },
-        ...
-    }
+	"quotas": {
+	    "6d23928357bb4e0eb302794bc57fb8fd": {
+	        "compute_cores": [
+	            {
+	               "region": "ru-1",
+	               "used": 2,
+	               "value": 10,
+	               "zone": "ru-1b"
+	            },
+	            ...
+	        ]
+	    },
+	    ...
+	}
 */
 func (result *ProjectsQuotas) UnmarshalJSON(b []byte) error {
 	// Populate temporary structure with projects quotas represented as maps.
