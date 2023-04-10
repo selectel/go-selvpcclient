@@ -4,12 +4,12 @@ Resell v2 API.
 
 Example of getting domain traffic
 
-  domainTraffic, _, err := traffic.Get(ctx, resellClient)
-  if err != nil {
-    log.Fatal(err)
-  }
-  for _, trafficData := range domainTraffic {
-    fmt.Println(trafficData)
-  }
+	domainTraffic, _, err := traffic.Get(ctx, resellClient)
+	if err != nil {
+	  log.Fatal(err)
+	}
+	for _, trafficData := range domainTraffic {
+	  fmt.Println(trafficData)
+	}
 */
 package traffic

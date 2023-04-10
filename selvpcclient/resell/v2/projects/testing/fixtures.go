@@ -103,7 +103,8 @@ var TestListProjectsSingleResponse = []*projects.Project{
 const TestCreateProjectOptsRaw = `
 {
     "project": {
-        "name": "Project2"
+        "name": "Project2",
+        "skip_quotas_init": false
     }
 }
 `
