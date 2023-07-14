@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/vrrpsubnets"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/vrrpsubnets"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetVRRPSubnet(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetVRRPSubnet(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/186",
@@ -25,8 +24,7 @@ func TestGetVRRPSubnet(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := vrrpsubnets.Get(ctx, testEnv.Client, "186")
+	actual, _, err := vrrpsubnets.Get(testEnv.Client, "186")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +44,7 @@ func TestGetVRRPSubnetHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/186",
@@ -56,8 +54,7 @@ func TestGetVRRPSubnetHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	subnet, httpResponse, err := vrrpsubnets.Get(ctx, testEnv.Client, "186")
+	subnet, httpResponse, err := vrrpsubnets.Get(testEnv.Client, "186")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -76,12 +73,11 @@ func TestGetVRRPSubnetHTTPError(t *testing.T) {
 
 func TestGetVRRPSubnetTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	subnet, _, err := vrrpsubnets.Get(ctx, testEnv.Client, "111122")
+	subnet, _, err := vrrpsubnets.Get(testEnv.Client, "111122")
 
 	if subnet != nil {
 		t.Fatal("expected no VRRP subnet from the Get method")
@@ -96,7 +92,7 @@ func TestGetVRRPSubnetUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/186",
@@ -106,8 +102,7 @@ func TestGetVRRPSubnetUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	vrpsubnet, _, err := vrrpsubnets.Get(ctx, testEnv.Client, "186")
+	vrpsubnet, _, err := vrrpsubnets.Get(testEnv.Client, "186")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -125,7 +120,7 @@ func TestListVRRPSubnets(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets",
@@ -135,8 +130,7 @@ func TestListVRRPSubnets(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
+	actual, _, err := vrrpsubnets.List(testEnv.Client, vrrpsubnets.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,7 +150,7 @@ func TestListVRRPSubnetsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets",
@@ -166,8 +160,7 @@ func TestListVRRPSubnetsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allVRRPSubnets, httpResponse, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
+	allVRRPSubnets, httpResponse, err := vrrpsubnets.List(testEnv.Client, vrrpsubnets.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -186,12 +179,11 @@ func TestListVRRPSubnetsHTTPError(t *testing.T) {
 
 func TestListVRRPSubnetsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allVRRPSubnets, _, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
+	allVRRPSubnets, _, err := vrrpsubnets.List(testEnv.Client, vrrpsubnets.ListOpts{})
 
 	if allVRRPSubnets != nil {
 		t.Fatal("expected no VRRP subnets from the List method")
@@ -206,7 +198,7 @@ func TestListVRRPSubnetsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets",
@@ -216,8 +208,7 @@ func TestListVRRPSubnetsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allVRRPSubnets, _, err := vrrpsubnets.List(ctx, testEnv.Client, vrrpsubnets.ListOpts{})
+	allVRRPSubnets, _, err := vrrpsubnets.List(testEnv.Client, vrrpsubnets.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -235,7 +226,7 @@ func TestCreateVRRPSubnets(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
@@ -246,9 +237,8 @@ func TestCreateVRRPSubnets(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
-	actualResponse, _, err := vrrpsubnets.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	actualResponse, _, err := vrrpsubnets.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -268,7 +258,7 @@ func TestCreateVRRPSubnetsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
@@ -279,9 +269,8 @@ func TestCreateVRRPSubnetsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
-	vrrpSubnet, httpResponse, err := vrrpsubnets.Create(ctx, testEnv.Client,
+	vrrpSubnet, httpResponse, err := vrrpsubnets.Create(testEnv.Client,
 		"49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
@@ -301,13 +290,12 @@ func TestCreateVRRPSubnetsHTTPError(t *testing.T) {
 
 func TestCreateVRRPSubnetsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
-	vrrpSubnet, _, err := vrrpsubnets.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	vrrpSubnet, _, err := vrrpsubnets.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if vrrpSubnet != nil {
 		t.Fatal("expected no VRRP subnet from the Create method")
@@ -322,7 +310,7 @@ func TestCreateVRRPSubnetsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/vrrp_subnets/projects/49338ac045f448e294b25d013f890317",
@@ -333,9 +321,8 @@ func TestCreateVRRPSubnetsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateVRRPSubnetsOpts
-	vrrpSubnet, _, err := vrrpsubnets.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	vrrpSubnet, _, err := vrrpsubnets.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -353,17 +340,16 @@ func TestDeleteVRRPSubnet(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/vrrp_subnets/112233",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
+	_, err := vrrpsubnets.Delete(testEnv.Client, "112233")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -378,7 +364,7 @@ func TestDeleteVRRPSubnetHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/vrrp_subnets/112233",
@@ -387,8 +373,7 @@ func TestDeleteVRRPSubnetHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
+	httpResponse, err := vrrpsubnets.Delete(testEnv.Client, "112233")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -403,12 +388,11 @@ func TestDeleteVRRPSubnetHTTPError(t *testing.T) {
 
 func TestDeleteVRRPSubnetTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := vrrpsubnets.Delete(ctx, testEnv.Client, "112233")
+	_, err := vrrpsubnets.Delete(testEnv.Client, "112233")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

@@ -17,5 +17,5 @@ type FloatingIPOpt struct {
 
 // ListOpts represents options for the floating ips List request.
 type ListOpts struct {
-	Detailed bool `param:"detailed"`
+	Detailed bool `url:"detailed"`
 }

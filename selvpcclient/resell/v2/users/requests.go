@@ -2,20 +2,29 @@ package users
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
 
 const resourceURL = "users"
 
 // Get returns a single user by its id.
-func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*User, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func Get(client *selvpcclient.Client, id string) (*User, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -36,9 +45,17 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*U
 }
 
 // List gets a list of users in the current domain.
-func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*User, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func List(client *selvpcclient.Client) ([]*User, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -59,7 +76,7 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*User, *se
 }
 
 // Create requests a creation of the user.
-func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts UserOpts) (*User, *selvpcclient.ResponseResult, error) {
+func Create(client *selvpcclient.Client, createOpts UserOpts) (*User, *clientservices.ResponseResult, error) {
 	// Nest create options into the parent "user" JSON structure.
 	type createUser struct {
 		Options UserOpts `json:"user"`
@@ -70,8 +87,16 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+		Body:    bytes.NewReader(requestBody),
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -92,7 +117,7 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 }
 
 // Update requests an update of the user referenced by its id.
-func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, updateOpts UserOpts) (*User, *selvpcclient.ResponseResult, error) {
+func Update(client *selvpcclient.Client, id string, updateOpts UserOpts) (*User, *clientservices.ResponseResult, error) {
 	// Nest update options into the parent "user" JSON structure.
 	type updateUser struct {
 		Options UserOpts `json:"user"`
@@ -103,8 +128,16 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPatch, url, bytes.NewReader(requestBody))
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
+		Body:    bytes.NewReader(requestBody),
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -125,9 +158,17 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 }
 
 // Delete deletes a single user by its id.
-func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
+func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{204},
+	})
 	if err != nil {
 		return nil, err
 	}

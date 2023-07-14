@@ -2,20 +2,31 @@ package subnets
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/google/go-querystring/query"
+
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
 
 const resourceURL = "subnets"
 
 // Get returns a single subnet by its id.
-func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*Subnet, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func Get(client *selvpcclient.Client, id string) (*Subnet, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -36,18 +47,25 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*S
 }
 
 // List gets a list of subnets in the current domain.
-func List(ctx context.Context, client *selvpcclient.ServiceClient, opts ListOpts) ([]*Subnet, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
+func List(client *selvpcclient.Client, opts ListOpts) ([]*Subnet, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
 
-	queryParams, err := selvpcclient.BuildQueryParameters(opts)
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+
+	queryParams, err := query.Values(opts)
 	if err != nil {
 		return nil, nil, err
 	}
-	if queryParams != "" {
-		url = strings.Join([]string{url, queryParams}, "?")
-	}
 
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+	url = strings.Join([]string{url, queryParams.Encode()}, "?")
+
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -68,15 +86,23 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient, opts ListOpts
 }
 
 // Create requests a creation of the subnets in the specified project.
-func Create(ctx context.Context, client *selvpcclient.ServiceClient, projectID string, createOpts SubnetOpts) ([]*Subnet, *selvpcclient.ResponseResult, error) {
+func Create(client *selvpcclient.Client, projectID string, createOpts SubnetOpts) ([]*Subnet, *clientservices.ResponseResult, error) {
 	createSubnetsOpts := &createOpts
 	requestBody, err := json.Marshal(createSubnetsOpts)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", projectID}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, "projects", projectID}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+		Body:    bytes.NewReader(requestBody),
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -97,9 +123,17 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, projectID s
 }
 
 // Delete deletes a single subnet by its id.
-func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
+func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{204},
+	})
 	if err != nil {
 		return nil, err
 	}

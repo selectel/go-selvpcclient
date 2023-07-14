@@ -4,7 +4,7 @@ Quota Manager API.
 
 Example of getting quota limits for a single project
 
-	limits, _, err := quotas.GetLimits(ctx, QuotaRegionalClient)
+	limits, _, err := quotas.GetLimits(client, projectID, regionName)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -14,7 +14,7 @@ Example of getting quota limits for a single project
 
 Example of getting quotas for a single project in specific region
 
-	singleProjectQuotas, _, err := quotas.GetProjectQuotas(ctx, ResellClient, QuotaRegionalClient, projectID, regionName)
+	singleProjectQuotas, _, err := quotas.GetProjectQuotas(client, projectID, regionName)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -39,7 +39,7 @@ Example of updating quotas for a single project in specific region
 	    },
 	  },
 	}
-	updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, ResellClient, QuotaRegionalClient, projectID, regionName, projectQuotaUpdateOpts)
+	updatedProjectQuotas, _, err := quotas.UpdateProjectQuotas(context, client, projectID, regionName, projectQuotaUpdateOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}

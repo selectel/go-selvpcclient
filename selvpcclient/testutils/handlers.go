@@ -3,7 +3,7 @@ package testutils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil" //nolint:staticcheck
+	"io"
 	"net/http"
 	"reflect"
 	"testing"
@@ -58,7 +58,7 @@ func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
 			t.Fatalf("expected %s method but got %s", opts.Method, r.Method)
 		}
 
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		if err != nil {
 			t.Errorf("unable to read the request body: %v", err)
 		}

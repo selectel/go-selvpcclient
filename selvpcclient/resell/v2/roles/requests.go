@@ -2,20 +2,29 @@ package roles
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
 
 const resourceURL = "roles"
 
 // List returns all roles in the current domain.
-func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Role, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func List(client *selvpcclient.Client) ([]*Role, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -36,9 +45,17 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Role, *se
 }
 
 // ListProject returns all roles in the specified project.
-func ListProject(ctx context.Context, client *selvpcclient.ServiceClient, id string) ([]*Role, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func ListProject(client *selvpcclient.Client, id string) ([]*Role, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, "projects", id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -59,9 +76,17 @@ func ListProject(ctx context.Context, client *selvpcclient.ServiceClient, id str
 }
 
 // ListUser returns all roles that are associated with the specified user.
-func ListUser(ctx context.Context, client *selvpcclient.ServiceClient, id string) ([]*Role, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "users", id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func ListUser(client *selvpcclient.Client, id string) ([]*Role, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, "users", id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -82,9 +107,17 @@ func ListUser(ctx context.Context, client *selvpcclient.ServiceClient, id string
 }
 
 // Create requests a creation of the single role for the specified project and user.
-func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts RoleOpt) (*Role, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", createOpts.ProjectID, "users", createOpts.UserID}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, nil)
+func Create(client *selvpcclient.Client, createOpts RoleOpt) (*Role, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, "projects", createOpts.ProjectID, "users", createOpts.UserID}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -105,15 +138,23 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 }
 
 // CreateBulk requests a creation of several roles.
-func CreateBulk(ctx context.Context, client *selvpcclient.ServiceClient, createOpts RoleOpts) ([]*Role, *selvpcclient.ResponseResult, error) {
+func CreateBulk(client *selvpcclient.Client, createOpts RoleOpts) ([]*Role, *clientservices.ResponseResult, error) {
 	createRolesOpts := &createOpts
 	requestBody, err := json.Marshal(createRolesOpts)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+		Body:    bytes.NewReader(requestBody),
+		OkCodes: []int{200, 208},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -134,9 +175,17 @@ func CreateBulk(ctx context.Context, client *selvpcclient.ServiceClient, createO
 }
 
 // Delete requests a deletion of the single role for the specified project and user.
-func Delete(ctx context.Context, client *selvpcclient.ServiceClient, deleteOpts RoleOpt) (*selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, "projects", deleteOpts.ProjectID, "users", deleteOpts.UserID}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
+func Delete(client *selvpcclient.Client, deleteOpts RoleOpt) (*clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, "projects", deleteOpts.ProjectID, "users", deleteOpts.UserID}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{204},
+	})
 	if err != nil {
 		return nil, err
 	}

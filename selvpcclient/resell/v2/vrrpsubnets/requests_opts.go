@@ -1,6 +1,6 @@
 package vrrpsubnets
 
-import "github.com/selectel/go-selvpcclient/v2/selvpcclient"
+import "github.com/selectel/go-selvpcclient/v3/selvpcclient"
 
 // VRRPSubnetOpts represents options for the VRRP subnets Create request.
 type VRRPSubnetOpts struct {
@@ -34,5 +34,5 @@ type VRRPRegionOpt struct {
 
 // ListOpts represents options for the VRRP subnets List request.
 type ListOpts struct {
-	Detailed bool `param:"detailed"`
+	Detailed bool `url:"detailed"`
 }

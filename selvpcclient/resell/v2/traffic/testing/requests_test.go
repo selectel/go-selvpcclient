@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/traffic"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/traffic"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetDomainTraffic(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetDomainTraffic(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
@@ -25,8 +24,7 @@ func TestGetDomainTraffic(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	tr, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +49,7 @@ func TestGetDomainTrafficUsed(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
@@ -61,8 +59,7 @@ func TestGetDomainTrafficUsed(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	tr, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +79,7 @@ func TestGetDomainTrafficHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
@@ -92,8 +89,7 @@ func TestGetDomainTrafficHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	tr, httpResponse, err := traffic.Get(ctx, testEnv.Client)
+	tr, httpResponse, err := traffic.Get(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -112,12 +108,11 @@ func TestGetDomainTrafficHTTPError(t *testing.T) {
 
 func TestGetTrafficTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	tr, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Client)
 
 	if tr != nil {
 		t.Fatal("expected no traffic from the Get method")
@@ -132,7 +127,7 @@ func TestGetTrafficInvalidTimestampsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
@@ -142,8 +137,7 @@ func TestGetTrafficInvalidTimestampsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	tr, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -161,7 +155,7 @@ func TestGetTrafficInvalidResponseUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/traffic",
@@ -171,8 +165,7 @@ func TestGetTrafficInvalidResponseUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	tr, _, err := traffic.Get(ctx, testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")

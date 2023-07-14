@@ -4,7 +4,7 @@ Resell v2 API.
 
 Example of getting a single project referenced by its id
 
-	project, _, err := projects.Get(context, resellClient, projectID)
+	project, _, err := projects.Get(context, client, projectID)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -12,7 +12,7 @@ Example of getting a single project referenced by its id
 
 Example of listing all projects in the domain
 
-	allProjects, _, err := projects.List(context, resellClient)
+	allProjects, _, err := projects.List(context, client)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -25,7 +25,7 @@ Example of creating a single project
 	createOpts := projects.CreateOpts{
 	  Name: "test000",
 	}
-	newProject, _, err := projects.Create(context, resellClient, createOpts)
+	newProject, _, err := projects.Create(context, client, createOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -44,7 +44,7 @@ Example of updating a single project
 	  Name:  &name,
 	  Theme: &themeUpdateOpts,
 	}
-	updatedProject, _, err := projects.Update(context, resellClient, newProject.ID, updateOpts)
+	updatedProject, _, err := projects.Update(context, client, newProject.ID, updateOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -52,7 +52,7 @@ Example of updating a single project
 
 Example of deleting a single project
 
-	_, err = projects.Delete(context, resellClient, newProject.ID)
+	_, err = projects.Delete(context, client, newProject.ID)
 	if err != nil {
 	  log.Fatal(err)
 	}

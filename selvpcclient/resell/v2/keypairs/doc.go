@@ -4,7 +4,7 @@ the Resell v2 API.
 
 Example of getting keypairs in the current domain
 
-	allKeypairs, _, err = keypairs.List(context, resellClient)
+	allKeypairs, _, err = keypairs.List(context, client)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -19,7 +19,7 @@ Example of creating keypairs in all regions with the same options
 	  PublicKey: "ssh-rsa public_key_part user0@example.org",
 	  UserID:    "82a026cae2104e92b999dbe00cdb9435",
 	}
-	newKeypairs, _, err := keypairs.Create(ctx, resellClient, newKeypairOptions)
+	newKeypairs, _, err := keypairs.Create(client, newKeypairOptions)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -31,7 +31,7 @@ Example of deleting a single keypair of a user
 
 	keypairName := "my_keypair"
 	userID := 82a026cae2104e92b999dbe00cdb9435""
-	_, err = keypairs.Delete(ctx, resellClient, keypairName, userID)
+	_, err = keypairs.Delete(client, keypairName, userID)
 	if err != nil {
 	  log.Fatal(err)
 	}

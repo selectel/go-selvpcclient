@@ -4,7 +4,7 @@ through the Resell v2 API.
 
 Example of getting a single VRRP subnet referenced by its id
 
-	vrrpsubnet, _, err := vrrpsubnets.Get(context, resellClient, vrrpSubnetID)
+	vrrpsubnet, _, err := vrrpsubnets.Get(context, client, vrrpSubnetID)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -12,7 +12,7 @@ Example of getting a single VRRP subnet referenced by its id
 
 Example of getting all VRRP subnets
 
-	allVRRPSubnets, _, err := vrrpsubnets.List(ctx, resellClient, vrrpsubnets.ListOpts{})
+	allVRRPSubnets, _, err := vrrpsubnets.List(client, vrrpsubnets.ListOpts{})
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -35,7 +35,7 @@ Example of creating VRRP subnets
 	    },
 	  },
 	}
-	newVRRPSubnets, _, err := vrrpsubnets.Create(ctx, resellClient, projectID, createOpts)
+	newVRRPSubnets, _, err := vrrpsubnets.Create(client, projectID, createOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -45,7 +45,7 @@ Example of creating VRRP subnets
 
 Example of deleting a single VRRP subnet
 
-	_, err = vrrpsubnets.Delete(ctx, resellClient, subnetID)
+	_, err = vrrpsubnets.Delete(client, subnetID)
 	if err != nil {
 	  log.Fatal(err)
 	}

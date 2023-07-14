@@ -10,7 +10,7 @@ linters:
     - dogsled
     - errcheck
     - exportloopref
-#    - gci
+    - gci
     - gocognit
     - goconst
     - gocritic
@@ -32,7 +32,7 @@ linters:
     - misspell
     - nakedret
     - noctx
-#    - nolintlint
+    - nolintlint
     - prealloc
     - rowserrcheck
     - scopelint
@@ -45,3 +45,17 @@ linters:
     - unused
     - varcheck
     - whitespace
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        allow:
+          - $gostd
+          - github.com/selectel/go-selvpcclient
+          - github.com/gophercloud/gophercloud
+          - github.com/google/go-querystring
+  goimports:
+    local-prefixes: github.com/selectel/go-selvpcclient
+  gci:
+    local-prefixes: github.com/selectel/go-selvpcclient

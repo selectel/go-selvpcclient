@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/licenses"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/licenses"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetLicense(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetLicense(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses/123123",
@@ -25,8 +24,7 @@ func TestGetLicense(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := licenses.Get(ctx, testEnv.Client, "123123")
+	actual, _, err := licenses.Get(testEnv.Client, "123123")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +44,7 @@ func TestGetLicenseHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses/123123",
@@ -56,8 +54,7 @@ func TestGetLicenseHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	license, httpResponse, err := licenses.Get(ctx, testEnv.Client, "123123")
+	license, httpResponse, err := licenses.Get(testEnv.Client, "123123")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -76,12 +73,11 @@ func TestGetLicenseHTTPError(t *testing.T) {
 
 func TestGetLicenseTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	license, _, err := licenses.Get(ctx, testEnv.Client, "123123")
+	license, _, err := licenses.Get(testEnv.Client, "123123")
 
 	if license != nil {
 		t.Fatal("expected no license from the Get method")
@@ -96,7 +92,7 @@ func TestGetLicenseUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses/123123",
@@ -106,8 +102,7 @@ func TestGetLicenseUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	license, _, err := licenses.Get(ctx, testEnv.Client, "123123")
+	license, _, err := licenses.Get(testEnv.Client, "123123")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -125,7 +120,7 @@ func TestListLicenses(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses",
@@ -135,8 +130,7 @@ func TestListLicenses(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
+	actual, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -161,7 +155,7 @@ func TestListLicensesSingle(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses",
@@ -171,8 +165,7 @@ func TestListLicensesSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
+	actual, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -192,7 +185,7 @@ func TestListLicensesHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses",
@@ -202,8 +195,7 @@ func TestListLicensesHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allLicenses, httpResponse, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
+	allLicenses, httpResponse, err := licenses.List(testEnv.Client, licenses.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -222,12 +214,11 @@ func TestListLicensesHTTPError(t *testing.T) {
 
 func TestListLicensesTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allLicenses, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
+	allLicenses, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
 
 	if allLicenses != nil {
 		t.Fatal("expected no licenses from the List method")
@@ -242,7 +233,7 @@ func TestListLicensesUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses",
@@ -252,8 +243,7 @@ func TestListLicensesUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allLicenses, _, err := licenses.List(ctx, testEnv.Client, licenses.ListOpts{})
+	allLicenses, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -271,7 +261,7 @@ func TestCreateLicenses(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
@@ -282,9 +272,8 @@ func TestCreateLicenses(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	actualResponse, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	actualResponse, _, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -304,7 +293,7 @@ func TestCreateLicensesHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
@@ -315,9 +304,8 @@ func TestCreateLicensesHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	l, httpResponse, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, httpResponse, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -336,13 +324,12 @@ func TestCreateLicensesHTTPError(t *testing.T) {
 
 func TestCreateLicensesTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	l, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
@@ -357,7 +344,7 @@ func TestCreateLicensesUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/licenses/projects/49338ac045f448e294b25d013f890317",
@@ -368,9 +355,8 @@ func TestCreateLicensesUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateLicenseOpts
-	l, _, err := licenses.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -388,17 +374,16 @@ func TestDeleteLicense(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := licenses.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	_, err := licenses.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -412,7 +397,7 @@ func TestDeleteLicenseHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/licenses/5232d5f3-4950-454b-bd41-78c5295622cd",
@@ -421,8 +406,7 @@ func TestDeleteLicenseHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := licenses.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	httpResponse, err := licenses.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -437,12 +421,11 @@ func TestDeleteLicenseHTTPError(t *testing.T) {
 
 func TestDeleteLicenseTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := licenses.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	_, err := licenses.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

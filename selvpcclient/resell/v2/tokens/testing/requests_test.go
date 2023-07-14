@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/tokens"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/tokens"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestCreateToken(t *testing.T) {
@@ -15,7 +14,7 @@ func TestCreateToken(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/tokens",
@@ -26,9 +25,8 @@ func TestCreateToken(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateTokenOpts
-	actualResponse, _, err := tokens.Create(ctx, testEnv.Client, createOpts)
+	actualResponse, _, err := tokens.Create(testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +46,7 @@ func TestCreateTokenHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/tokens",
@@ -59,9 +57,8 @@ func TestCreateTokenHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateTokenOpts
-	token, httpResponse, err := tokens.Create(ctx, testEnv.Client, createOpts)
+	token, httpResponse, err := tokens.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -80,13 +77,12 @@ func TestCreateTokenHTTPError(t *testing.T) {
 
 func TestCreateTokenTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateTokenOpts
-	token, _, err := tokens.Create(ctx, testEnv.Client, createOpts)
+	token, _, err := tokens.Create(testEnv.Client, createOpts)
 
 	if token != nil {
 		t.Fatal("expected no token from the Create method")
@@ -101,7 +97,7 @@ func TestCreateTokenUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/tokens",
@@ -112,9 +108,8 @@ func TestCreateTokenUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateTokenOpts
-	token, _, err := tokens.Create(ctx, testEnv.Client, createOpts)
+	token, _, err := tokens.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -132,7 +127,7 @@ func TestDeleteToken(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/tokens/dAFaSLSbK06iJ-iiq9x19A",
@@ -141,8 +136,7 @@ func TestDeleteToken(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := tokens.Delete(ctx, testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
+	_, err := tokens.Delete(testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,7 +150,7 @@ func TestDeleteNotOwnToken(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/tokens/dAFaSLSbK06iJ-iiq9x19A",
@@ -165,8 +159,7 @@ func TestDeleteNotOwnToken(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := tokens.Delete(ctx, testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
+	httpResponse, err := tokens.Delete(testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -181,12 +174,11 @@ func TestDeleteNotOwnToken(t *testing.T) {
 
 func TestDeleteUserTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := tokens.Delete(ctx, testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
+	_, err := tokens.Delete(testEnv.Client, "dAFaSLSbK06iJ-iiq9x19A")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

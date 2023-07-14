@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/keypairs"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/keypairs"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestListKeypairs(t *testing.T) {
@@ -15,7 +14,7 @@ func TestListKeypairs(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -25,8 +24,7 @@ func TestListKeypairs(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := keypairs.List(ctx, testEnv.Client)
+	actual, _, err := keypairs.List(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,7 +45,7 @@ func TestListKeypairsSingle(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -57,8 +55,7 @@ func TestListKeypairsSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := keypairs.List(ctx, testEnv.Client)
+	actual, _, err := keypairs.List(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -76,7 +73,7 @@ func TestListKeypairsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -86,8 +83,7 @@ func TestListKeypairsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allKeypairs, httpResponse, err := keypairs.List(ctx, testEnv.Client)
+	allKeypairs, httpResponse, err := keypairs.List(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -106,12 +102,11 @@ func TestListKeypairsHTTPError(t *testing.T) {
 
 func TestListKeypairsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allKeypairs, _, err := keypairs.List(ctx, testEnv.Client)
+	allKeypairs, _, err := keypairs.List(testEnv.Client)
 
 	if allKeypairs != nil {
 		t.Fatal("expected no keypairs from the List method")
@@ -126,7 +121,7 @@ func TestListKeypairsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -136,8 +131,7 @@ func TestListKeypairsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allKeypairs, _, err := keypairs.List(ctx, testEnv.Client)
+	allKeypairs, _, err := keypairs.List(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -155,7 +149,7 @@ func TestCreateKeypairs(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -166,9 +160,8 @@ func TestCreateKeypairs(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateKeypairOpts
-	actualResponse, _, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+	actualResponse, _, err := keypairs.Create(testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -188,7 +181,7 @@ func TestCreateKeypairsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -199,9 +192,8 @@ func TestCreateKeypairsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateKeypairOpts
-	l, httpResponse, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+	l, httpResponse, err := keypairs.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -220,13 +212,12 @@ func TestCreateKeypairsHTTPError(t *testing.T) {
 
 func TestCreateKeypairsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateKeypairOpts
-	l, _, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+	l, _, err := keypairs.Create(testEnv.Client, createOpts)
 
 	if l != nil {
 		t.Fatal("expected no keypairs from the Create method")
@@ -241,7 +232,7 @@ func TestCreateKeypairsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/keypairs",
@@ -252,9 +243,8 @@ func TestCreateKeypairsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateKeypairOpts
-	l, _, err := keypairs.Create(ctx, testEnv.Client, createOpts)
+	l, _, err := keypairs.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -272,17 +262,16 @@ func TestDeleteKeypair(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/keypairs/key1/users/82a026cae2104e92b999dbe00cdb9435",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := keypairs.Delete(ctx, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	_, err := keypairs.Delete(testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -296,7 +285,7 @@ func TestDeleteKeypairHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/keypairs/key1/users/82a026cae2104e92b999dbe00cdb9435",
@@ -305,8 +294,7 @@ func TestDeleteKeypairHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := keypairs.Delete(ctx, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	httpResponse, err := keypairs.Delete(testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -321,12 +309,11 @@ func TestDeleteKeypairHTTPError(t *testing.T) {
 
 func TestDeleteKeypairTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := keypairs.Delete(ctx, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	_, err := keypairs.Delete(testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

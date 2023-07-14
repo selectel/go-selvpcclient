@@ -4,7 +4,7 @@ the Resell v2 API.
 
 Example of getting a single subnet referenced by its id
 
-	subnet, _, err := subnets.Get(context, resellClient, subnetID)
+	subnet, _, err := subnets.Get(context, client, subnetID)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -12,7 +12,7 @@ Example of getting a single subnet referenced by its id
 
 Example of getting all subnets
 
-	allSubnets, _, err := subnets.List(ctx, resellClient, subnets.ListOpts{})
+	allSubnets, _, err := subnets.List(client, subnets.ListOpts{})
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -32,7 +32,7 @@ Example of creating subnets
 	      },
 	    },
 		}
-	  newSubnets, _, err := subnets.Create(ctx, resellClient, projectID, createOpts)
+	  newSubnets, _, err := subnets.Create(client, projectID, createOpts)
 	  if err != nil {
 	  	log.Fatal(err)
 	  }
@@ -42,7 +42,7 @@ Example of creating subnets
 
 Example of deleting a single subnet
 
-	_, err = subnets.Delete(ctx, resellClient, subnetID)
+	_, err = subnets.Delete(client, subnetID)
 	if err != nil {
 	  log.Fatal(err)
 	}

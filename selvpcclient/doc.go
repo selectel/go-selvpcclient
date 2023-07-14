@@ -3,23 +3,36 @@ Package selvpcclient provides a library to work with the Selectel VPC API.
 
 # Authentication
 
-To work with the Selectel VPC API you first need to:
+	To work with the Selectel VPC API you first need to:
 
-  - create a Selectel account: https://my.selectel.ru/registration
-  - obtain an API token: http://my.selectel.ru/profile/apikeys
+	  - create a Selectel account: https://my.selectel.ru/registration
+	  - create the service user: https://docs.selectel.ru/control-panel-actions/users-and-roles/add-user/
 
-You can then provide the API token to the selvpc service client.
+# Usage example
 
-# Service clients
+	ctx := context.Background()
 
-Service client is a special struct that implements a client for different part
-of the Selectel VPC API.
-You need to initialize the needed service client prior to do any requests:
+	options := &selvpcclient.ClientOptions{
+		Context:    ctx,
+		DomainName: "999999",
+		Username:   "admin",
+		Password:   "m1-sup3r-p@ssw0rd-p3w-p3w",
+	}
 
-	token := "token_string"
-	resellClient := resell.NewV2ResellClient(token)
+	client, err := selvpcclient.NewClient(options)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-All methods of service clients uses the Go context to provide end-user of the
-library with a native way to work with the cancellation signals
+	result, resp, err := projects.List(client)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Response StatusCode: %d \n", resp.StatusCode)
+
+	for _, project := range result {
+		fmt.Printf("Project name: %s, enabled: %t \n", project.Name, project.Enabled)
+	}
 */
 package selvpcclient

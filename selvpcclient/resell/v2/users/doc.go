@@ -4,7 +4,7 @@ Resell v2 API.
 
 Example of getting a single user referenced by its id
 
-	user, _, err := users.Get(context, resellClient, userID)
+	user, _, err := users.Get(context, client, userID)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -12,7 +12,7 @@ Example of getting a single user referenced by its id
 
 Example of getting all users
 
-	allUsers, _, err := users.List(ctx, resellClient)
+	allUsers, _, err := users.List(client)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -26,7 +26,7 @@ Example of creating a single user
 	  Name:     "user0",
 	  Password: "verysecret",
 	}
-	createdUser, _, err := users.Create(ctx, resellClient, userCreateOpts)
+	createdUser, _, err := users.Create(client, userCreateOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -40,7 +40,7 @@ Example of updating a single user
 	  Password: "moresecret",
 	  Enabled:  &userEnabled,
 	}
-	updatedUser, _, err := users.Update(ctx, resellClient, createdUser.ID, userUpdateOpts)
+	updatedUser, _, err := users.Update(client, createdUser.ID, userUpdateOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -48,7 +48,7 @@ Example of updating a single user
 
 Example of deleting a single user
 
-	_, err = users.Delete(context, resellClient, createdUser.ID)
+	_, err = users.Delete(context, client, createdUser.ID)
 	if err != nil {
 	  log.Fatal(err)
 	}

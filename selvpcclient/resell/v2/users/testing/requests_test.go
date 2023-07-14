@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/users"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/users"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetUser(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetUser(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -25,8 +24,7 @@ func TestGetUser(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actualResponse, _, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	actualResponse, _, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +43,7 @@ func TestGetUserHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -55,8 +53,7 @@ func TestGetUserHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	user, httpResponse, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	user, httpResponse, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -74,12 +71,11 @@ func TestGetUserHTTPError(t *testing.T) {
 
 func TestGetUserTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, _, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	_, _, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if err == nil {
 		t.Fatal("expected error from the Get method")
@@ -91,7 +87,7 @@ func TestGetUsersUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -101,8 +97,7 @@ func TestGetUsersUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	user, _, err := users.Get(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	user, _, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -120,7 +115,7 @@ func TestListUsers(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
@@ -130,8 +125,7 @@ func TestListUsers(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := users.List(ctx, testEnv.Client)
+	actual, _, err := users.List(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,7 +150,7 @@ func TestListUsersSingle(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
@@ -166,8 +160,7 @@ func TestListUsersSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := users.List(ctx, testEnv.Client)
+	actual, _, err := users.List(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -187,7 +180,7 @@ func TestListUsersHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
@@ -197,8 +190,7 @@ func TestListUsersHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allUsers, httpResponse, err := users.List(ctx, testEnv.Client)
+	allUsers, httpResponse, err := users.List(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -217,12 +209,11 @@ func TestListUsersHTTPError(t *testing.T) {
 
 func TestListUsersTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allUsers, _, err := users.List(ctx, testEnv.Client)
+	allUsers, _, err := users.List(testEnv.Client)
 
 	if allUsers != nil {
 		t.Fatal("expected no users from the List method")
@@ -237,7 +228,7 @@ func TestListUsersUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
@@ -247,8 +238,7 @@ func TestListUsersUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allUsers, _, err := users.List(ctx, testEnv.Client)
+	allUsers, _, err := users.List(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -266,7 +256,7 @@ func TestCreateUser(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
@@ -277,9 +267,8 @@ func TestCreateUser(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateUserOpts
-	actualResponse, _, err := users.Create(ctx, testEnv.Client, createOpts)
+	actualResponse, _, err := users.Create(testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -299,7 +288,7 @@ func TestCreateUserHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
 		URL:        "/resell/v2/users",
@@ -309,9 +298,8 @@ func TestCreateUserHTTPError(t *testing.T) {
 		CallFlag:   &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateUserOpts
-	user, httpResponse, err := users.Create(ctx, testEnv.Client, createOpts)
+	user, httpResponse, err := users.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -329,13 +317,12 @@ func TestCreateUserHTTPError(t *testing.T) {
 
 func TestCreateUserTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateUserOpts
-	user, _, err := users.Create(ctx, testEnv.Client, createOpts)
+	user, _, err := users.Create(testEnv.Client, createOpts)
 
 	if user != nil {
 		t.Fatal("expected no users from the Create method")
@@ -350,7 +337,7 @@ func TestCreateUserUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users",
@@ -361,9 +348,8 @@ func TestCreateUserUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateUserOpts
-	user, _, err := users.Create(ctx, testEnv.Client, createOpts)
+	user, _, err := users.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -381,7 +367,7 @@ func TestUpdateUser(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -392,9 +378,8 @@ func TestUpdateUser(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
-	actualResponse, _, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	actualResponse, _, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -414,7 +399,7 @@ func TestUpdateUserHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
 		URL:        "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -424,9 +409,8 @@ func TestUpdateUserHTTPError(t *testing.T) {
 		CallFlag:   &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
-	user, httpResponse, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, httpResponse, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -444,13 +428,12 @@ func TestUpdateUserHTTPError(t *testing.T) {
 
 func TestUpdateUserTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
-	user, _, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, _, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
 	if user != nil {
 		t.Fatal("expected no users from the Update method")
@@ -465,7 +448,7 @@ func TestUpdateUserUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -476,9 +459,8 @@ func TestUpdateUserUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateUserOpts
-	user, _, err := users.Update(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, _, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -496,17 +478,16 @@ func TestDeleteUser(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	_, err := users.Delete(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -520,7 +501,7 @@ func TestDeleteUserHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/users/4b2e452ed4c940bd87a88499eaf14c4f",
@@ -529,8 +510,7 @@ func TestDeleteUserHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	httpResponse, err := users.Delete(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -545,12 +525,11 @@ func TestDeleteUserHTTPError(t *testing.T) {
 
 func TestDeleteUserTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := users.Delete(ctx, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	_, err := users.Delete(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")
