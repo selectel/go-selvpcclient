@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/floatingips"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/floatingips"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetFloatingIP(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetFloatingIP(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
@@ -25,8 +24,7 @@ func TestGetFloatingIP(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	actual, _, err := floatingips.Get(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +44,7 @@ func TestGetFloatingIPWithLB(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
@@ -56,8 +54,7 @@ func TestGetFloatingIPWithLB(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	actual, _, err := floatingips.Get(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +74,7 @@ func TestGetFloatingIPHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
@@ -87,8 +84,7 @@ func TestGetFloatingIPHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	floatingIP, httpResponse, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	floatingIP, httpResponse, err := floatingips.Get(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -107,12 +103,11 @@ func TestGetFloatingIPHTTPError(t *testing.T) {
 
 func TestGetFloatingIPTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	floatingIP, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	floatingIP, _, err := floatingips.Get(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if floatingIP != nil {
 		t.Fatal("expected no floating ip from the Get method")
@@ -127,7 +122,7 @@ func TestGetFloatingIPUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
@@ -137,8 +132,7 @@ func TestGetFloatingIPUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	floatingIP, _, err := floatingips.Get(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	floatingIP, _, err := floatingips.Get(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -156,7 +150,7 @@ func TestListFloatingIPs(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips",
@@ -166,8 +160,7 @@ func TestListFloatingIPs(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
+	actual, _, err := floatingips.List(testEnv.Client, floatingips.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -192,7 +185,7 @@ func TestListFloatingIPsSingle(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips",
@@ -202,8 +195,7 @@ func TestListFloatingIPsSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
+	actual, _, err := floatingips.List(testEnv.Client, floatingips.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -223,7 +215,7 @@ func TestListFloatingIPsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips",
@@ -233,8 +225,7 @@ func TestListFloatingIPsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allFloatingIPs, httpResponse, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
+	allFloatingIPs, httpResponse, err := floatingips.List(testEnv.Client, floatingips.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -253,12 +244,11 @@ func TestListFloatingIPsHTTPError(t *testing.T) {
 
 func TestListFloatingIPsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
+	allFloatingIPs, _, err := floatingips.List(testEnv.Client, floatingips.ListOpts{})
 
 	if allFloatingIPs != nil {
 		t.Fatal("expected no floating ips from the List method")
@@ -273,7 +263,7 @@ func TestListFloatingIPsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips",
@@ -283,8 +273,7 @@ func TestListFloatingIPsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allFloatingIPs, _, err := floatingips.List(ctx, testEnv.Client, floatingips.ListOpts{})
+	allFloatingIPs, _, err := floatingips.List(testEnv.Client, floatingips.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -302,7 +291,7 @@ func TestCreateFloatingIPs(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
@@ -313,9 +302,8 @@ func TestCreateFloatingIPs(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
-	actualResponse, _, err := floatingips.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	actualResponse, _, err := floatingips.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -335,7 +323,7 @@ func TestCreateFloatingIPsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
@@ -346,9 +334,8 @@ func TestCreateFloatingIPsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
-	floatingIPs, httpResponse, err := floatingips.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	floatingIPs, httpResponse, err := floatingips.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -367,13 +354,12 @@ func TestCreateFloatingIPsHTTPError(t *testing.T) {
 
 func TestCreateFloatingIPsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
-	floatingIPs, _, err := floatingips.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	floatingIPs, _, err := floatingips.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if floatingIPs != nil {
 		t.Fatal("expected no floating ips from the Create method")
@@ -388,7 +374,7 @@ func TestCreateFloatingIPsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/floatingips/projects/49338ac045f448e294b25d013f890317",
@@ -399,9 +385,8 @@ func TestCreateFloatingIPsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateFloatingIPOpts
-	floatingIPs, _, err := floatingips.Create(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	floatingIPs, _, err := floatingips.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -419,17 +404,16 @@ func TestDeleteFloatingIP(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := floatingips.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	_, err := floatingips.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -443,7 +427,7 @@ func TestDeleteFloatingIPHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/floatingips/5232d5f3-4950-454b-bd41-78c5295622cd",
@@ -452,8 +436,7 @@ func TestDeleteFloatingIPHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := floatingips.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	httpResponse, err := floatingips.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -468,12 +451,11 @@ func TestDeleteFloatingIPHTTPError(t *testing.T) {
 
 func TestDeleteFloatingIPTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := floatingips.Delete(ctx, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	_, err := floatingips.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

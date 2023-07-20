@@ -20,5 +20,5 @@ type LicenseOpt struct {
 
 // ListOpts represents options for the licenses List request.
 type ListOpts struct {
-	Detailed bool `param:"detailed"`
+	Detailed bool `url:"detailed"`
 }

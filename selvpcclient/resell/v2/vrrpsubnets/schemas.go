@@ -1,8 +1,8 @@
 package vrrpsubnets
 
 import (
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/servers"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/subnets"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/servers"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/subnets"
 )
 
 // VRRPSubnet represents a single Resell VRRP subnet.

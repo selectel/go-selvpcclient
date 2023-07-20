@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/subnets"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/subnets"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetSubnet(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetSubnet(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/111122",
@@ -25,8 +24,7 @@ func TestGetSubnet(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := subnets.Get(ctx, testEnv.Client, "111122")
+	actual, _, err := subnets.Get(testEnv.Client, "111122")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +44,7 @@ func TestGetSubnetHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/111122",
@@ -56,8 +54,7 @@ func TestGetSubnetHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	subnet, httpResponse, err := subnets.Get(ctx, testEnv.Client, "111122")
+	subnet, httpResponse, err := subnets.Get(testEnv.Client, "111122")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -76,12 +73,11 @@ func TestGetSubnetHTTPError(t *testing.T) {
 
 func TestGetSubnetTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	subnet, _, err := subnets.Get(ctx, testEnv.Client, "111122")
+	subnet, _, err := subnets.Get(testEnv.Client, "111122")
 
 	if subnet != nil {
 		t.Fatal("expected no subnet from the Get method")
@@ -96,7 +92,7 @@ func TestGetSubnetUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/111122",
@@ -106,8 +102,7 @@ func TestGetSubnetUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	subnet, _, err := subnets.Get(ctx, testEnv.Client, "111122")
+	subnet, _, err := subnets.Get(testEnv.Client, "111122")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -125,7 +120,7 @@ func TestListSubnets(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
@@ -135,8 +130,7 @@ func TestListSubnets(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
+	actual, _, err := subnets.List(testEnv.Client, subnets.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -161,7 +155,7 @@ func TestListSubnetsSingle(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
@@ -171,8 +165,7 @@ func TestListSubnetsSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
+	actual, _, err := subnets.List(testEnv.Client, subnets.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -192,7 +185,7 @@ func TestListSubnetsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
@@ -202,8 +195,7 @@ func TestListSubnetsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allSubnet, httpResponse, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
+	allSubnet, httpResponse, err := subnets.List(testEnv.Client, subnets.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -222,12 +214,11 @@ func TestListSubnetsHTTPError(t *testing.T) {
 
 func TestListSubnetsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allSubnet, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
+	allSubnet, _, err := subnets.List(testEnv.Client, subnets.ListOpts{})
 
 	if allSubnet != nil {
 		t.Fatal("expected no subnets from the List method")
@@ -242,7 +233,7 @@ func TestListSubnetsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets",
@@ -252,8 +243,7 @@ func TestListSubnetsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allSubnet, _, err := subnets.List(ctx, testEnv.Client, subnets.ListOpts{})
+	allSubnet, _, err := subnets.List(testEnv.Client, subnets.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -271,7 +261,7 @@ func TestCreateSubnets(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
@@ -282,9 +272,8 @@ func TestCreateSubnets(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateSubnetsOpts
-	actualResponse, _, err := subnets.Create(ctx, testEnv.Client, "9c97bdc75295493096cf5edcb8c37933", createOpts)
+	actualResponse, _, err := subnets.Create(testEnv.Client, "9c97bdc75295493096cf5edcb8c37933", createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -304,7 +293,7 @@ func TestCreateSubnetsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
@@ -315,9 +304,8 @@ func TestCreateSubnetsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateSubnetsOpts
-	subnet, httpResponse, err := subnets.Create(ctx, testEnv.Client,
+	subnet, httpResponse, err := subnets.Create(testEnv.Client,
 		"9c97bdc75295493096cf5edcb8c37933", createOpts)
 
 	if !endpointCalled {
@@ -337,13 +325,12 @@ func TestCreateSubnetsHTTPError(t *testing.T) {
 
 func TestCreateSubnetsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateSubnetsOpts
-	subnet, _, err := subnets.Create(ctx, testEnv.Client, "9c97bdc75295493096cf5edcb8c37933", createOpts)
+	subnet, _, err := subnets.Create(testEnv.Client, "9c97bdc75295493096cf5edcb8c37933", createOpts)
 
 	if subnet != nil {
 		t.Fatal("expected no subnet from the Create method")
@@ -358,7 +345,7 @@ func TestCreateSubnetsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/subnets/projects/9c97bdc75295493096cf5edcb8c37933",
@@ -369,9 +356,8 @@ func TestCreateSubnetsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateSubnetsOpts
-	subnet, _, err := subnets.Create(ctx, testEnv.Client, "9c97bdc75295493096cf5edcb8c37933", createOpts)
+	subnet, _, err := subnets.Create(testEnv.Client, "9c97bdc75295493096cf5edcb8c37933", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -389,17 +375,16 @@ func TestDeleteSubnet(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/subnets/112233",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := subnets.Delete(ctx, testEnv.Client, "112233")
+	_, err := subnets.Delete(testEnv.Client, "112233")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -414,7 +399,7 @@ func TestDeleteSubnetHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/subnets/112233",
@@ -423,8 +408,7 @@ func TestDeleteSubnetHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := subnets.Delete(ctx, testEnv.Client, "112233")
+	httpResponse, err := subnets.Delete(testEnv.Client, "112233")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -439,12 +423,11 @@ func TestDeleteSubnetHTTPError(t *testing.T) {
 
 func TestDeleteSubnetTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := subnets.Delete(ctx, testEnv.Client, "112233")
+	_, err := subnets.Delete(testEnv.Client, "112233")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

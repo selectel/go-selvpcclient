@@ -6,7 +6,7 @@ Example of creating a project-scoped token
 	  createOpts := tokens.TokenOpts{
 	    ProjectID: "f628616b452f4052b191161c26abba91",
 	  }
-	  token, err := tokens.Create(ctx, resellClient, createOpts)
+	  token, err := tokens.Create(client, createOpts)
 	  if err != nil {
 	    log.Fatal(err)
 	  }
@@ -17,7 +17,7 @@ Example of creating a domain-scoped token
 	createOpts := tokens.TokenOpts{
 	  AccountName: "1122334455",
 	}
-	token, err := tokens.Create(ctx, resellClient, createOpts)
+	token, err := tokens.Create(client, createOpts)
 	if err != nil {
 	  log.Fatal(err)
 	}
@@ -25,7 +25,7 @@ Example of creating a domain-scoped token
 
 Example of deleting a token
 
-	_, err = tokens.Delete(context, resellClient, token.ID)
+	_, err = tokens.Delete(context, client, token.ID)
 	if err != nil {
 	  log.Fatal(err)
 	}

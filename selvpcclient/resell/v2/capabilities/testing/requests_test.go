@@ -1,12 +1,11 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/capabilities"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/capabilities"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetCapabilities(t *testing.T) {
@@ -14,7 +13,7 @@ func TestGetCapabilities(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/capabilities",
@@ -24,8 +23,7 @@ func TestGetCapabilities(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	c, _, err := capabilities.Get(ctx, testEnv.Client)
+	c, _, err := capabilities.Get(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +56,7 @@ func TestGetCapabilitiesHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/capabilities",
@@ -68,8 +66,7 @@ func TestGetCapabilitiesHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	c, httpResponse, err := capabilities.Get(ctx, testEnv.Client)
+	c, httpResponse, err := capabilities.Get(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -88,12 +85,11 @@ func TestGetCapabilitiesHTTPError(t *testing.T) {
 
 func TestGetCapabilitiesTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	c, _, err := capabilities.Get(ctx, testEnv.Client)
+	c, _, err := capabilities.Get(testEnv.Client)
 
 	if c != nil {
 		t.Fatal("expected no capabilities from the Get method")
@@ -108,7 +104,7 @@ func TestGetCapabilitiesUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/capabilities",
@@ -118,8 +114,7 @@ func TestGetCapabilitiesUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	c, _, err := capabilities.Get(ctx, testEnv.Client)
+	c, _, err := capabilities.Get(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")

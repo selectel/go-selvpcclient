@@ -3,7 +3,7 @@ package projects
 import (
 	"encoding/json"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/quotas"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/quotas"
 )
 
 // Project represents a single Identity service project.

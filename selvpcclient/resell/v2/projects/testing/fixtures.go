@@ -1,7 +1,7 @@
 package testing
 
 import (
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/projects"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/projects"
 )
 
 // TestGetProjectResponseRaw represents a raw response from the Get request.

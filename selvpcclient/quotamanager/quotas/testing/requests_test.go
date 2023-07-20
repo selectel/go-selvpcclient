@@ -1,14 +1,13 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/quotamanager/quotas"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/quotamanager/quotas"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 const (
@@ -20,9 +19,9 @@ const (
 func TestGetLimitsQuotas(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "limits"}, "/"),
@@ -32,8 +31,7 @@ func TestGetLimitsQuotas(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := quotas.GetLimits(ctx, testEnv.Client, testProjectID, testRegion)
+	actual, _, err := quotas.GetLimits(testEnv.Client, testProjectID, testRegion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,9 +59,9 @@ func TestGetLimitsQuotas(t *testing.T) {
 func TestGetLimitsQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "limits"}, "/"),
@@ -73,8 +71,7 @@ func TestGetLimitsQuotasHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, httpResponse, err := quotas.GetLimits(ctx, testEnv.Client, testProjectID, testRegion)
+	actual, httpResponse, err := quotas.GetLimits(testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -92,13 +89,12 @@ func TestGetLimitsQuotasHTTPError(t *testing.T) {
 }
 
 func TestGetLimitsQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestQuotasEnv()
-	testEnv.Server.Close()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetLimits(ctx, testEnv.Client, "", "ru-1")
+	allQuotas, _, err := quotas.GetLimits(testEnv.Client, "", "ru-1")
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the GetAll method")
@@ -111,9 +107,9 @@ func TestGetLimitsQuotasTimeoutError(t *testing.T) {
 func TestGetLimitsQuotasUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "limits"}, "/"),
@@ -123,8 +119,7 @@ func TestGetLimitsQuotasUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetLimits(ctx, testEnv.Client, testProjectID, testRegion)
+	allQuotas, _, err := quotas.GetLimits(testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -140,9 +135,9 @@ func TestGetLimitsQuotasUnmarshalError(t *testing.T) {
 func TestGetProjectQuotas(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -152,8 +147,7 @@ func TestGetProjectQuotas(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
+	actual, _, err := quotas.GetProjectQuotas(testEnv.Client, testProjectID, testRegion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -181,9 +175,9 @@ func TestGetProjectQuotas(t *testing.T) {
 func TestGetProjectQuotasSingle(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -193,8 +187,7 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
+	actual, _, err := quotas.GetProjectQuotas(testEnv.Client, testProjectID, testRegion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -212,9 +205,9 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 func TestGetProjectQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -224,8 +217,7 @@ func TestGetProjectQuotasHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allQuotas, httpResponse, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
+	allQuotas, httpResponse, err := quotas.GetProjectQuotas(testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -243,13 +235,12 @@ func TestGetProjectQuotasHTTPError(t *testing.T) {
 }
 
 func TestGetProjectQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestQuotasEnv()
-	testEnv.Server.Close()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
+	allQuotas, _, err := quotas.GetProjectQuotas(testEnv.Client, testProjectID, testRegion)
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the GetProjectQuotas method")
@@ -262,9 +253,9 @@ func TestGetProjectQuotasTimeoutError(t *testing.T) {
 func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -274,8 +265,7 @@ func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allQuotas, _, err := quotas.GetProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion)
+	allQuotas, _, err := quotas.GetProjectQuotas(testEnv.Client, testProjectID, testRegion)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -291,9 +281,9 @@ func TestGetProjectQuotasUnmarshalError(t *testing.T) {
 func TestUpdateProjectQuotas(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/projects/c83243b3c18a4d109a5f0fe45336af85/quotas",
@@ -304,9 +294,8 @@ func TestUpdateProjectQuotas(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
+	actualResponse, _, err := quotas.UpdateProjectQuotas(testEnv.Client, testProjectID, testRegion, updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -324,9 +313,9 @@ func TestUpdateProjectQuotas(t *testing.T) {
 func TestUpdateProjectQuotasNilLocation(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -337,9 +326,8 @@ func TestUpdateProjectQuotasNilLocation(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOptsNilLocationParams
-	actualResponse, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
+	actualResponse, _, err := quotas.UpdateProjectQuotas(testEnv.Client, testProjectID, testRegion, updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -357,9 +345,9 @@ func TestUpdateProjectQuotasNilLocation(t *testing.T) {
 func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
 		URL:        strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -369,9 +357,8 @@ func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 		CallFlag:   &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	allQuotas, httpResponse, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
+	allQuotas, httpResponse, err := quotas.UpdateProjectQuotas(testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -388,14 +375,13 @@ func TestUpdateProjectQuotasHTTPError(t *testing.T) {
 }
 
 func TestUpdateProjectQuotasTimeoutError(t *testing.T) {
-	testEnv := testutils.SetupTestQuotasEnv()
-	testEnv.Server.Close()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
+	allQuotas, _, err := quotas.UpdateProjectQuotas(testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the Update method")
@@ -408,9 +394,9 @@ func TestUpdateProjectQuotasTimeoutError(t *testing.T) {
 func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 	endpointCalled := false
 
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
@@ -421,9 +407,8 @@ func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateQuotasOpts
-	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
+	allQuotas, _, err := quotas.UpdateProjectQuotas(testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -437,13 +422,12 @@ func TestUpdateProjectQuotasUnmarshalError(t *testing.T) {
 }
 
 func TestUpdateProjectQuotasMarshallError(t *testing.T) {
-	testEnv := testutils.SetupTestQuotasEnv()
+	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestRegionalClient()
+	testEnv.NewSelVPCClient()
 
-	ctx := context.Background()
 	updateOpts := TestUpdateQuotasInvalidOpts
-	allQuotas, _, err := quotas.UpdateProjectQuotas(ctx, testEnv.Client, testProjectID, testRegion, updateOpts)
+	allQuotas, _, err := quotas.UpdateProjectQuotas(testEnv.Client, testProjectID, testRegion, updateOpts)
 
 	if allQuotas != nil {
 		t.Fatal("expected no quotas from the Update method")

@@ -1,13 +1,12 @@
 package testing
 
 import (
-	"context"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/resell/v2/projects"
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/projects"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
 )
 
 func TestGetProject(t *testing.T) {
@@ -15,7 +14,7 @@ func TestGetProject(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
@@ -25,8 +24,7 @@ func TestGetProject(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
+	actual, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,7 +42,7 @@ func TestGetProjectSingleQuota(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
@@ -54,8 +52,7 @@ func TestGetProjectSingleQuota(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
+	actual, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +72,7 @@ func TestGetProjectHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
@@ -85,8 +82,7 @@ func TestGetProjectHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	project, httpResponse, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
+	project, httpResponse, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -105,12 +101,11 @@ func TestGetProjectHTTPError(t *testing.T) {
 
 func TestGetProjectTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	project, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
+	project, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if project != nil {
 		t.Fatal("expected no project from the Get method")
@@ -125,7 +120,7 @@ func TestGetProjectUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects/49338ac045f448e294b25d013f890317",
@@ -135,8 +130,7 @@ func TestGetProjectUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	project, _, err := projects.Get(ctx, testEnv.Client, "49338ac045f448e294b25d013f890317")
+	project, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -154,7 +148,7 @@ func TestListProjects(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -164,8 +158,7 @@ func TestListProjects(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := projects.List(ctx, testEnv.Client)
+	actual, _, err := projects.List(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -186,7 +179,7 @@ func TestListProjectsSingle(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -196,8 +189,7 @@ func TestListProjectsSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	actual, _, err := projects.List(ctx, testEnv.Client)
+	actual, _, err := projects.List(testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -217,7 +209,7 @@ func TestListProjectsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -227,8 +219,7 @@ func TestListProjectsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allProjects, httpResponse, err := projects.List(ctx, testEnv.Client)
+	allProjects, httpResponse, err := projects.List(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -247,12 +238,11 @@ func TestListProjectsHTTPError(t *testing.T) {
 
 func TestListProjectsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	allProjects, _, err := projects.List(ctx, testEnv.Client)
+	allProjects, _, err := projects.List(testEnv.Client)
 
 	if allProjects != nil {
 		t.Fatal("expected no projects from the List method")
@@ -267,7 +257,7 @@ func TestListProjectsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -277,8 +267,7 @@ func TestListProjectsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
-	allProjects, _, err := projects.List(ctx, testEnv.Client)
+	allProjects, _, err := projects.List(testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -296,7 +285,7 @@ func TestCreateProject(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -307,9 +296,8 @@ func TestCreateProject(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
-	actualResponse, _, err := projects.Create(ctx, testEnv.Client, createOpts)
+	actualResponse, _, err := projects.Create(testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -329,7 +317,7 @@ func TestCreateProjectsHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -340,9 +328,8 @@ func TestCreateProjectsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
-	project, httpResponse, err := projects.Create(ctx, testEnv.Client, createOpts)
+	project, httpResponse, err := projects.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -361,13 +348,12 @@ func TestCreateProjectsHTTPError(t *testing.T) {
 
 func TestCreateProjectsTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
-	project, _, err := projects.Create(ctx, testEnv.Client, createOpts)
+	project, _, err := projects.Create(testEnv.Client, createOpts)
 
 	if project != nil {
 		t.Fatal("expected no project from the Create method")
@@ -382,7 +368,7 @@ func TestCreateProjectsUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects",
@@ -393,9 +379,8 @@ func TestCreateProjectsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	createOpts := TestCreateProjectOpts
-	project, _, err := projects.Create(ctx, testEnv.Client, createOpts)
+	project, _, err := projects.Create(testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -413,7 +398,7 @@ func TestUpdateProject(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
@@ -424,9 +409,8 @@ func TestUpdateProject(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
-	actualResponse, _, err := projects.Update(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	actualResponse, _, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -446,7 +430,7 @@ func TestUpdateProjectHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:        testEnv.Mux,
 		URL:        "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
@@ -456,9 +440,8 @@ func TestUpdateProjectHTTPError(t *testing.T) {
 		CallFlag:   &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
-	project, httpResponse, err := projects.Update(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	project, httpResponse, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -476,13 +459,12 @@ func TestUpdateProjectHTTPError(t *testing.T) {
 
 func TestUpdateProjectTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
-	project, _, err := projects.Update(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	project, _, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 
 	if project != nil {
 		t.Fatal("expected no project from the Update method")
@@ -497,7 +479,7 @@ func TestUpdateProjectUnmarshalError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithBody(t, &testutils.HandleReqOpts{
 		Mux:         testEnv.Mux,
 		URL:         "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
@@ -508,9 +490,8 @@ func TestUpdateProjectUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	ctx := context.Background()
 	updateOpts := TestUpdateProjectOpts
-	project, _, err := projects.Update(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	project, _, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -528,17 +509,16 @@ func TestDeleteProject(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
 		Method:   http.MethodDelete,
-		Status:   http.StatusOK,
+		Status:   http.StatusNoContent,
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	_, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	_, err := projects.Delete(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -552,7 +532,7 @@ func TestDeleteProjectHTTPError(t *testing.T) {
 
 	testEnv := testutils.SetupTestEnv()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
 	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
 		Mux:      testEnv.Mux,
 		URL:      "/resell/v2/projects/f9ede488e5f14bac8962d8c53d0af9f4",
@@ -561,8 +541,7 @@ func TestDeleteProjectHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	ctx := context.Background()
-	httpResponse, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	httpResponse, err := projects.Delete(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -577,12 +556,11 @@ func TestDeleteProjectHTTPError(t *testing.T) {
 
 func TestDeleteProjectTimeoutError(t *testing.T) {
 	testEnv := testutils.SetupTestEnv()
-	testEnv.Server.Close()
 	defer testEnv.TearDownTestEnv()
-	testEnv.NewTestResellV2Client()
+	testEnv.NewSelVPCClient()
+	testEnv.Server.Close()
 
-	ctx := context.Background()
-	_, err := projects.Delete(ctx, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	_, err := projects.Delete(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

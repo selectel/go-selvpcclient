@@ -2,20 +2,29 @@ package projects
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
 
 const resourceURL = "projects"
 
 // Get returns a single project by its id.
-func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*Project, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func Get(client *selvpcclient.Client, id string) (*Project, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -36,9 +45,17 @@ func Get(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*P
 }
 
 // List gets a list of projects in the current domain.
-func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Project, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func List(client *selvpcclient.Client) ([]*Project, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -59,7 +76,7 @@ func List(ctx context.Context, client *selvpcclient.ServiceClient) ([]*Project, 
 }
 
 // Create requests a creation of the project.
-func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts CreateOpts) (*Project, *selvpcclient.ResponseResult, error) {
+func Create(client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clientservices.ResponseResult, error) {
 	// Nest create options into the parent "project" JSON structure.
 	type createProject struct {
 		Options CreateOpts `json:"project"`
@@ -70,8 +87,16 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPost, url, bytes.NewReader(requestBody))
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+		Body:    bytes.NewReader(requestBody),
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -92,7 +117,7 @@ func Create(ctx context.Context, client *selvpcclient.ServiceClient, createOpts 
 }
 
 // Update requests an update of the project referenced by its id.
-func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, updateOpts UpdateOpts) (*Project, *selvpcclient.ResponseResult, error) {
+func Update(client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Project, *clientservices.ResponseResult, error) {
 	// Nest update options into the parent "project" JSON structure.
 	type updateProject struct {
 		Options UpdateOpts `json:"project"`
@@ -103,8 +128,16 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 		return nil, nil, err
 	}
 
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodPatch, url, bytes.NewReader(requestBody))
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
+		Body:    bytes.NewReader(requestBody),
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -125,9 +158,17 @@ func Update(ctx context.Context, client *selvpcclient.ServiceClient, id string, 
 }
 
 // Delete deletes a single project by its id.
-func Delete(ctx context.Context, client *selvpcclient.ServiceClient, id string) (*selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL, id}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodDelete, url, nil)
+func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{204},
+	})
 	if err != nil {
 		return nil, err
 	}

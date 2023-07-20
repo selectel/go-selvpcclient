@@ -1,19 +1,28 @@
 package traffic
 
 import (
-	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v2/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
 
 const resourceURL = "traffic"
 
 // Get returns the domain traffic information.
-func Get(ctx context.Context, client *selvpcclient.ServiceClient) (*DomainTraffic, *selvpcclient.ResponseResult, error) {
-	url := strings.Join([]string{client.Endpoint, resourceURL}, "/")
-	responseResult, err := client.DoRequest(ctx, http.MethodGet, url, nil)
+func Get(client *selvpcclient.Client) (*DomainTraffic, *clientservices.ResponseResult, error) {
+	endpoint, err := client.Resell.GetEndpoint()
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
+	}
+
+	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+		Body:    nil,
+		OkCodes: []int{200},
+	})
 	if err != nil {
 		return nil, nil, err
 	}
