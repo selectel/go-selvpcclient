@@ -81,18 +81,31 @@ func (cs *CatalogService) GetCatalog() (*tokens.ServiceCatalog, error) {
 	return catalog, nil
 }
 
-// findServiceTypeEndpoints - returns all endpoints for ServiceType from endpoints catalog.
+// findServiceTypeEndpoints - returns all public endpoints for ServiceType from endpoints catalog.
 func (cs *CatalogService) findServiceTypeEndpoints(serviceType string) ([]tokens.Endpoint, error) {
 	for _, service := range cs.catalog.Entries {
 		if service.Type == serviceType {
-			return service.Endpoints, nil
+			return cs.findPublicEndpoints(service.Endpoints), nil
 		}
 	}
 
 	return nil, ErrServiceTypeNotFound
 }
 
-// findRegionalEndpoint - returns one endpoint for service in the specified region.
+// findPublicEndpoints - returns all public endpoints from input endpoints slice.
+func (cs *CatalogService) findPublicEndpoints(endpoints []tokens.Endpoint) []tokens.Endpoint {
+	publicEndpoints := make([]tokens.Endpoint, 0)
+
+	for _, endpoint := range endpoints {
+		if endpoint.Interface == publicInterface {
+			publicEndpoints = append(publicEndpoints, endpoint)
+		}
+	}
+
+	return publicEndpoints
+}
+
+// findRegionalEndpoint - returns single public endpoint for service in the specified region.
 func (cs *CatalogService) findRegionalEndpoint(endpoints []tokens.Endpoint, regionName string) (tokens.Endpoint, error) {
 	for _, endpoint := range endpoints {
 		if endpoint.Interface == publicInterface && endpoint.RegionID == regionName {
