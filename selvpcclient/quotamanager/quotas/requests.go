@@ -1,8 +1,6 @@
 package quotas
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -24,7 +22,6 @@ func GetLimits(client *selvpcclient.Client, projectID, region string,
 	url := strings.Join([]string{endpoint, resourcePrefix, projectID, "limits"}, "/")
 
 	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -56,7 +53,6 @@ func GetProjectQuotas(client *selvpcclient.Client, projectID, region string,
 	url := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
 
 	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -81,11 +77,6 @@ func GetProjectQuotas(client *selvpcclient.Client, projectID, region string,
 func UpdateProjectQuotas(client *selvpcclient.Client, projectID, region string,
 	updateOpts UpdateProjectQuotasOpts,
 ) ([]*Quota, *clientservices.ResponseResult, error) {
-	requestBody, err := json.Marshal(&updateOpts)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint, err := client.QuotaManager.GetEndpoint(region)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
@@ -94,8 +85,8 @@ func UpdateProjectQuotas(client *selvpcclient.Client, projectID, region string,
 	url := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
 
 	responseResult, err := client.QuotaManager.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200},
+		JSONBody: &updateOpts,
+		OkCodes:  []int{200},
 	})
 	if err != nil {
 		return nil, nil, err

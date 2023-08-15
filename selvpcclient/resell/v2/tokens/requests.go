@@ -1,8 +1,6 @@
 package tokens
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -19,11 +17,7 @@ func Create(client *selvpcclient.Client, createOpts TokenOpts) (*Token, *clients
 	type createToken struct {
 		Options TokenOpts `json:"token"`
 	}
-	createTokenOpts := &createToken{Options: createOpts}
-	requestBody, err := json.Marshal(createTokenOpts)
-	if err != nil {
-		return nil, nil, err
-	}
+	createTokenOpts := createToken{Options: createOpts}
 
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
@@ -32,8 +26,8 @@ func Create(client *selvpcclient.Client, createOpts TokenOpts) (*Token, *clients
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200},
+		JSONBody: &createTokenOpts,
+		OkCodes:  []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -63,7 +57,6 @@ func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseRes
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{204},
 	})
 	if err != nil {

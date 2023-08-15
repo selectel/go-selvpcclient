@@ -1,8 +1,6 @@
 package vrrpsubnets
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -24,7 +22,6 @@ func Get(client *selvpcclient.Client, id string) (*VRRPSubnet, *clientservices.R
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -63,7 +60,6 @@ func List(client *selvpcclient.Client, opts ListOpts) ([]*VRRPSubnet, *clientser
 	url = strings.Join([]string{url, queryParams.Encode()}, "?")
 
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -87,12 +83,6 @@ func List(client *selvpcclient.Client, opts ListOpts) ([]*VRRPSubnet, *clientser
 
 // Create requests a creation of the VRRP subnets in the specified project.
 func Create(client *selvpcclient.Client, projectID string, createOpts VRRPSubnetOpts) ([]*VRRPSubnet, *clientservices.ResponseResult, error) {
-	createVRRPSubnetsOpts := &createOpts
-	requestBody, err := json.Marshal(createVRRPSubnetsOpts)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
@@ -100,8 +90,8 @@ func Create(client *selvpcclient.Client, projectID string, createOpts VRRPSubnet
 
 	url := strings.Join([]string{endpoint, resourceURL, "projects", projectID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200},
+		JSONBody: &createOpts,
+		OkCodes:  []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -131,7 +121,6 @@ func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseRes
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{204},
 	})
 	if err != nil {

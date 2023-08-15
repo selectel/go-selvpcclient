@@ -14,8 +14,8 @@ type RequestService struct {
 }
 
 type RequestOptions struct {
-	Body    io.Reader
-	OkCodes []int
+	JSONBody interface{}
+	OkCodes  []int
 }
 
 func NewRequestService(serviceClient *gophercloud.ServiceClient) *RequestService {
@@ -25,7 +25,7 @@ func NewRequestService(serviceClient *gophercloud.ServiceClient) *RequestService
 func (s *RequestService) Do(method, url string, options *RequestOptions) (*ResponseResult, error) {
 	requestOpts := gophercloud.RequestOpts{
 		OkCodes:          options.OkCodes,
-		RawBody:          options.Body,
+		JSONBody:         options.JSONBody,
 		KeepResponseBody: true,
 	}
 

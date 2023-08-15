@@ -20,7 +20,6 @@ func Get(client *selvpcclient.Client) (*DomainTraffic, *clientservices.ResponseR
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {

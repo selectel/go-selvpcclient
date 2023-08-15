@@ -1,8 +1,6 @@
 package projects
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -22,7 +20,6 @@ func Get(client *selvpcclient.Client, id string) (*Project, *clientservices.Resp
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -53,7 +50,6 @@ func List(client *selvpcclient.Client) ([]*Project, *clientservices.ResponseResu
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -81,11 +77,7 @@ func Create(client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clie
 	type createProject struct {
 		Options CreateOpts `json:"project"`
 	}
-	createProjectOpts := &createProject{Options: createOpts}
-	requestBody, err := json.Marshal(createProjectOpts)
-	if err != nil {
-		return nil, nil, err
-	}
+	createProjectOpts := createProject{Options: createOpts}
 
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
@@ -94,8 +86,8 @@ func Create(client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clie
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200},
+		JSONBody: &createProjectOpts,
+		OkCodes:  []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -122,11 +114,7 @@ func Update(client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Pro
 	type updateProject struct {
 		Options UpdateOpts `json:"project"`
 	}
-	updateProjectOpts := &updateProject{Options: updateOpts}
-	requestBody, err := json.Marshal(updateProjectOpts)
-	if err != nil {
-		return nil, nil, err
-	}
+	updateProjectOpts := updateProject{Options: updateOpts}
 
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
@@ -135,8 +123,8 @@ func Update(client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Pro
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200},
+		JSONBody: &updateProjectOpts,
+		OkCodes:  []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -166,7 +154,6 @@ func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseRes
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{204},
 	})
 	if err != nil {
