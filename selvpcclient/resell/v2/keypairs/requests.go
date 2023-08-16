@@ -1,8 +1,6 @@
 package keypairs
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -22,7 +20,6 @@ func List(client *selvpcclient.Client) ([]*Keypair, *clientservices.ResponseResu
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -53,10 +50,6 @@ func Create(client *selvpcclient.Client, createOpts KeypairOpts) ([]*Keypair, *c
 	createKeypairOpts := nestedCreateOpts{
 		Keypair: createOpts,
 	}
-	requestBody, err := json.Marshal(&createKeypairOpts)
-	if err != nil {
-		return nil, nil, err
-	}
 
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
@@ -65,8 +58,8 @@ func Create(client *selvpcclient.Client, createOpts KeypairOpts) ([]*Keypair, *c
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200},
+		JSONBody: &createKeypairOpts,
+		OkCodes:  []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -96,7 +89,6 @@ func Delete(client *selvpcclient.Client, name, userID string) (*clientservices.R
 
 	url := strings.Join([]string{endpoint, resourceURL, name, "users", userID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{204},
 	})
 	if err != nil {

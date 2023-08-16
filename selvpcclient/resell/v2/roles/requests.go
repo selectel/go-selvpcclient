@@ -1,8 +1,6 @@
 package roles
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -22,7 +20,6 @@ func List(client *selvpcclient.Client) ([]*Role, *clientservices.ResponseResult,
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -53,7 +50,6 @@ func ListProject(client *selvpcclient.Client, id string) ([]*Role, *clientservic
 
 	url := strings.Join([]string{endpoint, resourceURL, "projects", id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -84,7 +80,6 @@ func ListUser(client *selvpcclient.Client, id string) ([]*Role, *clientservices.
 
 	url := strings.Join([]string{endpoint, resourceURL, "users", id}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -115,7 +110,6 @@ func Create(client *selvpcclient.Client, createOpts RoleOpt) (*Role, *clientserv
 
 	url := strings.Join([]string{endpoint, resourceURL, "projects", createOpts.ProjectID, "users", createOpts.UserID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -139,12 +133,6 @@ func Create(client *selvpcclient.Client, createOpts RoleOpt) (*Role, *clientserv
 
 // CreateBulk requests a creation of several roles.
 func CreateBulk(client *selvpcclient.Client, createOpts RoleOpts) ([]*Role, *clientservices.ResponseResult, error) {
-	createRolesOpts := &createOpts
-	requestBody, err := json.Marshal(createRolesOpts)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
@@ -152,8 +140,8 @@ func CreateBulk(client *selvpcclient.Client, createOpts RoleOpts) ([]*Role, *cli
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		Body:    bytes.NewReader(requestBody),
-		OkCodes: []int{200, 208},
+		JSONBody: &createOpts,
+		OkCodes:  []int{200, 208},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -183,7 +171,6 @@ func Delete(client *selvpcclient.Client, deleteOpts RoleOpt) (*clientservices.Re
 
 	url := strings.Join([]string{endpoint, resourceURL, "projects", deleteOpts.ProjectID, "users", deleteOpts.UserID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
-		Body:    nil,
 		OkCodes: []int{204},
 	})
 	if err != nil {

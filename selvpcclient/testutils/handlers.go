@@ -58,6 +58,25 @@ func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
 			t.Fatalf("expected %s method but got %s", opts.Method, r.Method)
 		}
 
+		_, contentTypeExists := r.Header["Content-Type"]
+		if !contentTypeExists {
+			t.Fatalf("request doesn't contain content-type in headers")
+		}
+
+		contentTypeFound := false
+
+		for _, contentTypeValue := range r.Header["Content-Type"] {
+			if contentTypeValue == "application/json" {
+				contentTypeFound = true
+
+				break
+			}
+		}
+
+		if !contentTypeFound {
+			t.Fatalf("content-type is not equal to application/json")
+		}
+
 		b, err := io.ReadAll(r.Body)
 		if err != nil {
 			t.Errorf("unable to read the request body: %v", err)
