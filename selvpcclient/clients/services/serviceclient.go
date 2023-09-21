@@ -34,7 +34,7 @@ type ServiceClientOptions struct {
 	UserAgent string
 }
 
-const AuthURL = "https://api.selvpc.ru/identity/v3/"
+const AuthURL = "https://cloud.api.selcloud.ru/identity/v3/"
 
 func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient, error) {
 	if options.AuthURL == "" {
