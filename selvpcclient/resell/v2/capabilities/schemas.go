@@ -2,9 +2,6 @@ package capabilities
 
 // Capabilities contains possible availability values of different domain resources.
 type Capabilities struct {
-	// Licenses contains licenses information.
-	Licenses []License `json:"licenses"`
-
 	// Logo contains project logo information.
 	Logo Logo `json:"logo"`
 
@@ -13,21 +10,6 @@ type Capabilities struct {
 
 	// Resources contains billing resources information.
 	Resources []Resource `json:"resources"`
-
-	// Subnets contains public subnets information.
-	Subnets []Subnet `json:"subnets"`
-
-	// Traffic contains domain traffic information.
-	Traffic Traffic `json:"traffic"`
-}
-
-// License contains single license information.
-type License struct {
-	// Availability contains availability between locations.
-	Availability []string `json:"availability"`
-
-	// Type represents license type.
-	Type string `json:"type"`
 }
 
 // Logo contains project logo information.
@@ -85,31 +67,4 @@ type Resource struct {
 
 	// Unbillable shows if resource is not should be billed.
 	Unbillable bool `json:"unbillable"`
-}
-
-// Subnet contains information about single public subnet.
-type Subnet struct {
-	// Availability contains availability between locations.
-	Availability []string `json:"availability"`
-
-	// Type represents subnet type.
-	Type string `json:"type"`
-
-	// PrefixLength represents subnet prefix length.
-	PrefixLength string `json:"prefix_length"`
-}
-
-// Traffic contains information about domain traffic.
-type Traffic struct {
-	// Granularities represents traffic granularities.
-	Granularities []Granularity `json:"granularities"`
-}
-
-// Granularity contains information about domain traffic granularity.
-type Granularity struct {
-	// Granularity represents granularity in seconds.
-	Granularity int `json:"granularity"`
-
-	// Timespan represents period of time in days.
-	Timespan int `json:"timespan"`
 }
