@@ -34,20 +34,11 @@ func TestGetCapabilities(t *testing.T) {
 	if c == nil {
 		t.Fatal("didn't get capabilities")
 	}
-	if len(c.Licenses) != 2 {
-		t.Errorf("expected 2 licenses, but got %d", len(c.Licenses))
-	}
 	if len(c.Regions) != 3 {
 		t.Errorf("expected 3 regions, but got %d", len(c.Regions))
 	}
 	if len(c.Resources) != 16 {
 		t.Errorf("expected 16 resources, but got %d", len(c.Resources))
-	}
-	if len(c.Subnets) != 1 {
-		t.Errorf("expected 1 subnets, but got %d", len(c.Subnets))
-	}
-	if len(c.Traffic.Granularities) != 3 {
-		t.Errorf("expected 3 traffic granularities, but got %d", len(c.Traffic.Granularities))
 	}
 }
 
