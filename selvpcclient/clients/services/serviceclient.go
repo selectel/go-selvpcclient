@@ -27,6 +27,9 @@ type ServiceClientOptions struct {
 	// Optional field for setting a non-default Identity endpoint.
 	AuthURL string
 
+	// Optional field for setting a non-default location for endpoints like ResellAPI or Keystone.
+	AuthRegion string
+
 	// Optional field.
 	HTTPClient *http.Client
 
@@ -34,7 +37,9 @@ type ServiceClientOptions struct {
 	UserAgent string
 }
 
-const AuthURL = "https://cloud.api.selcloud.ru/identity/v3/"
+const (
+	AuthURL = "https://cloud.api.selcloud.ru/identity/v3/"
+)
 
 func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient, error) {
 	if options.AuthURL == "" {
@@ -71,6 +76,7 @@ func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient
 
 	serviceClient, err := openstack.NewIdentityV3(authProvider, gophercloud.EndpointOpts{
 		Availability: gophercloud.AvailabilityPublic,
+		Region:       options.AuthRegion,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create service client, err: %w", err)

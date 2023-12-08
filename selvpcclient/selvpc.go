@@ -14,8 +14,9 @@ import (
 )
 
 const (
-	AppName    = "go-selvpcclient"
-	AppVersion = "3.0.0"
+	AppName           = "go-selvpcclient"
+	AppVersion        = "3.0.0"
+	defaultAuthRegion = "ru-1"
 )
 
 type Client struct {
@@ -49,6 +50,9 @@ type ClientOptions struct {
 	// Optional field to specify a non-default Identity endpoint.
 	AuthURL string
 
+	// Optional field for setting a non-default location for endpoints like ResellAPI or Keystone.
+	AuthRegion string
+
 	// Optional field to specify the domain name where the user is located.
 	// Used in private clouds to issue a token not from owned domain.
 	// If this field is not set, then it will be equal to the value of DomainName.
@@ -56,6 +60,10 @@ type ClientOptions struct {
 }
 
 func NewClient(options *ClientOptions) (*Client, error) {
+	if options.AuthRegion == "" {
+		options.AuthRegion = defaultAuthRegion
+	}
+
 	serviceClientOptions := clientservices.ServiceClientOptions{
 		DomainName:     options.DomainName,
 		Username:       options.Username,
@@ -63,6 +71,7 @@ func NewClient(options *ClientOptions) (*Client, error) {
 		ProjectID:      options.ProjectID,
 		UserDomainName: options.UserDomainName,
 		AuthURL:        options.AuthURL,
+		AuthRegion:     options.AuthRegion,
 		UserAgent:      fmt.Sprintf("%s/%s", AppName, AppVersion),
 	}
 
@@ -81,7 +90,7 @@ func NewClient(options *ClientOptions) (*Client, error) {
 	requestService := clientservices.NewRequestService(serviceClient)
 
 	client := Client{
-		Resell:        clients.NewResellClient(requestService, catalogService),
+		Resell:        clients.NewResellClient(requestService, catalogService, options.AuthRegion),
 		QuotaManager:  clients.NewQuotaManagerClient(requestService, catalogService),
 		Catalog:       catalogService,
 		serviceClient: serviceClient,
