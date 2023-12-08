@@ -16,7 +16,7 @@ import (
 const (
 	AppName           = "go-selvpcclient"
 	AppVersion        = "3.0.0"
-	defaultAuthRegion = "ru-1"
+	DefaultAuthRegion = "ru-1"
 )
 
 type Client struct {
@@ -61,7 +61,7 @@ type ClientOptions struct {
 
 func NewClient(options *ClientOptions) (*Client, error) {
 	if options.AuthRegion == "" {
-		options.AuthRegion = defaultAuthRegion
+		options.AuthRegion = DefaultAuthRegion
 	}
 
 	serviceClientOptions := clientservices.ServiceClientOptions{
