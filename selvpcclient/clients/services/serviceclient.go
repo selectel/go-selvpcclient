@@ -37,15 +37,7 @@ type ServiceClientOptions struct {
 	UserAgent string
 }
 
-const (
-	AuthURL = "https://cloud.api.selcloud.ru/identity/v3/"
-)
-
 func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient, error) {
-	if options.AuthURL == "" {
-		options.AuthURL = AuthURL
-	}
-
 	// UserDomainName field to specify the domain name where the user is located.
 	// If this field is not specified, then we will think that the token will be
 	// issued in the same domain where the user is located.

@@ -13,26 +13,26 @@ const (
 
 // ResellClient resell client with X-Auth-Token authorization.
 type ResellClient struct {
-	Requests   *clientservices.RequestService
-	catalog    *clientservices.CatalogService
-	authRegion string
+	Requests *clientservices.RequestService
+	catalog  *clientservices.CatalogService
+	region   string
 }
 
 func NewResellClient(
 	requestService *clientservices.RequestService,
 	catalogService *clientservices.CatalogService,
-	authRegion string,
+	region string,
 ) *ResellClient {
 	return &ResellClient{
-		Requests:   requestService,
-		catalog:    catalogService,
-		authRegion: authRegion,
+		Requests: requestService,
+		catalog:  catalogService,
+		region:   region,
 	}
 }
 
 // GetEndpoint - returns service url.
 func (c *ResellClient) GetEndpoint() (string, error) {
-	endpoint, err := c.catalog.GetEndpoint(ResellServiceType, c.authRegion)
+	endpoint, err := c.catalog.GetEndpoint(ResellServiceType, c.region)
 	if err != nil {
 		return "", fmt.Errorf("failed to resolve endpoint for %s, err: %w", ResellServiceType, err)
 	}

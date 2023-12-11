@@ -17,6 +17,7 @@ const (
 	AppName           = "go-selvpcclient"
 	AppVersion        = "3.0.0"
 	DefaultAuthRegion = "ru-1"
+	DefaultAuthURL    = "https://cloud.api.selcloud.ru/identity/v3/"
 )
 
 type Client struct {
@@ -62,6 +63,10 @@ type ClientOptions struct {
 func NewClient(options *ClientOptions) (*Client, error) {
 	if options.AuthRegion == "" {
 		options.AuthRegion = DefaultAuthRegion
+	}
+
+	if options.AuthURL == "" {
+		options.AuthURL = DefaultAuthURL
 	}
 
 	serviceClientOptions := clientservices.ServiceClientOptions{
