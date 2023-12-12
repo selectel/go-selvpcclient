@@ -24,10 +24,10 @@ type ServiceClientOptions struct {
 	// Optional field. The name of the domain where the user resides (Identity v3).
 	UserDomainName string
 
-	// Optional field for setting a non-default Identity endpoint.
+	// Field for setting Identity endpoint.
 	AuthURL string
 
-	// Optional field for setting a non-default location for endpoints like ResellAPI or Keystone.
+	// Field for setting location for endpoints like ResellAPI or Keystone.
 	AuthRegion string
 
 	// Optional field.
