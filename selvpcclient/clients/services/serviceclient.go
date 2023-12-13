@@ -24,8 +24,11 @@ type ServiceClientOptions struct {
 	// Optional field. The name of the domain where the user resides (Identity v3).
 	UserDomainName string
 
-	// Optional field for setting a non-default Identity endpoint.
+	// Field for setting Identity endpoint.
 	AuthURL string
+
+	// Field for setting location for endpoints like ResellAPI or Keystone.
+	AuthRegion string
 
 	// Optional field.
 	HTTPClient *http.Client
@@ -34,13 +37,7 @@ type ServiceClientOptions struct {
 	UserAgent string
 }
 
-const AuthURL = "https://cloud.api.selcloud.ru/identity/v3/"
-
 func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient, error) {
-	if options.AuthURL == "" {
-		options.AuthURL = AuthURL
-	}
-
 	// UserDomainName field to specify the domain name where the user is located.
 	// If this field is not specified, then we will think that the token will be
 	// issued in the same domain where the user is located.
@@ -71,6 +68,7 @@ func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient
 
 	serviceClient, err := openstack.NewIdentityV3(authProvider, gophercloud.EndpointOpts{
 		Availability: gophercloud.AvailabilityPublic,
+		Region:       options.AuthRegion,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create service client, err: %w", err)
