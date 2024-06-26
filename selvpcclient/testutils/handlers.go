@@ -2,7 +2,7 @@ package testutils
 
 import (
 	"encoding/json"
-	"fmt"
+	"html/template"
 	"io"
 	"net/http"
 	"reflect"
@@ -41,7 +41,16 @@ func HandleReqWithoutBody(t *testing.T, opts *HandleReqOpts) {
 	opts.Mux.HandleFunc(opts.URL, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(opts.Status)
-		fmt.Fprint(w, opts.RawResponse)
+
+		tpl, err := template.New("template").Parse(opts.RawResponse)
+		if err != nil {
+			t.Fatalf("unable to parse template: %v", err)
+		}
+
+		err = tpl.Execute(w, nil)
+		if err != nil {
+			t.Fatalf("unable to write response: %v", err)
+		}
 
 		if r.Method != opts.Method {
 			t.Fatalf("expected %s method but got %s", opts.Method, r.Method)
@@ -91,7 +100,16 @@ func HandleReqWithBody(t *testing.T, opts *HandleReqOpts) {
 
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(opts.Status)
-		fmt.Fprint(w, opts.RawResponse)
+
+		tpl, err := template.New("template").Parse(opts.RawResponse)
+		if err != nil {
+			t.Fatalf("unable to parse template: %v", err)
+		}
+
+		err = tpl.Execute(w, nil)
+		if err != nil {
+			t.Fatalf("unable to write response: %v", err)
+		}
 
 		var expectedRequest interface{}
 		err = json.Unmarshal([]byte(opts.RawRequest), &expectedRequest)

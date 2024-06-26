@@ -5,7 +5,6 @@ linters:
   fast: false
   enable:
     - asciicheck
-    - deadcode
     - depguard
     - dogsled
     - errcheck
@@ -21,29 +20,23 @@ linters:
     - gofumpt
     - goheader
     - goimports
-    - golint
     - gomodguard
     - goprintffuncname
     - gosimple
     - govet
     - ineffassign
-    - interfacer
-    - maligned
     - misspell
     - nakedret
     - noctx
     - nolintlint
     - prealloc
     - rowserrcheck
-    - scopelint
     - sqlclosecheck
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unused
-    - varcheck
     - whitespace
 
 linters-settings:
