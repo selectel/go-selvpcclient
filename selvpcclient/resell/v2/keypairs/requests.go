@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/google/go-querystring/query"
+
 	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
 	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
@@ -13,12 +15,26 @@ const resourceURL = "keypairs"
 
 // List gets a list of keypairs in the current domain.
 func List(client *selvpcclient.Client) ([]*Keypair, *clientservices.ResponseResult, error) {
+	return ListWithOpts(client, ListOpts{})
+}
+
+// ListWithOpts gets a list of keypairs with filter options.
+func ListWithOpts(client *selvpcclient.Client, opts ListOpts) ([]*Keypair, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
+	if opts.UserID != "" {
+		queryParams, err := query.Values(opts)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		url = strings.Join([]string{url, queryParams.Encode()}, "?")
+	}
+
 	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})

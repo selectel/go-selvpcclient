@@ -16,3 +16,10 @@ type KeypairOpts struct {
 	// this keypair.
 	UserID string `json:"user_id"`
 }
+
+// ListOpts represents options for the keypair ListWithFilter request.
+type ListOpts struct {
+	// UserID contains an ID of an OpenStack Identity service user that owns
+	// this keypair.
+	UserID string `url:"user_id"`
+}

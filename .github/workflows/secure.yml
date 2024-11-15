@@ -1,6 +1,10 @@
 name: Secure
 
-on: push
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
   # Sample GitHub Actions:
@@ -17,7 +21,7 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - run: semgrep scan --sarif --output=semgrep.sarif --error --severity=WARNING
+      - run: semgrep scan --sarif --output=semgrep.sarif --error
         env:
           SEMGREP_RULES: >-
             p/command-injection
