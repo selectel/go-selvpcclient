@@ -5,6 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"runtime/debug"
+	"strings"
 	"time"
 
 	"github.com/gophercloud/gophercloud"
@@ -15,7 +17,6 @@ import (
 
 const (
 	AppName           = "go-selvpcclient"
-	AppVersion        = "3.1.1"
 	DefaultAuthRegion = "ru-1"
 	DefaultAuthURL    = "https://cloud.api.selcloud.ru/identity/v3/"
 )
@@ -77,7 +78,7 @@ func NewClient(options *ClientOptions) (*Client, error) {
 		UserDomainName: options.UserDomainName,
 		AuthURL:        options.AuthURL,
 		AuthRegion:     options.AuthRegion,
-		UserAgent:      fmt.Sprintf("%s/%s", AppName, AppVersion),
+		UserAgent:      fmt.Sprintf("%s/%s", AppName, findModuleVersion()),
 	}
 
 	serviceClient, err := clientservices.NewServiceClient(&serviceClientOptions)
@@ -149,3 +150,18 @@ const (
 
 // IPVersion represents a type for the IP versions of the different Selectel VPC APIs.
 type IPVersion string
+
+func findModuleVersion() string {
+	moduleName := "github.com/selectel/" + AppName
+
+	info, ok := debug.ReadBuildInfo()
+	if ok {
+		for _, dep := range info.Deps {
+			// Use prefix, because module has name with major version - github.com/selectel/go-selvpcclient/v3
+			if strings.HasPrefix(dep.Path, moduleName) {
+				return dep.Version
+			}
+		}
+	}
+	return "unknown_version"
+}
