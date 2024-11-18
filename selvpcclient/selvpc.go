@@ -15,7 +15,7 @@ import (
 
 const (
 	AppName           = "go-selvpcclient"
-	AppVersion        = "3.1.1"
+	AppVersion        = "3.2.1"
 	DefaultAuthRegion = "ru-1"
 	DefaultAuthURL    = "https://cloud.api.selcloud.ru/identity/v3/"
 )
