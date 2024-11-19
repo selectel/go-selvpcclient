@@ -31,7 +31,6 @@ Cloud Management API:
 - [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/tokens)
 - [traffic](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/traffic)
 - [users](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/users)
-- [vrrp subnets](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/vrrpsubnets)
 
 Cloud Quota Management API:
 
