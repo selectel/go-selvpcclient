@@ -1,11 +1,13 @@
 # go-selvpcclient: a Go library for the Selectel VPC API
+
 [![GoDoc](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient?status.svg)](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient)
 [![Go Report Card](https://goreportcard.com/badge/github.com/selectel/go-selvpcclient/v3)](https://goreportcard.com/report/github.com/selectel/go-selvpcclient/v3)
 [![Coverage Status](https://coveralls.io/repos/github/selectel/go-selvpcclient/badge.svg?branch=master)](https://coveralls.io/github/selectel/go-selvpcclient?branch=master)
 
 Package go-selvpcclient provides a Go library to work with the Selectel API:
- - [Cloud Management API](https://developers.selectel.ru/docs/selectel-cloud-platform/main-services/selectel_cloud_management_api/)
- - [Cloud Quota Management API ](https://developers.selectel.ru/docs/selectel-cloud-platform/main-services/cloud-quota-management/)
+
+- [Cloud Management API](https://developers.selectel.ru/docs/selectel-cloud-platform/main-services/selectel_cloud_management_api/)
+- [Cloud Quota Management API](https://developers.selectel.ru/docs/selectel-cloud-platform/main-services/cloud-quota-management/)
 
 ## Documentation
 
@@ -13,25 +15,27 @@ The Go library documentation is available at [godoc.org](https://godoc.org/githu
 
 ## What this library is capable of
 
-You can use this library to work with the following objects of the 
+You can use this library to work with the following objects of the
 [Cloud Management API](https://developers.selectel.ru/docs/selectel-cloud-platform/main-services/selectel_cloud_management_api/) and
 [Cloud Quota Management API](https://developers.selectel.ru/docs/selectel-cloud-platform/main-services/cloud-quota-management/).
 
 Cloud Management API:
-* [capabilities](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/capabilities)
-* [floating ips](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/floatingips)
-* [keypairs](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/keypairs)
-* [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/licenses)
-* [projects](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/projects)
-* [roles](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/roles)
-* [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/subnets)
-* [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/tokens)
-* [traffic](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/traffic)
-* [users](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/users)
-* [vrrp subnets](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/vrrpsubnets)
+
+- [capabilities](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/capabilities)
+- [floating ips](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/floatingips)
+- [keypairs](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/keypairs)
+- [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/licenses)
+- [projects](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/projects)
+- [roles](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/roles)
+- [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/subnets)
+- [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/tokens)
+- [traffic](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/traffic)
+- [users](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/users)
+- [vrrp subnets](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/vrrpsubnets)
 
 Cloud Quota Management API:
-* [quotas](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/quotamanager/quotas)
+
+- [quotas](https://godoc.org/github.com/selectel/go-selvpcclient/v3/selvpcclient/quotamanager/quotas)
 
 Selectel VPC Cloud is based on the [OpenStack](https://www.openstack.org), so you don't need this library to work with actual servers, volumes, networks, etc.  
 You can use the [Gophercloud](https://github.com/gophercloud/gophercloud) project to work with the OpenStack objects.
@@ -50,8 +54,8 @@ go get github.com/selectel/go-selvpcclient/selvpcclient/v3
 
 To work with the Selectel VPC API you first need to:
 
-* create a Selectel account: [registration page](https://my.selectel.ru/registration)
-* create the service user: [users and roles](https://docs.selectel.ru/control-panel-actions/users-and-roles)
+- create a Selectel account: [registration page](https://my.selectel.ru/registration)
+- create the service user: [users and roles](https://docs.selectel.ru/control-panel-actions/users-and-roles)
 
 ### Usage example
 
@@ -59,38 +63,40 @@ To work with the Selectel VPC API you first need to:
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
+ "context"
+ "fmt"
+ "log"
 
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/projects"
+ "github.com/selectel/go-selvpcclient/v3/selvpcclient"
+ "github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/projects"
 )
 
 func main() {
-	ctx := context.Background()
-	
-	options := &selvpcclient.ClientOptions{
-		Context:    ctx,
-		DomainName: "999999",
-		Username:   "admin",
-		Password:   "m1-sup3r-p@ssw0rd-p3w-p3w",
-	}
+ ctx := context.Background()
 
-	client, err := selvpcclient.NewClient(options)
-	if err != nil {
-		log.Fatal(err)
-	}
-	
-	result, resp, err := projects.List(client)
-	if err != nil {
-		log.Fatal(err)
-	}
+ options := &selvpcclient.ClientOptions{
+  Context:    ctx,
+  DomainName: "999999",
+  AuthRegion: "<pool>",
+  AuthURL:     "https://cloud.api.selcloud.ru/identity/v3/",
+  Username:   "admin",
+  Password:   "m1-sup3r-p@ssw0rd-p3w-p3w",
+ }
 
-	fmt.Printf("Response StatusCode: %d \n", resp.StatusCode)
+ client, err := selvpcclient.NewClient(options)
+ if err != nil {
+  log.Fatal(err)
+ }
 
-	for _, project := range result {
-		fmt.Printf("Project name: %s, enabled: %t \n", project.Name, project.Enabled)
-	}
+ result, resp, err := projects.List(client)
+ if err != nil {
+  log.Fatal(err)
+ }
+
+ fmt.Printf("Response StatusCode: %d \n", resp.StatusCode)
+
+ for _, project := range result {
+  fmt.Printf("Project name: %s, enabled: %t \n", project.Name, project.Enabled)
+ }
 }
 ```

@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gophercloud/gophercloud"
@@ -13,11 +15,11 @@ import (
 	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
 )
 
+var errRequiredClientOptions = errors.New("some of the required options are not set")
+
 const (
-	AppName           = "go-selvpcclient"
-	AppVersion        = "3.2.1"
-	DefaultAuthRegion = "ru-1"
-	DefaultAuthURL    = "https://cloud.api.selcloud.ru/identity/v3/"
+	AppName    = "go-selvpcclient"
+	AppVersion = "4.0.0"
 )
 
 type Client struct {
@@ -39,20 +41,20 @@ type ClientOptions struct {
 	// Your Account ID, for example: 234567.
 	DomainName string
 
+	// Specify Identity endpoint.
+	AuthURL string
+
+	// Setting a location for auth endpoint like ResellAPI or Keystone.
+	AuthRegion string
+
 	// Credentials of your service user.
 	// Documentation: https://docs.selectel.ru/control-panel-actions/users-and-roles/
 	Username string
 	Password string
 
 	// Optional field, that is used for authentication with project scope.
-	// If you created service user with admin role of project, then this field is for you.
+	// If you created service user with admin role of project, then this is field for you.
 	ProjectID string
-
-	// Optional field to specify a non-default Identity endpoint.
-	AuthURL string
-
-	// Optional field for setting a non-default location for endpoints like ResellAPI or Keystone.
-	AuthRegion string
 
 	// Optional field to specify the domain name where the user is located.
 	// Used in private clouds to issue a token not from owned domain.
@@ -61,22 +63,39 @@ type ClientOptions struct {
 }
 
 func NewClient(options *ClientOptions) (*Client, error) {
-	if options.AuthRegion == "" {
-		options.AuthRegion = DefaultAuthRegion
+	requiredAbsent := make([]string, 0)
+	if options.DomainName == "" {
+		requiredAbsent = append(requiredAbsent, "DomainName")
+	}
+
+	if options.Username == "" {
+		requiredAbsent = append(requiredAbsent, "Username")
+	}
+
+	if options.Password == "" {
+		requiredAbsent = append(requiredAbsent, "Password")
 	}
 
 	if options.AuthURL == "" {
-		options.AuthURL = DefaultAuthURL
+		requiredAbsent = append(requiredAbsent, "AuthURL")
+	}
+
+	if options.AuthRegion == "" {
+		requiredAbsent = append(requiredAbsent, "AuthRegion")
+	}
+
+	if len(requiredAbsent) > 0 {
+		return nil, fmt.Errorf("validation error: %w: %s", errRequiredClientOptions, strings.Join(requiredAbsent, ", "))
 	}
 
 	serviceClientOptions := clientservices.ServiceClientOptions{
 		DomainName:     options.DomainName,
 		Username:       options.Username,
 		Password:       options.Password,
-		ProjectID:      options.ProjectID,
-		UserDomainName: options.UserDomainName,
 		AuthURL:        options.AuthURL,
 		AuthRegion:     options.AuthRegion,
+		ProjectID:      options.ProjectID,
+		UserDomainName: options.UserDomainName,
 		UserAgent:      fmt.Sprintf("%s/%s", AppName, AppVersion),
 	}
 
