@@ -26,7 +26,7 @@ func (testEnv *TestEnv) NewSelVPCClient() {
 	requestService := clientservices.NewRequestService(serviceClient)
 
 	testEnv.Client = &selvpcclient.Client{
-		Resell:       clients.NewResellClient(requestService, catalogService, selvpcclient.DefaultAuthRegion),
+		Resell:       clients.NewResellClient(requestService, catalogService, "ru-1"),
 		QuotaManager: clients.NewQuotaManagerClient(requestService, catalogService),
 	}
 }
