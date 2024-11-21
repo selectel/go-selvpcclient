@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -18,8 +19,7 @@ import (
 var errRequiredClientOptions = errors.New("some of the required options are not set")
 
 const (
-	AppName    = "go-selvpcclient"
-	AppVersion = "4.0.0"
+	AppName = "go-selvpcclient"
 )
 
 type Client struct {
@@ -96,7 +96,7 @@ func NewClient(options *ClientOptions) (*Client, error) {
 		AuthRegion:     options.AuthRegion,
 		ProjectID:      options.ProjectID,
 		UserDomainName: options.UserDomainName,
-		UserAgent:      fmt.Sprintf("%s/%s", AppName, AppVersion),
+		UserAgent:      fmt.Sprintf("%s/%s", AppName, findModuleVersion()),
 	}
 
 	serviceClient, err := clientservices.NewServiceClient(&serviceClientOptions)
@@ -121,6 +121,21 @@ func NewClient(options *ClientOptions) (*Client, error) {
 	}
 
 	return &client, nil
+}
+
+func findModuleVersion() string {
+	moduleName := "github.com/selectel/" + AppName
+
+	info, ok := debug.ReadBuildInfo()
+	if ok {
+		for _, dep := range info.Deps {
+			// Use prefix, because module has name with major version - github.com/selectel/go-selvpcclient/v4
+			if strings.HasPrefix(dep.Path, moduleName) {
+				return dep.Version
+			}
+		}
+	}
+	return "unknown_version"
 }
 
 // GetXAuthToken - returns X-Auth-Token from Service Provider. This method doesn't guarantee that the token is valid.
