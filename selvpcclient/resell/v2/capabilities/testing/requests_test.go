@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/capabilities"
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/capabilities"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/testutils"
 )
 
 func TestGetCapabilities(t *testing.T) {

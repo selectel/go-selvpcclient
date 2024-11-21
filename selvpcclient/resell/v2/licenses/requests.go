@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
-	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
 )
 
 const resourceURL = "licenses"

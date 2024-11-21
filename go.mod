@@ -1,4 +1,4 @@
-module github.com/selectel/go-selvpcclient/v3
+module github.com/selectel/go-selvpcclient/v4
 
 go 1.21
 

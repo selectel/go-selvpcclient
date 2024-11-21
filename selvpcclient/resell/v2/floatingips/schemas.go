@@ -1,6 +1,6 @@
 package floatingips
 
-import "github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/servers"
+import "github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/servers"
 
 // FloatingIP represents a single Resell Floating IP.
 type FloatingIP struct {
