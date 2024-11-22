@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/roles"
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/roles"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/testutils"
 )
 
 func TestListRoles(t *testing.T) {

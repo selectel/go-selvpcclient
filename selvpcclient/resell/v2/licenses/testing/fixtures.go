@@ -3,8 +3,8 @@ package testing
 import (
 	"time"
 
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/licenses"
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/servers"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/licenses"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/servers"
 )
 
 // TestGetLicenseResponseRaw represents a raw response from the Get request.

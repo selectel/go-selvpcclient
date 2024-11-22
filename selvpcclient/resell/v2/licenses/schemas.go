@@ -1,6 +1,6 @@
 package licenses
 
-import "github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/servers"
+import "github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/servers"
 
 // License represents a single Resell License.
 type License struct {

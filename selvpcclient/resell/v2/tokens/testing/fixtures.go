@@ -1,6 +1,6 @@
 package testing
 
-import "github.com/selectel/go-selvpcclient/v3/selvpcclient/resell/v2/tokens"
+import "github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/tokens"
 
 // TestCreateTokenOptsRaw represents marshalled options for the Create request.
 const TestCreateTokenOptsRaw = `

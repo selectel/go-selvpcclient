@@ -3,7 +3,7 @@ package clients
 import (
 	"fmt"
 
-	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
+	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
 )
 
 const (

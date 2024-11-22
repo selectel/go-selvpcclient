@@ -5,9 +5,9 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient"
-	"github.com/selectel/go-selvpcclient/v3/selvpcclient/clients"
-	clientservices "github.com/selectel/go-selvpcclient/v3/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v4/selvpcclient/clients"
+	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
 )
 
 func (testEnv *TestEnv) NewSelVPCClient() {
@@ -26,7 +26,7 @@ func (testEnv *TestEnv) NewSelVPCClient() {
 	requestService := clientservices.NewRequestService(serviceClient)
 
 	testEnv.Client = &selvpcclient.Client{
-		Resell:       clients.NewResellClient(requestService, catalogService, selvpcclient.DefaultAuthRegion),
+		Resell:       clients.NewResellClient(requestService, catalogService, "ru-1"),
 		QuotaManager: clients.NewQuotaManagerClient(requestService, catalogService),
 	}
 }
