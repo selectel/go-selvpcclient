@@ -62,6 +62,26 @@ const TestGetProjectQuotasResponseSingleRaw = `
 }
 `
 
+// TestGetProjectQuotasResponseSingleRaw represents a raw response with a single quota from the GetProject request.
+const TestGetProjectQuotasResponseFilteredRaw = `
+{
+    "quotas": {
+        "compute_ram": [
+            {
+                "value": 51200,
+                "zone": "ru-1a"
+            }
+        ],
+        "compute_cores": [
+            {
+                "value": 300,
+                "zone": "ru-1a"
+            }
+        ]
+    }
+}
+`
+
 // TestGetProjectQuotasResponseSingle represents the unmarshalled TestGetProjectQuotasResponseSingleRaw response.
 var TestGetProjectQuotasResponseSingle = []*quotas.Quota{
 	{
@@ -70,6 +90,30 @@ var TestGetProjectQuotasResponseSingle = []*quotas.Quota{
 			{
 				Zone:  "ru-1a",
 				Value: 51200,
+			},
+		},
+		ResourceQuotasErrors: []quotas.ResourceError{},
+	},
+}
+
+// TestGetProjectQuotasResponseFiltered represents the unmarshalled TestGetProjectQuotasResponseFilteredRaw response.
+var TestGetProjectQuotasResponseFiltered = []*quotas.Quota{
+	{
+		Name: "compute_ram",
+		ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+			{
+				Zone:  "ru-1a",
+				Value: 51200,
+			},
+		},
+		ResourceQuotasErrors: []quotas.ResourceError{},
+	},
+	{
+		Name: "compute_cores",
+		ResourceQuotasEntities: []quotas.ResourceQuotaEntity{
+			{
+				Zone:  "ru-1a",
+				Value: 300,
 			},
 		},
 		ResourceQuotasErrors: []quotas.ResourceError{},
