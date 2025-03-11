@@ -3,6 +3,7 @@ package quotas
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
@@ -10,6 +11,17 @@ import (
 )
 
 const resourcePrefix = "projects"
+
+func WithResourceFilter(name string) func(url.Values) {
+	return func(query url.Values) {
+		if query == nil {
+			query = make(url.Values)
+		}
+		if name != "" {
+			query.Add("resource", name)
+		}
+	}
+}
 
 // GetLimits returns limits for a single project referenced by id in specific region.
 func GetLimits(client *selvpcclient.Client, projectID, region string,
@@ -19,9 +31,9 @@ func GetLimits(client *selvpcclient.Client, projectID, region string,
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
-	url := strings.Join([]string{endpoint, resourcePrefix, projectID, "limits"}, "/")
+	fullURL := strings.Join([]string{endpoint, resourcePrefix, projectID, "limits"}, "/")
 
-	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, fullURL, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -43,16 +55,21 @@ func GetLimits(client *selvpcclient.Client, projectID, region string,
 }
 
 // GetProjectQuotas returns the quotas info for a single project referenced by id in specific region.
-func GetProjectQuotas(client *selvpcclient.Client, projectID, region string,
+func GetProjectQuotas(client *selvpcclient.Client, projectID, region string, options ...func(url.Values),
 ) ([]*Quota, *clientservices.ResponseResult, error) {
+	resourceFilters := url.Values{}
+	for _, opts := range options {
+		opts(resourceFilters)
+	}
 	endpoint, err := client.QuotaManager.GetEndpoint(region)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
-	url := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
+	baseURL := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
+	fullURL := baseURL + "?" + resourceFilters.Encode()
 
-	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, fullURL, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -82,9 +99,9 @@ func UpdateProjectQuotas(client *selvpcclient.Client, projectID, region string,
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
-	url := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
+	fullURL := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
 
-	responseResult, err := client.QuotaManager.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
+	responseResult, err := client.QuotaManager.Requests.Do(http.MethodPatch, fullURL, &clientservices.RequestOptions{
 		JSONBody: &updateOpts,
 		OkCodes:  []int{200},
 	})

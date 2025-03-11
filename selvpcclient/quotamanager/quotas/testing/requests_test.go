@@ -202,6 +202,80 @@ func TestGetProjectQuotasSingle(t *testing.T) {
 	}
 }
 
+func TestGetProjectQuotasFiltered(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewSelVPCClient()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
+		RawResponse: TestGetProjectQuotasResponseFilteredRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusOK,
+		CallFlag:    &endpointCalled,
+	})
+
+	actual, _, err := quotas.GetProjectQuotas(
+		testEnv.Client,
+		testProjectID,
+		testRegion,
+		quotas.WithResourceFilter("compute_ram"),
+		quotas.WithResourceFilter("compute_cores"),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := TestGetProjectQuotasResponseFiltered
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Fatalf("expected %#v, but got %#v", expected, actual)
+	}
+}
+
+func TestGetProjectQuotasFilteredHTTPError(t *testing.T) {
+	endpointCalled := false
+
+	testEnv := testutils.SetupTestEnv()
+	defer testEnv.TearDownTestEnv()
+	testEnv.NewSelVPCClient()
+	testutils.HandleReqWithoutBody(t, &testutils.HandleReqOpts{
+		Mux:         testEnv.Mux,
+		URL:         strings.Join([]string{testBaseURL, "quotas"}, "/"),
+		RawResponse: TestGetProjectQuotasResponseRaw,
+		Method:      http.MethodGet,
+		Status:      http.StatusBadGateway,
+		CallFlag:    &endpointCalled,
+	})
+
+	allQuotas, httpResponse, err := quotas.GetProjectQuotas(
+		testEnv.Client,
+		testProjectID,
+		testRegion,
+		quotas.WithResourceFilter("compute_ram"),
+		quotas.WithResourceFilter("compute_cores"),
+	)
+
+	if !endpointCalled {
+		t.Fatal("endpoint wasn't called")
+	}
+	if allQuotas != nil {
+		t.Fatal("expected no quotas from the GetProjectQuotas method")
+	}
+	if err == nil {
+		t.Fatal("expected error from the GetProjectQuotas method")
+	}
+	if httpResponse.StatusCode != http.StatusBadGateway {
+		t.Fatalf("expected %d status in the HTTP response, but got %d",
+			http.StatusBadGateway, httpResponse.StatusCode)
+	}
+}
+
 func TestGetProjectQuotasHTTPError(t *testing.T) {
 	endpointCalled := false
 
