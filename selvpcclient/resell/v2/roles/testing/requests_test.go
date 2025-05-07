@@ -24,7 +24,7 @@ func TestListRoles(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := roles.List(testEnv.Client)
+	actual, _, err := roles.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +55,7 @@ func TestListRolesSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := roles.List(testEnv.Client)
+	actual, _, err := roles.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,7 +83,7 @@ func TestListRolesHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allRoles, httpResponse, err := roles.List(testEnv.Client)
+	allRoles, httpResponse, err := roles.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -106,7 +106,7 @@ func TestListRolesTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allRoles, _, err := roles.List(testEnv.Client)
+	allRoles, _, err := roles.List(testEnv.Context, testEnv.Client)
 
 	if allRoles != nil {
 		t.Fatal("expected no roles from the List method")
@@ -131,7 +131,7 @@ func TestListRolesUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allRoles, _, err := roles.List(testEnv.Client)
+	allRoles, _, err := roles.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -159,7 +159,7 @@ func TestListRolesProject(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := roles.ListProject(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	actual, _, err := roles.ListProject(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -194,7 +194,7 @@ func TestListRolesProjectSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := roles.ListProject(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	actual, _, err := roles.ListProject(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -224,7 +224,7 @@ func TestListRolesProjectHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allRoles, httpResponse, err := roles.ListProject(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	allRoles, httpResponse, err := roles.ListProject(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -247,7 +247,7 @@ func TestListRolesProjectTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allRoles, _, err := roles.ListProject(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	allRoles, _, err := roles.ListProject(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if allRoles != nil {
 		t.Fatal("expected no roles from the List method")
@@ -272,7 +272,7 @@ func TestListRolesProjectUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allRoles, _, err := roles.ListProject(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	allRoles, _, err := roles.ListProject(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -300,7 +300,7 @@ func TestListRolesUser(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := roles.ListUser(testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
+	actual, _, err := roles.ListUser(testEnv.Context, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -335,7 +335,7 @@ func TestListRolesUserSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := roles.ListUser(testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
+	actual, _, err := roles.ListUser(testEnv.Context, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -365,7 +365,7 @@ func TestListRolesUserHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allRoles, httpResponse, err := roles.ListUser(testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
+	allRoles, httpResponse, err := roles.ListUser(testEnv.Context, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -388,7 +388,7 @@ func TestListRolesUserTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allRoles, _, err := roles.ListUser(testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
+	allRoles, _, err := roles.ListUser(testEnv.Context, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
 
 	if allRoles != nil {
 		t.Fatal("expected no roles from the List method")
@@ -413,7 +413,7 @@ func TestListRolesUserUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allRoles, _, err := roles.ListUser(testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
+	allRoles, _, err := roles.ListUser(testEnv.Context, testEnv.Client, "763eecfaeb0c8e9b76ab12a82eb4c11")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -442,7 +442,7 @@ func TestCreateRole(t *testing.T) {
 	})
 
 	createOpts := TestRoleOpt
-	actual, _, err := roles.Create(testEnv.Client, createOpts)
+	actual, _, err := roles.Create(testEnv.Context, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -473,7 +473,7 @@ func TestCreateRoleHTTPError(t *testing.T) {
 	})
 
 	createOpts := TestRoleOpt
-	role, httpResponse, err := roles.Create(testEnv.Client, createOpts)
+	role, httpResponse, err := roles.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -497,7 +497,7 @@ func TestCreateRoleTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	createOpts := TestRoleOpt
-	role, _, err := roles.Create(testEnv.Client, createOpts)
+	role, _, err := roles.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if role != nil {
 		t.Fatal("expected no role from the Create method")
@@ -523,7 +523,7 @@ func TestCreateRoleUnmarshalError(t *testing.T) {
 	})
 
 	createOpts := TestRoleOpt
-	role, _, err := roles.Create(testEnv.Client, createOpts)
+	role, _, err := roles.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -553,7 +553,7 @@ func TestCreateRolesBulk(t *testing.T) {
 	})
 
 	createOpts := TestCreateRolesOpts
-	actual, _, err := roles.CreateBulk(testEnv.Client, createOpts)
+	actual, _, err := roles.CreateBulk(testEnv.Context, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -590,7 +590,7 @@ func TestCreateRolesBulkHTTPError(t *testing.T) {
 	})
 
 	createOpts := TestCreateRolesOpts
-	allRoles, httpResponse, err := roles.CreateBulk(testEnv.Client, createOpts)
+	allRoles, httpResponse, err := roles.CreateBulk(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -614,7 +614,7 @@ func TestCreateRolesBulkTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	createOpts := TestCreateRolesOpts
-	allRoles, _, err := roles.CreateBulk(testEnv.Client, createOpts)
+	allRoles, _, err := roles.CreateBulk(testEnv.Context, testEnv.Client, createOpts)
 
 	if allRoles != nil {
 		t.Fatal("expected no role from the CreateBulk method")
@@ -641,7 +641,7 @@ func TestCreateRolesBulkUnmarshalError(t *testing.T) {
 	})
 
 	createOpts := TestCreateRolesOpts
-	allRoles, _, err := roles.CreateBulk(testEnv.Client, createOpts)
+	allRoles, _, err := roles.CreateBulk(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -669,7 +669,7 @@ func TestDeleteRole(t *testing.T) {
 	})
 
 	deleteOpts := TestRoleOpt
-	_, err := roles.Delete(testEnv.Client, deleteOpts)
+	_, err := roles.Delete(testEnv.Context, testEnv.Client, deleteOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -693,7 +693,7 @@ func TestDeleteRoleHTTPError(t *testing.T) {
 	})
 
 	deleteOpts := TestRoleOpt
-	httpResponse, err := roles.Delete(testEnv.Client, deleteOpts)
+	httpResponse, err := roles.Delete(testEnv.Context, testEnv.Client, deleteOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -713,7 +713,7 @@ func TestDeleteRoleTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	deleteOpts := TestRoleOpt
-	_, err := roles.Delete(testEnv.Client, deleteOpts)
+	_, err := roles.Delete(testEnv.Context, testEnv.Client, deleteOpts)
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

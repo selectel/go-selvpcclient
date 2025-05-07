@@ -24,7 +24,7 @@ func TestListKeypairs(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := keypairs.List(testEnv.Client)
+	actual, _, err := keypairs.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +55,7 @@ func TestListKeypairsSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := keypairs.List(testEnv.Client)
+	actual, _, err := keypairs.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,7 +83,7 @@ func TestListKeypairsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allKeypairs, httpResponse, err := keypairs.List(testEnv.Client)
+	allKeypairs, httpResponse, err := keypairs.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -106,7 +106,7 @@ func TestListKeypairsTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allKeypairs, _, err := keypairs.List(testEnv.Client)
+	allKeypairs, _, err := keypairs.List(testEnv.Context, testEnv.Client)
 
 	if allKeypairs != nil {
 		t.Fatal("expected no keypairs from the List method")
@@ -131,7 +131,7 @@ func TestListKeypairsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allKeypairs, _, err := keypairs.List(testEnv.Client)
+	allKeypairs, _, err := keypairs.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -161,7 +161,7 @@ func TestCreateKeypairs(t *testing.T) {
 	})
 
 	createOpts := TestCreateKeypairOpts
-	actualResponse, _, err := keypairs.Create(testEnv.Client, createOpts)
+	actualResponse, _, err := keypairs.Create(testEnv.Context, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -193,7 +193,7 @@ func TestCreateKeypairsHTTPError(t *testing.T) {
 	})
 
 	createOpts := TestCreateKeypairOpts
-	l, httpResponse, err := keypairs.Create(testEnv.Client, createOpts)
+	l, httpResponse, err := keypairs.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -217,7 +217,7 @@ func TestCreateKeypairsTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	createOpts := TestCreateKeypairOpts
-	l, _, err := keypairs.Create(testEnv.Client, createOpts)
+	l, _, err := keypairs.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if l != nil {
 		t.Fatal("expected no keypairs from the Create method")
@@ -244,7 +244,7 @@ func TestCreateKeypairsUnmarshalError(t *testing.T) {
 	})
 
 	createOpts := TestCreateKeypairOpts
-	l, _, err := keypairs.Create(testEnv.Client, createOpts)
+	l, _, err := keypairs.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -271,7 +271,7 @@ func TestDeleteKeypair(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	_, err := keypairs.Delete(testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	_, err := keypairs.Delete(testEnv.Context, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -294,7 +294,7 @@ func TestDeleteKeypairHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	httpResponse, err := keypairs.Delete(testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	httpResponse, err := keypairs.Delete(testEnv.Context, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -313,7 +313,7 @@ func TestDeleteKeypairTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	_, err := keypairs.Delete(testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
+	_, err := keypairs.Delete(testEnv.Context, testEnv.Client, "key1", "82a026cae2104e92b999dbe00cdb9435")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

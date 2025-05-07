@@ -1,11 +1,12 @@
 package clientservices
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/openstack/identity/v3/tokens"
 )
 
 const publicInterface = string(gophercloud.AvailabilityPublic)
@@ -21,11 +22,11 @@ type CatalogService struct {
 	catalog       *tokens.ServiceCatalog
 }
 
-func NewCatalogService(serviceClient *gophercloud.ServiceClient) (*CatalogService, error) {
+func NewCatalogService(ctx context.Context, serviceClient *gophercloud.ServiceClient) (*CatalogService, error) {
 	service := &CatalogService{serviceClient: serviceClient}
 
 	// Cache warming.
-	_, err := service.GetCatalog()
+	_, err := service.GetCatalog(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get endpoints catalog from identity service, err: %w", err)
 	}
@@ -66,12 +67,12 @@ func (cs *CatalogService) GetEndpoints(serviceType string) ([]tokens.Endpoint, e
 }
 
 // GetCatalog - returns endpoints catalog from Keystone or cache.
-func (cs *CatalogService) GetCatalog() (*tokens.ServiceCatalog, error) {
+func (cs *CatalogService) GetCatalog(ctx context.Context) (*tokens.ServiceCatalog, error) {
 	if cs.catalog != nil {
 		return cs.catalog, nil
 	}
 
-	catalog, err := tokens.Get(cs.serviceClient, cs.serviceClient.Token()).ExtractServiceCatalog()
+	catalog, err := tokens.Get(ctx, cs.serviceClient, cs.serviceClient.Token()).ExtractServiceCatalog()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get endpoints catalog, err: %w", err)
 	}

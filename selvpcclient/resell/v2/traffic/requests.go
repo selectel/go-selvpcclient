@@ -1,6 +1,7 @@
 package traffic
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -12,14 +13,14 @@ import (
 const resourceURL = "traffic"
 
 // Get returns the domain traffic information.
-func Get(client *selvpcclient.Client) (*DomainTraffic, *clientservices.ResponseResult, error) {
+func Get(ctx context.Context, client *selvpcclient.Client) (*DomainTraffic, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {

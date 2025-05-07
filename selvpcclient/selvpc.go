@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 
 	"github.com/selectel/go-selvpcclient/v4/selvpcclient/clients"
 	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
@@ -36,8 +36,6 @@ type Client struct {
 }
 
 type ClientOptions struct {
-	Context context.Context
-
 	// Your Account ID, for example: 234567.
 	DomainName string
 
@@ -65,7 +63,7 @@ type ClientOptions struct {
 	UserAgent string
 }
 
-func NewClient(options *ClientOptions) (*Client, error) {
+func NewClient(ctx context.Context, options *ClientOptions) (*Client, error) {
 	requiredAbsent := make([]string, 0)
 	if options.DomainName == "" {
 		requiredAbsent = append(requiredAbsent, "DomainName")
@@ -107,14 +105,12 @@ func NewClient(options *ClientOptions) (*Client, error) {
 		UserAgent:      userAgent,
 	}
 
-	serviceClient, err := clientservices.NewServiceClient(&serviceClientOptions)
+	serviceClient, err := clientservices.NewServiceClient(ctx, &serviceClientOptions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create service client, err: %w", err)
 	}
 
-	serviceClient.ProviderClient.Context = options.Context
-
-	catalogService, err := clientservices.NewCatalogService(serviceClient)
+	catalogService, err := clientservices.NewCatalogService(ctx, serviceClient)
 	if err != nil {
 		return nil, fmt.Errorf("failed to initialize endpoints catalog service, err: %w", err)
 	}

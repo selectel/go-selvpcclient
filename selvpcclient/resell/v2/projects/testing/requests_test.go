@@ -24,7 +24,7 @@ func TestGetProject(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	actual, _, err := projects.Get(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func TestGetProjectSingleQuota(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	actual, _, err := projects.Get(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func TestGetProjectHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	project, httpResponse, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	project, httpResponse, err := projects.Get(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -105,7 +105,7 @@ func TestGetProjectTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	project, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	project, _, err := projects.Get(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if project != nil {
 		t.Fatal("expected no project from the Get method")
@@ -130,7 +130,7 @@ func TestGetProjectUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	project, _, err := projects.Get(testEnv.Client, "49338ac045f448e294b25d013f890317")
+	project, _, err := projects.Get(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -158,7 +158,7 @@ func TestListProjects(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := projects.List(testEnv.Client)
+	actual, _, err := projects.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -189,7 +189,7 @@ func TestListProjectsSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := projects.List(testEnv.Client)
+	actual, _, err := projects.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -219,7 +219,7 @@ func TestListProjectsHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allProjects, httpResponse, err := projects.List(testEnv.Client)
+	allProjects, httpResponse, err := projects.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -242,7 +242,7 @@ func TestListProjectsTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allProjects, _, err := projects.List(testEnv.Client)
+	allProjects, _, err := projects.List(testEnv.Context, testEnv.Client)
 
 	if allProjects != nil {
 		t.Fatal("expected no projects from the List method")
@@ -267,7 +267,7 @@ func TestListProjectsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allProjects, _, err := projects.List(testEnv.Client)
+	allProjects, _, err := projects.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -297,7 +297,7 @@ func TestCreateProject(t *testing.T) {
 	})
 
 	createOpts := TestCreateProjectOpts
-	actualResponse, _, err := projects.Create(testEnv.Client, createOpts)
+	actualResponse, _, err := projects.Create(testEnv.Context, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -329,7 +329,7 @@ func TestCreateProjectsHTTPError(t *testing.T) {
 	})
 
 	createOpts := TestCreateProjectOpts
-	project, httpResponse, err := projects.Create(testEnv.Client, createOpts)
+	project, httpResponse, err := projects.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -353,7 +353,7 @@ func TestCreateProjectsTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	createOpts := TestCreateProjectOpts
-	project, _, err := projects.Create(testEnv.Client, createOpts)
+	project, _, err := projects.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if project != nil {
 		t.Fatal("expected no project from the Create method")
@@ -380,7 +380,7 @@ func TestCreateProjectsUnmarshalError(t *testing.T) {
 	})
 
 	createOpts := TestCreateProjectOpts
-	project, _, err := projects.Create(testEnv.Client, createOpts)
+	project, _, err := projects.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -410,7 +410,7 @@ func TestUpdateProject(t *testing.T) {
 	})
 
 	updateOpts := TestUpdateProjectOpts
-	actualResponse, _, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	actualResponse, _, err := projects.Update(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -441,7 +441,7 @@ func TestUpdateProjectHTTPError(t *testing.T) {
 	})
 
 	updateOpts := TestUpdateProjectOpts
-	project, httpResponse, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	project, httpResponse, err := projects.Update(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -464,7 +464,7 @@ func TestUpdateProjectTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	updateOpts := TestUpdateProjectOpts
-	project, _, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	project, _, err := projects.Update(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 
 	if project != nil {
 		t.Fatal("expected no project from the Update method")
@@ -491,7 +491,7 @@ func TestUpdateProjectUnmarshalError(t *testing.T) {
 	})
 
 	updateOpts := TestUpdateProjectOpts
-	project, _, err := projects.Update(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
+	project, _, err := projects.Update(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -518,7 +518,7 @@ func TestDeleteProject(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	_, err := projects.Delete(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	_, err := projects.Delete(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -541,7 +541,7 @@ func TestDeleteProjectHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	httpResponse, err := projects.Delete(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	httpResponse, err := projects.Delete(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -560,7 +560,7 @@ func TestDeleteProjectTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	_, err := projects.Delete(testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
+	_, err := projects.Delete(testEnv.Context, testEnv.Client, "f9ede488e5f14bac8962d8c53d0af9f4")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")
