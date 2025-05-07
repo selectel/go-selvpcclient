@@ -1,28 +1,31 @@
-run:
-  timeout: 5m
+version: "2"
+
+formatters:
+  enable:
+    - gci
+    - gofumpt
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/selectel/go-selvpcclient)
 
 linters:
-  fast: false
   enable:
     - asciicheck
     - depguard
     - dogsled
     - errcheck
-    - exportloopref
-    - gci
     - gocognit
     - goconst
     - gocritic
     - gocyclo
     - godot
     - godox
-    - gofmt
-    - gofumpt
     - goheader
-    - goimports
     - gomodguard
     - goprintffuncname
-    - gosimple
     - govet
     - ineffassign
     - misspell
@@ -33,25 +36,22 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unused
     - whitespace
 
-linters-settings:
-  depguard:
-    rules:
-      main:
-        allow:
-          - $gostd
-          - github.com/selectel/go-selvpcclient
-          - github.com/gophercloud/gophercloud
-          - github.com/google/go-querystring
-  goimports:
-    local-prefixes: github.com/selectel/go-selvpcclient
-  gci:
-    sections:
-      - standard
-      - default
-      - prefix(github.com/selectel/go-selvpcclient)
+  settings:
+    depguard:
+      rules:
+        main:
+          allow:
+            - $gostd
+            - github.com/selectel/go-selvpcclient
+            - github.com/gophercloud/gophercloud
+            - github.com/google/go-querystring
+
+  exclusions:
+    presets:
+      - comments
+      - common-false-positives
+      - std-error-handling
