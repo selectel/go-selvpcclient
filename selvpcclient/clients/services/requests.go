@@ -1,12 +1,13 @@
 package clientservices
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
 
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 )
 
 type RequestService struct {
@@ -22,14 +23,14 @@ func NewRequestService(serviceClient *gophercloud.ServiceClient) *RequestService
 	return &RequestService{serviceClient: serviceClient}
 }
 
-func (s *RequestService) Do(method, url string, options *RequestOptions) (*ResponseResult, error) {
+func (s *RequestService) Do(ctx context.Context, method, url string, options *RequestOptions) (*ResponseResult, error) {
 	requestOpts := gophercloud.RequestOpts{
 		OkCodes:          options.OkCodes,
 		JSONBody:         options.JSONBody,
 		KeepResponseBody: true,
 	}
 
-	response, err := s.serviceClient.Request(method, url, &requestOpts)
+	response, err := s.serviceClient.Request(ctx, method, url, &requestOpts)
 	if err != nil && !errors.As(err, &gophercloud.ErrUnexpectedResponseCode{}) {
 		return nil, err
 	}

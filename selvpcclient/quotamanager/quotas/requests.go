@@ -1,6 +1,7 @@
 package quotas
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -24,7 +25,7 @@ func WithResourceFilter(name string) func(url.Values) {
 }
 
 // GetLimits returns limits for a single project referenced by id in specific region.
-func GetLimits(client *selvpcclient.Client, projectID, region string,
+func GetLimits(ctx context.Context, client *selvpcclient.Client, projectID, region string,
 ) ([]*Quota, *clientservices.ResponseResult, error) {
 	endpoint, err := client.QuotaManager.GetEndpoint(region)
 	if err != nil {
@@ -33,7 +34,7 @@ func GetLimits(client *selvpcclient.Client, projectID, region string,
 
 	fullURL := strings.Join([]string{endpoint, resourcePrefix, projectID, "limits"}, "/")
 
-	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, fullURL, &clientservices.RequestOptions{
+	responseResult, err := client.QuotaManager.Requests.Do(ctx, http.MethodGet, fullURL, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -55,7 +56,7 @@ func GetLimits(client *selvpcclient.Client, projectID, region string,
 }
 
 // GetProjectQuotas returns the quotas info for a single project referenced by id in specific region.
-func GetProjectQuotas(client *selvpcclient.Client, projectID, region string, options ...func(url.Values),
+func GetProjectQuotas(ctx context.Context, client *selvpcclient.Client, projectID, region string, options ...func(url.Values),
 ) ([]*Quota, *clientservices.ResponseResult, error) {
 	resourceFilters := url.Values{}
 	for _, opts := range options {
@@ -69,7 +70,7 @@ func GetProjectQuotas(client *selvpcclient.Client, projectID, region string, opt
 	baseURL := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
 	fullURL := baseURL + "?" + resourceFilters.Encode()
 
-	responseResult, err := client.QuotaManager.Requests.Do(http.MethodGet, fullURL, &clientservices.RequestOptions{
+	responseResult, err := client.QuotaManager.Requests.Do(ctx, http.MethodGet, fullURL, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -91,7 +92,15 @@ func GetProjectQuotas(client *selvpcclient.Client, projectID, region string, opt
 }
 
 // UpdateProjectQuotas updates the quotas info for a single project referenced by id in specific region.
+// Deprecated: use UpdateProjectQuotasWithContext.
 func UpdateProjectQuotas(client *selvpcclient.Client, projectID, region string,
+	updateOpts UpdateProjectQuotasOpts,
+) ([]*Quota, *clientservices.ResponseResult, error) {
+	return UpdateProjectQuotasWithContext(context.Background(), client, projectID, region, updateOpts)
+}
+
+// UpdateProjectQuotasWithContext updates the quotas info for a single project referenced by id in specific region.
+func UpdateProjectQuotasWithContext(ctx context.Context, client *selvpcclient.Client, projectID, region string,
 	updateOpts UpdateProjectQuotasOpts,
 ) ([]*Quota, *clientservices.ResponseResult, error) {
 	endpoint, err := client.QuotaManager.GetEndpoint(region)
@@ -101,7 +110,7 @@ func UpdateProjectQuotas(client *selvpcclient.Client, projectID, region string,
 
 	fullURL := strings.Join([]string{endpoint, resourcePrefix, projectID, "quotas"}, "/")
 
-	responseResult, err := client.QuotaManager.Requests.Do(http.MethodPatch, fullURL, &clientservices.RequestOptions{
+	responseResult, err := client.QuotaManager.Requests.Do(ctx, http.MethodPatch, fullURL, &clientservices.RequestOptions{
 		JSONBody: &updateOpts,
 		OkCodes:  []int{200},
 	})

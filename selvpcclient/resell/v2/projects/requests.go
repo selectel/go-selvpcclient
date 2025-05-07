@@ -1,6 +1,7 @@
 package projects
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -12,14 +13,14 @@ import (
 const resourceURL = "projects"
 
 // Get returns a single project by its id.
-func Get(client *selvpcclient.Client, id string) (*Project, *clientservices.ResponseResult, error) {
+func Get(ctx context.Context, client *selvpcclient.Client, id string) (*Project, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -42,14 +43,14 @@ func Get(client *selvpcclient.Client, id string) (*Project, *clientservices.Resp
 }
 
 // List gets a list of projects in the current domain.
-func List(client *selvpcclient.Client) ([]*Project, *clientservices.ResponseResult, error) {
+func List(ctx context.Context, client *selvpcclient.Client) ([]*Project, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -72,7 +73,7 @@ func List(client *selvpcclient.Client) ([]*Project, *clientservices.ResponseResu
 }
 
 // Create requests a creation of the project.
-func Create(client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clientservices.ResponseResult, error) {
+func Create(ctx context.Context, client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clientservices.ResponseResult, error) {
 	// Nest create options into the parent "project" JSON structure.
 	type createProject struct {
 		Options CreateOpts `json:"project"`
@@ -85,7 +86,7 @@ func Create(client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clie
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodPost, url, &clientservices.RequestOptions{
 		JSONBody: &createProjectOpts,
 		OkCodes:  []int{200},
 	})
@@ -109,7 +110,7 @@ func Create(client *selvpcclient.Client, createOpts CreateOpts) (*Project, *clie
 }
 
 // Update requests an update of the project referenced by its id.
-func Update(client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Project, *clientservices.ResponseResult, error) {
+func Update(ctx context.Context, client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Project, *clientservices.ResponseResult, error) {
 	// Nest update options into the parent "project" JSON structure.
 	type updateProject struct {
 		Options UpdateOpts `json:"project"`
@@ -122,7 +123,7 @@ func Update(client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Pro
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodPatch, url, &clientservices.RequestOptions{
 		JSONBody: &updateProjectOpts,
 		OkCodes:  []int{200},
 	})
@@ -146,14 +147,14 @@ func Update(client *selvpcclient.Client, id string, updateOpts UpdateOpts) (*Pro
 }
 
 // Delete deletes a single project by its id.
-func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
+func Delete(ctx context.Context, client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodDelete, url, &clientservices.RequestOptions{
 		OkCodes: []int{204},
 	})
 	if err != nil {

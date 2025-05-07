@@ -24,7 +24,7 @@ func TestGetDomainTraffic(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	tr, _, err := traffic.Get(testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,7 +59,7 @@ func TestGetDomainTrafficUsed(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	tr, _, err := traffic.Get(testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -89,7 +89,7 @@ func TestGetDomainTrafficHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	tr, httpResponse, err := traffic.Get(testEnv.Client)
+	tr, httpResponse, err := traffic.Get(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -112,7 +112,7 @@ func TestGetTrafficTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	tr, _, err := traffic.Get(testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Context, testEnv.Client)
 
 	if tr != nil {
 		t.Fatal("expected no traffic from the Get method")
@@ -137,7 +137,7 @@ func TestGetTrafficInvalidTimestampsUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	tr, _, err := traffic.Get(testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -165,7 +165,7 @@ func TestGetTrafficInvalidResponseUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	tr, _, err := traffic.Get(testEnv.Client)
+	tr, _, err := traffic.Get(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")

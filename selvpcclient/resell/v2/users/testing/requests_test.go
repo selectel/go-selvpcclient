@@ -24,7 +24,7 @@ func TestGetUser(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actualResponse, _, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	actualResponse, _, err := users.Get(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -53,7 +53,7 @@ func TestGetUserHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	user, httpResponse, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	user, httpResponse, err := users.Get(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -75,7 +75,7 @@ func TestGetUserTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	_, _, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	_, _, err := users.Get(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if err == nil {
 		t.Fatal("expected error from the Get method")
@@ -97,7 +97,7 @@ func TestGetUsersUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	user, _, err := users.Get(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	user, _, err := users.Get(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -125,7 +125,7 @@ func TestListUsers(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := users.List(testEnv.Client)
+	actual, _, err := users.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -160,7 +160,7 @@ func TestListUsersSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := users.List(testEnv.Client)
+	actual, _, err := users.List(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -190,7 +190,7 @@ func TestListUsersHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allUsers, httpResponse, err := users.List(testEnv.Client)
+	allUsers, httpResponse, err := users.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -213,7 +213,7 @@ func TestListUsersTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allUsers, _, err := users.List(testEnv.Client)
+	allUsers, _, err := users.List(testEnv.Context, testEnv.Client)
 
 	if allUsers != nil {
 		t.Fatal("expected no users from the List method")
@@ -238,7 +238,7 @@ func TestListUsersUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allUsers, _, err := users.List(testEnv.Client)
+	allUsers, _, err := users.List(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -268,7 +268,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	createOpts := TestCreateUserOpts
-	actualResponse, _, err := users.Create(testEnv.Client, createOpts)
+	actualResponse, _, err := users.Create(testEnv.Context, testEnv.Client, createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -299,7 +299,7 @@ func TestCreateUserHTTPError(t *testing.T) {
 	})
 
 	createOpts := TestCreateUserOpts
-	user, httpResponse, err := users.Create(testEnv.Client, createOpts)
+	user, httpResponse, err := users.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -322,7 +322,7 @@ func TestCreateUserTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	createOpts := TestCreateUserOpts
-	user, _, err := users.Create(testEnv.Client, createOpts)
+	user, _, err := users.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if user != nil {
 		t.Fatal("expected no users from the Create method")
@@ -349,7 +349,7 @@ func TestCreateUserUnmarshalError(t *testing.T) {
 	})
 
 	createOpts := TestCreateUserOpts
-	user, _, err := users.Create(testEnv.Client, createOpts)
+	user, _, err := users.Create(testEnv.Context, testEnv.Client, createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -379,7 +379,7 @@ func TestUpdateUser(t *testing.T) {
 	})
 
 	updateOpts := TestUpdateUserOpts
-	actualResponse, _, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	actualResponse, _, err := users.Update(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -410,7 +410,7 @@ func TestUpdateUserHTTPError(t *testing.T) {
 	})
 
 	updateOpts := TestUpdateUserOpts
-	user, httpResponse, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, httpResponse, err := users.Update(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -433,7 +433,7 @@ func TestUpdateUserTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	updateOpts := TestUpdateUserOpts
-	user, _, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, _, err := users.Update(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
 	if user != nil {
 		t.Fatal("expected no users from the Update method")
@@ -460,7 +460,7 @@ func TestUpdateUserUnmarshalError(t *testing.T) {
 	})
 
 	updateOpts := TestUpdateUserOpts
-	user, _, err := users.Update(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
+	user, _, err := users.Update(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f", updateOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -487,7 +487,7 @@ func TestDeleteUser(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	_, err := users.Delete(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	_, err := users.Delete(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -510,7 +510,7 @@ func TestDeleteUserHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	httpResponse, err := users.Delete(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	httpResponse, err := users.Delete(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -529,7 +529,7 @@ func TestDeleteUserTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	_, err := users.Delete(testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
+	_, err := users.Delete(testEnv.Context, testEnv.Client, "4b2e452ed4c940bd87a88499eaf14c4f")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")
