@@ -12,8 +12,8 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/clients"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/clients"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 var errRequiredClientOptions = errors.New("some of the required options are not set")
@@ -125,7 +125,7 @@ func findModuleVersion() string {
 	info, ok := debug.ReadBuildInfo()
 	if ok {
 		for _, dep := range info.Deps {
-			// Use prefix, because module has name with major version - github.com/selectel/go-selvpcclient/v4
+			// Use prefix, because module has name with major version - github.com/selectel/go-selvpcclient/v5
 			if strings.HasPrefix(dep.Path, moduleName) {
 				return dep.Version
 			}

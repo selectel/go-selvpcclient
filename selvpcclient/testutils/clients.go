@@ -5,9 +5,9 @@ import (
 
 	"github.com/gophercloud/gophercloud/v2"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/clients"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/clients"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 func (testEnv *TestEnv) NewSelVPCClient() {

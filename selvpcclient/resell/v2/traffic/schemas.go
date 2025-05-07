@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
 )
 
 // Traffic contains information about used and paid traffic.

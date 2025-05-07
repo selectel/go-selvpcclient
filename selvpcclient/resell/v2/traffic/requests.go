@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 const resourceURL = "traffic"
