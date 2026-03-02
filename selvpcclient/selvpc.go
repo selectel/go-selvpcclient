@@ -60,6 +60,9 @@ type ClientOptions struct {
 	// Used in private clouds to issue a token not from owned domain.
 	// If this field is not set, then it will be equal to the value of DomainName.
 	UserDomainName string
+
+	// Optional field for specifying your User-Agent.
+	UserAgent string
 }
 
 func NewClient(options *ClientOptions) (*Client, error) {
@@ -88,6 +91,11 @@ func NewClient(options *ClientOptions) (*Client, error) {
 		return nil, fmt.Errorf("validation error: %w: %s", errRequiredClientOptions, strings.Join(requiredAbsent, ", "))
 	}
 
+	userAgent := fmt.Sprintf("%s/%s", AppName, findModuleVersion())
+	if options.UserAgent != "" {
+		userAgent = fmt.Sprintf("%s %s", options.UserAgent, userAgent)
+	}
+
 	serviceClientOptions := clientservices.ServiceClientOptions{
 		DomainName:     options.DomainName,
 		Username:       options.Username,
@@ -96,7 +104,7 @@ func NewClient(options *ClientOptions) (*Client, error) {
 		AuthRegion:     options.AuthRegion,
 		ProjectID:      options.ProjectID,
 		UserDomainName: options.UserDomainName,
-		UserAgent:      fmt.Sprintf("%s/%s", AppName, findModuleVersion()),
+		UserAgent:      userAgent,
 	}
 
 	serviceClient, err := clientservices.NewServiceClient(&serviceClientOptions)

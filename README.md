@@ -77,9 +77,10 @@ func main() {
   Context:    ctx,
   DomainName: "999999",
   AuthRegion: "<pool>",
-  AuthURL:     "https://cloud.api.selcloud.ru/identity/v3/",
+  AuthURL:    "https://cloud.api.selcloud.ru/identity/v3/",
   Username:   "admin",
   Password:   "m1-sup3r-p@ssw0rd-p3w-p3w",
+  UserAgent:  "my-test-app/0.0.0",
  }
 
  client, err := selvpcclient.NewClient(options)
