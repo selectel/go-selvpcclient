@@ -1,4 +1,5 @@
 */testing/*_test.go
 */testing/fixtures.go
+selvpcclient/testutils/*.go
 README.md
 selvpcclient/doc.go

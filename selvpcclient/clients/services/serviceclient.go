@@ -81,9 +81,7 @@ func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient
 	serviceClient.HTTPClient = *httpClient
 
 	if options.UserAgent != "" {
-		userAgent := gophercloud.UserAgent{}
-		userAgent.Prepend(options.UserAgent)
-		serviceClient.UserAgent = userAgent
+		serviceClient.UserAgent.Prepend(options.UserAgent)
 	}
 
 	return serviceClient, nil
