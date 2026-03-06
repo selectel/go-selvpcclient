@@ -1,25 +1,26 @@
 package capabilities
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 const resourceURL = "capabilities"
 
 // Get returns the domain capabilities.
-func Get(client *selvpcclient.Client) (*Capabilities, *clientservices.ResponseResult, error) {
+func Get(ctx context.Context, client *selvpcclient.Client) (*Capabilities, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {

@@ -1,25 +1,26 @@
 package users
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 const resourceURL = "users"
 
 // Get returns a single user by its id.
-func Get(client *selvpcclient.Client, id string) (*User, *clientservices.ResponseResult, error) {
+func Get(ctx context.Context, client *selvpcclient.Client, id string) (*User, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -42,14 +43,14 @@ func Get(client *selvpcclient.Client, id string) (*User, *clientservices.Respons
 }
 
 // List gets a list of users in the current domain.
-func List(client *selvpcclient.Client) ([]*User, *clientservices.ResponseResult, error) {
+func List(ctx context.Context, client *selvpcclient.Client) ([]*User, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -72,7 +73,7 @@ func List(client *selvpcclient.Client) ([]*User, *clientservices.ResponseResult,
 }
 
 // Create requests a creation of the user.
-func Create(client *selvpcclient.Client, createOpts UserOpts) (*User, *clientservices.ResponseResult, error) {
+func Create(ctx context.Context, client *selvpcclient.Client, createOpts UserOpts) (*User, *clientservices.ResponseResult, error) {
 	// Nest create options into the parent "user" JSON structure.
 	type createUser struct {
 		Options UserOpts `json:"user"`
@@ -85,7 +86,7 @@ func Create(client *selvpcclient.Client, createOpts UserOpts) (*User, *clientser
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodPost, url, &clientservices.RequestOptions{
 		JSONBody: &createUserOpts,
 		OkCodes:  []int{200},
 	})
@@ -109,7 +110,7 @@ func Create(client *selvpcclient.Client, createOpts UserOpts) (*User, *clientser
 }
 
 // Update requests an update of the user referenced by its id.
-func Update(client *selvpcclient.Client, id string, updateOpts UserOpts) (*User, *clientservices.ResponseResult, error) {
+func Update(ctx context.Context, client *selvpcclient.Client, id string, updateOpts UserOpts) (*User, *clientservices.ResponseResult, error) {
 	// Nest update options into the parent "user" JSON structure.
 	type updateUser struct {
 		Options UserOpts `json:"user"`
@@ -122,7 +123,7 @@ func Update(client *selvpcclient.Client, id string, updateOpts UserOpts) (*User,
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodPatch, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodPatch, url, &clientservices.RequestOptions{
 		JSONBody: &updateUserOpts,
 		OkCodes:  []int{200},
 	})
@@ -146,14 +147,14 @@ func Update(client *selvpcclient.Client, id string, updateOpts UserOpts) (*User,
 }
 
 // Delete deletes a single user by its id.
-func Delete(client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
+func Delete(ctx context.Context, client *selvpcclient.Client, id string) (*clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, id}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodDelete, url, &clientservices.RequestOptions{
 		OkCodes: []int{204},
 	})
 	if err != nil {
