@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/capabilities"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/capabilities"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/testutils"
 )
 
 func TestGetCapabilities(t *testing.T) {
@@ -23,7 +23,7 @@ func TestGetCapabilities(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	c, _, err := capabilities.Get(testEnv.Client)
+	c, _, err := capabilities.Get(testEnv.Context, testEnv.Client)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -57,7 +57,7 @@ func TestGetCapabilitiesHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	c, httpResponse, err := capabilities.Get(testEnv.Client)
+	c, httpResponse, err := capabilities.Get(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -80,7 +80,7 @@ func TestGetCapabilitiesTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	c, _, err := capabilities.Get(testEnv.Client)
+	c, _, err := capabilities.Get(testEnv.Context, testEnv.Client)
 
 	if c != nil {
 		t.Fatal("expected no capabilities from the Get method")
@@ -105,7 +105,7 @@ func TestGetCapabilitiesUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	c, _, err := capabilities.Get(testEnv.Client)
+	c, _, err := capabilities.Get(testEnv.Context, testEnv.Client)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")

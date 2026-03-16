@@ -1,25 +1,26 @@
 package keypairs
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/google/go-querystring/query"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 const resourceURL = "keypairs"
 
 // List gets a list of keypairs in the current domain.
-func List(client *selvpcclient.Client) ([]*Keypair, *clientservices.ResponseResult, error) {
-	return ListWithOpts(client, ListOpts{})
+func List(ctx context.Context, client *selvpcclient.Client) ([]*Keypair, *clientservices.ResponseResult, error) {
+	return ListWithOpts(ctx, client, ListOpts{})
 }
 
 // ListWithOpts gets a list of keypairs with filter options.
-func ListWithOpts(client *selvpcclient.Client, opts ListOpts) ([]*Keypair, *clientservices.ResponseResult, error) {
+func ListWithOpts(ctx context.Context, client *selvpcclient.Client, opts ListOpts) ([]*Keypair, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
@@ -35,7 +36,7 @@ func ListWithOpts(client *selvpcclient.Client, opts ListOpts) ([]*Keypair, *clie
 		url = strings.Join([]string{url, queryParams.Encode()}, "?")
 	}
 
-	responseResult, err := client.Resell.Requests.Do(http.MethodGet, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodGet, url, &clientservices.RequestOptions{
 		OkCodes: []int{200},
 	})
 	if err != nil {
@@ -58,7 +59,7 @@ func ListWithOpts(client *selvpcclient.Client, opts ListOpts) ([]*Keypair, *clie
 }
 
 // Create requests a creation of the keypar with the specified options.
-func Create(client *selvpcclient.Client, createOpts KeypairOpts) ([]*Keypair, *clientservices.ResponseResult, error) {
+func Create(ctx context.Context, client *selvpcclient.Client, createOpts KeypairOpts) ([]*Keypair, *clientservices.ResponseResult, error) {
 	// Nest create opts into additional body.
 	type nestedCreateOpts struct {
 		Keypair KeypairOpts `json:"keypair"`
@@ -73,7 +74,7 @@ func Create(client *selvpcclient.Client, createOpts KeypairOpts) ([]*Keypair, *c
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodPost, url, &clientservices.RequestOptions{
 		JSONBody: &createKeypairOpts,
 		OkCodes:  []int{200},
 	})
@@ -97,14 +98,14 @@ func Create(client *selvpcclient.Client, createOpts KeypairOpts) ([]*Keypair, *c
 }
 
 // Delete deletes a single keypair by its name and user ID.
-func Delete(client *selvpcclient.Client, name, userID string) (*clientservices.ResponseResult, error) {
+func Delete(ctx context.Context, client *selvpcclient.Client, name, userID string) (*clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
 	url := strings.Join([]string{endpoint, resourceURL, name, "users", userID}, "/")
-	responseResult, err := client.Resell.Requests.Do(http.MethodDelete, url, &clientservices.RequestOptions{
+	responseResult, err := client.Resell.Requests.Do(ctx, http.MethodDelete, url, &clientservices.RequestOptions{
 		OkCodes: []int{204},
 	})
 	if err != nil {

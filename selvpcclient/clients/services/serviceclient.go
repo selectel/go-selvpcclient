@@ -1,13 +1,14 @@
 package clientservices
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
 	"time"
 
-	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/openstack"
+	"github.com/gophercloud/gophercloud/v2"
+	"github.com/gophercloud/gophercloud/v2/openstack"
 )
 
 type ServiceClientOptions struct {
@@ -37,7 +38,7 @@ type ServiceClientOptions struct {
 	UserAgent string
 }
 
-func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient, error) {
+func NewServiceClient(ctx context.Context, options *ServiceClientOptions) (*gophercloud.ServiceClient, error) {
 	// UserDomainName field to specify the domain name where the user is located.
 	// If this field is not specified, then we will think that the token will be
 	// issued in the same domain where the user is located.
@@ -61,7 +62,7 @@ func NewServiceClient(options *ServiceClientOptions) (*gophercloud.ServiceClient
 		authOptions.Scope.DomainName = options.DomainName
 	}
 
-	authProvider, err := openstack.AuthenticatedClient(authOptions)
+	authProvider, err := openstack.AuthenticatedClient(ctx, authOptions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create auth provider, err: %w", err)
 	}

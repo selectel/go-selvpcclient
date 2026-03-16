@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/licenses"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/licenses"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/testutils"
 )
 
 func TestGetLicense(t *testing.T) {
@@ -24,7 +24,7 @@ func TestGetLicense(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := licenses.Get(testEnv.Client, "123123")
+	actual, _, err := licenses.Get(testEnv.Context, testEnv.Client, "123123")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,7 +54,7 @@ func TestGetLicenseHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	license, httpResponse, err := licenses.Get(testEnv.Client, "123123")
+	license, httpResponse, err := licenses.Get(testEnv.Context, testEnv.Client, "123123")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -77,7 +77,7 @@ func TestGetLicenseTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	license, _, err := licenses.Get(testEnv.Client, "123123")
+	license, _, err := licenses.Get(testEnv.Context, testEnv.Client, "123123")
 
 	if license != nil {
 		t.Fatal("expected no license from the Get method")
@@ -102,7 +102,7 @@ func TestGetLicenseUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	license, _, err := licenses.Get(testEnv.Client, "123123")
+	license, _, err := licenses.Get(testEnv.Context, testEnv.Client, "123123")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -130,7 +130,7 @@ func TestListLicenses(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
+	actual, _, err := licenses.List(testEnv.Context, testEnv.Client, licenses.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -165,7 +165,7 @@ func TestListLicensesSingle(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	actual, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
+	actual, _, err := licenses.List(testEnv.Context, testEnv.Client, licenses.ListOpts{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -195,7 +195,7 @@ func TestListLicensesHTTPError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allLicenses, httpResponse, err := licenses.List(testEnv.Client, licenses.ListOpts{})
+	allLicenses, httpResponse, err := licenses.List(testEnv.Context, testEnv.Client, licenses.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -218,7 +218,7 @@ func TestListLicensesTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	allLicenses, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
+	allLicenses, _, err := licenses.List(testEnv.Context, testEnv.Client, licenses.ListOpts{})
 
 	if allLicenses != nil {
 		t.Fatal("expected no licenses from the List method")
@@ -243,7 +243,7 @@ func TestListLicensesUnmarshalError(t *testing.T) {
 		CallFlag:    &endpointCalled,
 	})
 
-	allLicenses, _, err := licenses.List(testEnv.Client, licenses.ListOpts{})
+	allLicenses, _, err := licenses.List(testEnv.Context, testEnv.Client, licenses.ListOpts{})
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -273,7 +273,7 @@ func TestCreateLicenses(t *testing.T) {
 	})
 
 	createOpts := TestCreateLicenseOpts
-	actualResponse, _, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	actualResponse, _, err := licenses.Create(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -305,7 +305,7 @@ func TestCreateLicensesHTTPError(t *testing.T) {
 	})
 
 	createOpts := TestCreateLicenseOpts
-	l, httpResponse, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, httpResponse, err := licenses.Create(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -329,7 +329,7 @@ func TestCreateLicensesTimeoutError(t *testing.T) {
 	testEnv.Server.Close()
 
 	createOpts := TestCreateLicenseOpts
-	l, _, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if l != nil {
 		t.Fatal("expected no licenses from the Create method")
@@ -356,7 +356,7 @@ func TestCreateLicensesUnmarshalError(t *testing.T) {
 	})
 
 	createOpts := TestCreateLicenseOpts
-	l, _, err := licenses.Create(testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
+	l, _, err := licenses.Create(testEnv.Context, testEnv.Client, "49338ac045f448e294b25d013f890317", createOpts)
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -383,7 +383,7 @@ func TestDeleteLicense(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	_, err := licenses.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	_, err := licenses.Delete(testEnv.Context, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -406,7 +406,7 @@ func TestDeleteLicenseHTTPError(t *testing.T) {
 		CallFlag: &endpointCalled,
 	})
 
-	httpResponse, err := licenses.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	httpResponse, err := licenses.Delete(testEnv.Context, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if !endpointCalled {
 		t.Fatal("endpoint wasn't called")
@@ -425,7 +425,7 @@ func TestDeleteLicenseTimeoutError(t *testing.T) {
 	testEnv.NewSelVPCClient()
 	testEnv.Server.Close()
 
-	_, err := licenses.Delete(testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
+	_, err := licenses.Delete(testEnv.Context, testEnv.Client, "5232d5f3-4950-454b-bd41-78c5295622cd")
 
 	if err == nil {
 		t.Fatal("expected error from the Delete method")

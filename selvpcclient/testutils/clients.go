@@ -3,11 +3,11 @@ package testutils
 import (
 	"log"
 
-	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/v2"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/clients"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/clients"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 func (testEnv *TestEnv) NewSelVPCClient() {
@@ -16,9 +16,7 @@ func (testEnv *TestEnv) NewSelVPCClient() {
 		Endpoint:       testEnv.Server.URL + "/", // gophercloud endpoints doesn't start with /
 	}
 
-	serviceClient.ProviderClient.Context = testEnv.Context
-
-	catalogService, err := clientservices.NewCatalogService(serviceClient)
+	catalogService, err := clientservices.NewCatalogService(testEnv.Context, serviceClient)
 	if err != nil {
 		log.Fatalf("failed to initialize endpoints catalog service, err: %v", err)
 	}
