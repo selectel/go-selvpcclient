@@ -21,16 +21,12 @@ You can use this library to work with the following objects of the
 
 Cloud Management API:
 
-- [capabilities](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/capabilities)
 - [floating ips](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/floatingips)
 - [keypairs](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/keypairs)
 - [licenses](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/licenses)
 - [projects](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/projects)
-- [roles](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/roles)
 - [subnets](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/subnets)
-- [tokens](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/tokens)
 - [traffic](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/traffic)
-- [users](https://godoc.org/github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/users)
 
 Cloud Quota Management API:
 

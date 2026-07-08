@@ -12,7 +12,7 @@ Any package that implements methods to work with a needed API uses the
 following structure:
 
 ```
-selectel_api_object/     # Name of the directory should desrcibe API object (quotas/projects/users)
+selectel_api_object/     # Name of the directory should desrcibe API object (quotas/projects)
 ├── doc.go               # Documentation that will be available at the godoc.org
 ├── requests.go          # Methods to work with the API
 ├── requests_opts.go     # Structures that contain options for a POST/PATCH calls
