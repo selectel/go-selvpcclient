@@ -147,10 +147,10 @@ const TestCreateFloatingIPOptsRaw = `
 {
     "floatingips": [
         {
-            "region": "ru-2",
+            "region": "ru-2"
         },
         {
-            "region": "ru-1",
+            "region": "ru-1"
         }
     ]
 }
