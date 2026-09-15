@@ -148,11 +148,9 @@ const TestCreateFloatingIPOptsRaw = `
     "floatingips": [
         {
             "region": "ru-2",
-            "quantity": 1
         },
         {
             "region": "ru-1",
-            "quantity": 2
         }
     ]
 }
@@ -162,12 +160,10 @@ const TestCreateFloatingIPOptsRaw = `
 var TestCreateFloatingIPOpts = floatingips.FloatingIPOpts{
 	FloatingIPs: []floatingips.FloatingIPOpt{
 		{
-			Region:   "ru-2",
-			Quantity: 1,
+			Region: "ru-2",
 		},
 		{
-			Region:   "ru-1",
-			Quantity: 2,
+			Region: "ru-1",
 		},
 	},
 }

@@ -1,6 +1,6 @@
 module github.com/selectel/go-selvpcclient/v5
 
-go 1.26.0
+go 1.26.8
 
 require (
 	github.com/google/go-querystring v1.2.0

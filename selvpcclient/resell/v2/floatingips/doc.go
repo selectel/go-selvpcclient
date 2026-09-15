@@ -26,7 +26,6 @@ Example of creating floating ips in a project
 	  FloatingIPs: []floatingips.FloatingIPOpt{
 	    {
 	      Region:   "ru-2",
-	      Quantity: 2,
 	    },
 	  },
 	}

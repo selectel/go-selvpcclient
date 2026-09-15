@@ -13,9 +13,6 @@ type SubnetOpt struct {
 	// Region represents a region of where the subnet should reside.
 	Region string `json:"region"`
 
-	// Quantity represents how many subnets do we need to create.
-	Quantity int `json:"quantity"`
-
 	// Type represents ip version type.
 	Type selvpcclient.IPVersion `json:"type"`
 

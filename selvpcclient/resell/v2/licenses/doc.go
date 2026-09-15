@@ -26,7 +26,6 @@ Example of creating licenses in a project
 	  Licenses: []licenses.LicenseOpt{
 	    {
 	      Region:   "ru-2",
-	      Quantity: 2,
 	      Type: "license_windows_2016_standard",
 	    },
 	  },

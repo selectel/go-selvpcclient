@@ -107,13 +107,11 @@ const TestCreateSubnetsOptsRaw = `
         {
             "region": "ru-2",
             "type": "ipv4",
-            "quantity": 1,
             "prefix_length": 29
         },
         {
             "region": "ru-1",
             "type": "ipv4",
-            "quantity": 1,
             "prefix_length": 29
         }
     ]
@@ -125,13 +123,11 @@ var TestCreateSubnetsOpts = subnets.SubnetOpts{
 	Subnets: []subnets.SubnetOpt{
 		{
 			Region:       "ru-2",
-			Quantity:     1,
 			Type:         selvpcclient.IPv4,
 			PrefixLength: 29,
 		},
 		{
 			Region:       "ru-1",
-			Quantity:     1,
 			Type:         selvpcclient.IPv4,
 			PrefixLength: 29,
 		},

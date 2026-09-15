@@ -129,7 +129,6 @@ const TestCreateLicenseOptsRaw = `
     "licenses": [
         {
             "region": "ru-2",
-            "quantity": 1,
             "type": "license_windows_2016_standard"
         }
     ]
@@ -140,9 +139,8 @@ const TestCreateLicenseOptsRaw = `
 var TestCreateLicenseOpts = licenses.LicenseOpts{
 	Licenses: []licenses.LicenseOpt{
 		{
-			Region:   "ru-2",
-			Quantity: 1,
-			Type:     "license_windows_2016_standard",
+			Region: "ru-2",
+			Type:   "license_windows_2016_standard",
 		},
 	},
 }

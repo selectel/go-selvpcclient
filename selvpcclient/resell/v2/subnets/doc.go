@@ -28,7 +28,6 @@ Example of creating subnets
 	        Region:       "ru-3",
 	        Type:         selvpcclient.IPv4,
 	        PrefixLength: 29,
-	        Quantity:     1,
 	      },
 	    },
 		}
