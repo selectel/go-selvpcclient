@@ -1,0 +1,6 @@
+vulnerabilities:
+  - id: GO-2026-5932
+    statement: |
+      False positive: The vulnerability is inside the deprecated subpackage golang.org/x/crypto/openpgp,
+      which is not imported or used by our code. Trivy triggers on the parent module golang.org/x/crypto due to 
+      module-level resolution.

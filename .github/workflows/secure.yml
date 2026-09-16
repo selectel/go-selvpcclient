@@ -61,6 +61,8 @@ jobs:
           output: trivy.sarif
           exit-code: 0 # Change this after all events have resolved.
           severity: MEDIUM,CRITICAL,HIGH
+        env:
+          TRIVY_IGNOREFILE: .trivyignore.yml
       - uses: github/codeql-action/upload-sarif@02c5e83432fe5497fd85b873b6c9f16a8578e1d9 # v3.37.0
         with:
           sarif_file: trivy.sarif
