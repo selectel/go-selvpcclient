@@ -286,7 +286,7 @@ func TestListFloatingIPsUnmarshalError(t *testing.T) {
 	}
 }
 
-func TestCreateFloatingIPs(t *testing.T) {
+func TestCreateFloatingIP(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()

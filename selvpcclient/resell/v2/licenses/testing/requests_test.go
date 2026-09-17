@@ -256,7 +256,7 @@ func TestListLicensesUnmarshalError(t *testing.T) {
 	}
 }
 
-func TestCreateLicenses(t *testing.T) {
+func TestCreateLicense(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()

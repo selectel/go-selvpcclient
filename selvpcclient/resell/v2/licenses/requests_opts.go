@@ -2,12 +2,6 @@ package licenses
 
 // LicenseOpts represents options for the licenses Create request.
 type LicenseOpts struct {
-	// Licenses represents options for all licenses.
-	Licenses []LicenseOpt `json:"licenses"`
-}
-
-// LicenseOpt represents options for the single license.
-type LicenseOpt struct {
 	// Region represents a region of where the licenses should reside.
 	Region string `json:"region"`
 

@@ -22,22 +22,18 @@ Example of getting all subnets
 
 Example of creating subnets
 
-	  createOpts := subnets.SubnetOpts{
-	    Subnets: []subnets.SubnetOpt{
-	      {
-	        Region:       "ru-3",
-	        Type:         selvpcclient.IPv4,
-	        PrefixLength: 29,
-	      },
-	    },
-		}
-	  newSubnets, _, err := subnets.Create(client, projectID, createOpts)
-	  if err != nil {
-	  	log.Fatal(err)
-	  }
-	  for _, newSubnet := range newSubnets {
-	  	fmt.Printf("%v\n", newSubnet)
-	  }
+		  createOpts := subnets.SubnetOpts{
+			Region:       "ru-3",
+			Type:         selvpcclient.IPv4,
+			PrefixLength: 29,
+	      }
+		  newSubnets, _, err := subnets.Create(client, projectID, createOpts)
+		  if err != nil {
+		  	log.Fatal(err)
+		  }
+		  for _, newSubnet := range newSubnets {
+		  	fmt.Printf("%v\n", newSubnet)
+		  }
 
 Example of deleting a single subnet
 

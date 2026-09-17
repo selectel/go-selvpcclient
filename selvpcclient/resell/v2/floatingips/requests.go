@@ -82,16 +82,22 @@ func List(client *selvpcclient.Client, opts ListOpts) ([]*FloatingIP, *clientser
 }
 
 // Create requests a creation of the floating ip in the specified project.
-func Create(client *selvpcclient.Client, projectID string, createOpts FloatingIPOpts) ([]*FloatingIP, *clientservices.ResponseResult, error) {
+func Create(client *selvpcclient.Client, projectID string, createOpts FloatingIPOpts) (*FloatingIP, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
+	type requestBody struct {
+		FloatingIPs []FloatingIPOpts `json:"floatingips"`
+	}
+
 	url := strings.Join([]string{endpoint, resourceURL, "projects", projectID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		JSONBody: &createOpts,
-		OkCodes:  []int{200},
+		JSONBody: &requestBody{
+			FloatingIPs: []FloatingIPOpts{createOpts},
+		},
+		OkCodes: []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -109,7 +115,7 @@ func Create(client *selvpcclient.Client, projectID string, createOpts FloatingIP
 		return nil, responseResult, err
 	}
 
-	return result.FloatingIPs, responseResult, nil
+	return result.FloatingIPs[0], responseResult, nil
 }
 
 // Delete deletes a single floating ip by its id.

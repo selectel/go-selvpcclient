@@ -108,11 +108,6 @@ const TestCreateSubnetsOptsRaw = `
             "region": "ru-2",
             "type": "ipv4",
             "prefix_length": 29
-        },
-        {
-            "region": "ru-1",
-            "type": "ipv4",
-            "prefix_length": 29
         }
     ]
 }
@@ -120,18 +115,9 @@ const TestCreateSubnetsOptsRaw = `
 
 // TestCreateSubnetsOpts represent options for the Create request.
 var TestCreateSubnetsOpts = subnets.SubnetOpts{
-	Subnets: []subnets.SubnetOpt{
-		{
-			Region:       "ru-2",
-			Type:         selvpcclient.IPv4,
-			PrefixLength: 29,
-		},
-		{
-			Region:       "ru-1",
-			Type:         selvpcclient.IPv4,
-			PrefixLength: 29,
-		},
-	},
+	Region:       "ru-2",
+	Type:         selvpcclient.IPv4,
+	PrefixLength: 29,
 }
 
 // TestCreateSubnetsResponseRaw represents a raw response from the Create request.
@@ -144,34 +130,18 @@ const TestCreateSubnetsResponseRaw = `
             "project_id": "9c97bdc75295493096cf5edcb8c37933",
             "region": "ru-2",
             "status": "DOWN"
-        },
-        {
-            "cidr": "198.51.100.0/29",
-            "id": 112234,
-            "project_id": "9c97bdc75295493096cf5edcb8c37933",
-            "region": "ru-1",
-            "status": "DOWN"
         }
     ]
 }
 `
 
 // TestCreateSubnetResponse represents the unmarshalled TestCreateSubnetsResponseRaw response.
-var TestCreateSubnetResponse = []*subnets.Subnet{
-	{
-		CIDR:      "203.0.113.0/29",
-		ID:        112233,
-		ProjectID: "9c97bdc75295493096cf5edcb8c37933",
-		Region:    "ru-2",
-		Status:    "DOWN",
-	},
-	{
-		CIDR:      "198.51.100.0/29",
-		ID:        112234,
-		ProjectID: "9c97bdc75295493096cf5edcb8c37933",
-		Region:    "ru-1",
-		Status:    "DOWN",
-	},
+var TestCreateSubnetResponse = &subnets.Subnet{
+	CIDR:      "203.0.113.0/29",
+	ID:        112233,
+	ProjectID: "9c97bdc75295493096cf5edcb8c37933",
+	Region:    "ru-2",
+	Status:    "DOWN",
 }
 
 // TestManySubnetsInvalidResponseRaw represents a raw invalid response with several subnets.

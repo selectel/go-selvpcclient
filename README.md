@@ -42,7 +42,7 @@ You can use the [Gophercloud](https://github.com/gophercloud/gophercloud) projec
 You can install `go-selvpcclient` as a Go package:
 
 ```bash
-go get github.com/selectel/go-selvpcclient/selvpcclient/v4
+go get github.com/selectel/go-selvpcclient/selvpcclient/v5
 ```
 
 ### Authentication

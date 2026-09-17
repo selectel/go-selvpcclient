@@ -256,7 +256,7 @@ func TestListSubnetsUnmarshalError(t *testing.T) {
 	}
 }
 
-func TestCreateSubnets(t *testing.T) {
+func TestCreateSubnet(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()

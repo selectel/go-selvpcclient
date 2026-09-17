@@ -82,16 +82,22 @@ func List(client *selvpcclient.Client, opts ListOpts) ([]*Subnet, *clientservice
 }
 
 // Create requests a creation of the subnets in the specified project.
-func Create(client *selvpcclient.Client, projectID string, createOpts SubnetOpts) ([]*Subnet, *clientservices.ResponseResult, error) {
+func Create(client *selvpcclient.Client, projectID string, createOpts SubnetOpts) (*Subnet, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
+	type requestBody struct {
+		Subnets []SubnetOpts `json:"subnets"`
+	}
+
 	url := strings.Join([]string{endpoint, resourceURL, "projects", projectID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		JSONBody: &createOpts,
-		OkCodes:  []int{200},
+		JSONBody: &requestBody{
+			Subnets: []SubnetOpts{createOpts},
+		},
+		OkCodes: []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -109,7 +115,7 @@ func Create(client *selvpcclient.Client, projectID string, createOpts SubnetOpts
 		return nil, responseResult, err
 	}
 
-	return result.Subnets, responseResult, nil
+	return result.Subnets[0], responseResult, nil
 }
 
 // Delete deletes a single subnet by its id.

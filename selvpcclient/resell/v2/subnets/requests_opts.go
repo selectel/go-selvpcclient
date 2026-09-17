@@ -4,12 +4,6 @@ import "github.com/selectel/go-selvpcclient/v5/selvpcclient"
 
 // SubnetOpts represents options for the subnets Create request.
 type SubnetOpts struct {
-	// Subnets represents options for all subnets.
-	Subnets []SubnetOpt `json:"subnets"`
-}
-
-// SubnetOpt represents options for the single subnet.
-type SubnetOpt struct {
 	// Region represents a region of where the subnet should reside.
 	Region string `json:"region"`
 
