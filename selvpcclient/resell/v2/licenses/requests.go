@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient"
-	clientservices "github.com/selectel/go-selvpcclient/v4/selvpcclient/clients/services"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient"
+	clientservices "github.com/selectel/go-selvpcclient/v5/selvpcclient/clients/services"
 )
 
 const resourceURL = "licenses"
@@ -82,16 +82,22 @@ func List(client *selvpcclient.Client, opts ListOpts) ([]*License, *clientservic
 }
 
 // Create requests a creation of the licenses in the specified project.
-func Create(client *selvpcclient.Client, projectID string, createOpts LicenseOpts) ([]*License, *clientservices.ResponseResult, error) {
+func Create(client *selvpcclient.Client, projectID string, createOpts LicenseOpts) (*License, *clientservices.ResponseResult, error) {
 	endpoint, err := client.Resell.GetEndpoint()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get endpoint, err: %w", err)
 	}
 
+	type requestBody struct {
+		Licenses []LicenseOpts `json:"licenses"`
+	}
+
 	url := strings.Join([]string{endpoint, resourceURL, "projects", projectID}, "/")
 	responseResult, err := client.Resell.Requests.Do(http.MethodPost, url, &clientservices.RequestOptions{
-		JSONBody: &createOpts,
-		OkCodes:  []int{200},
+		JSONBody: &requestBody{
+			Licenses: []LicenseOpts{createOpts},
+		},
+		OkCodes: []int{200},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -109,7 +115,7 @@ func Create(client *selvpcclient.Client, projectID string, createOpts LicenseOpt
 		return nil, responseResult, err
 	}
 
-	return result.Licenses, responseResult, nil
+	return result.Licenses[0], responseResult, nil
 }
 
 // Delete deletes a single license by its id.

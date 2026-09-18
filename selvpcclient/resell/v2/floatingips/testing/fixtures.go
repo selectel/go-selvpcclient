@@ -3,8 +3,8 @@ package testing
 import (
 	"time"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/floatingips"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/servers"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/floatingips"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/servers"
 )
 
 // TestGetFloatingIPResponseRaw represents a raw response from the Get request.
@@ -147,12 +147,7 @@ const TestCreateFloatingIPOptsRaw = `
 {
     "floatingips": [
         {
-            "region": "ru-2",
-            "quantity": 1
-        },
-        {
-            "region": "ru-1",
-            "quantity": 2
+            "region": "ru-2"
         }
     ]
 }
@@ -160,16 +155,7 @@ const TestCreateFloatingIPOptsRaw = `
 
 // TestCreateFloatingIPOpts represent options for the Create request.
 var TestCreateFloatingIPOpts = floatingips.FloatingIPOpts{
-	FloatingIPs: []floatingips.FloatingIPOpt{
-		{
-			Region:   "ru-2",
-			Quantity: 1,
-		},
-		{
-			Region:   "ru-1",
-			Quantity: 2,
-		},
-	},
+	Region: "ru-2",
 }
 
 // TestCreateFloatingIPResponseRaw represents a raw response from the Create request.
@@ -182,34 +168,18 @@ const TestCreateFloatingIPResponseRaw = `
             "project_id": "49338ac045f448e294b25d013f890317",
             "region": "ru-2",
             "status": "DOWN"
-        },
-        {
-            "floating_ip_address": "203.0.113.12",
-            "id": "94425a6e-19cd-412d-9710-ff40b34a78f4",
-            "project_id": "9c97bdc75295493096cf5edcb8c37933",
-            "region": "ru-1",
-            "status": "DOWN"
         }
     ]
 }
 `
 
 // TestCreateFloatingIPResponse represents the unmarshalled TestCreateFloatingIPResponseRaw response.
-var TestCreateFloatingIPResponse = []*floatingips.FloatingIP{
-	{
-		FloatingIPAddress: "203.0.113.11",
-		ID:                "5232d5f3-4950-454b-bd41-78c5295622cd",
-		ProjectID:         "49338ac045f448e294b25d013f890317",
-		Region:            "ru-2",
-		Status:            "DOWN",
-	},
-	{
-		FloatingIPAddress: "203.0.113.12",
-		ID:                "94425a6e-19cd-412d-9710-ff40b34a78f4",
-		ProjectID:         "9c97bdc75295493096cf5edcb8c37933",
-		Region:            "ru-1",
-		Status:            "DOWN",
-	},
+var TestCreateFloatingIPResponse = &floatingips.FloatingIP{
+	FloatingIPAddress: "203.0.113.11",
+	ID:                "5232d5f3-4950-454b-bd41-78c5295622cd",
+	ProjectID:         "49338ac045f448e294b25d013f890317",
+	Region:            "ru-2",
+	Status:            "DOWN",
 }
 
 // TestManyFloatingIPsInvalidResponseRaw represents a raw invalid response with several floating ips.

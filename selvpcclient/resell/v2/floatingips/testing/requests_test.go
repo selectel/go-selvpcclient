@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/floatingips"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/floatingips"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/testutils"
 )
 
 func TestGetFloatingIP(t *testing.T) {
@@ -286,7 +286,7 @@ func TestListFloatingIPsUnmarshalError(t *testing.T) {
 	}
 }
 
-func TestCreateFloatingIPs(t *testing.T) {
+func TestCreateFloatingIP(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()

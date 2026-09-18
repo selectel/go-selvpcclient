@@ -3,8 +3,8 @@ package testing
 import (
 	"time"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/licenses"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/servers"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/licenses"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/servers"
 )
 
 // TestGetLicenseResponseRaw represents a raw response from the Get request.
@@ -129,7 +129,6 @@ const TestCreateLicenseOptsRaw = `
     "licenses": [
         {
             "region": "ru-2",
-            "quantity": 1,
             "type": "license_windows_2016_standard"
         }
     ]
@@ -138,13 +137,8 @@ const TestCreateLicenseOptsRaw = `
 
 // TestCreateLicenseOpts represent options for the Create request.
 var TestCreateLicenseOpts = licenses.LicenseOpts{
-	Licenses: []licenses.LicenseOpt{
-		{
-			Region:   "ru-2",
-			Quantity: 1,
-			Type:     "license_windows_2016_standard",
-		},
-	},
+	Region: "ru-2",
+	Type:   "license_windows_2016_standard",
 }
 
 // TestCreateLicenseResponseRaw represents a raw response from the Create request.
@@ -166,17 +160,15 @@ const TestCreateLicenseResponseRaw = `
 `
 
 // TestCreateLicenseResponse represents the unmarshalled TestCreateLicenseResponseRaw response.
-var TestCreateLicenseResponse = []*licenses.License{
-	{
-		ID:        1123123,
-		NetworkID: "f40a1c7e-cde8-4059-8f7d-49122e08229e",
-		SubnetID:  "9263c811-9a4d-48e6-a7cb-48561f742b39",
-		PortID:    "",
-		ProjectID: "49338ac045f448e294b25d013f890317",
-		Region:    "ru-2",
-		Status:    "DOWN",
-		Type:      "license_windows_2016_standard",
-	},
+var TestCreateLicenseResponse = &licenses.License{
+	ID:        1123123,
+	NetworkID: "f40a1c7e-cde8-4059-8f7d-49122e08229e",
+	SubnetID:  "9263c811-9a4d-48e6-a7cb-48561f742b39",
+	PortID:    "",
+	ProjectID: "49338ac045f448e294b25d013f890317",
+	Region:    "ru-2",
+	Status:    "DOWN",
+	Type:      "license_windows_2016_standard",
 }
 
 // TestManyLicensesInvalidResponseRaw represents a raw invalid response with several licenses.
