@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/resell/v2/subnets"
-	"github.com/selectel/go-selvpcclient/v4/selvpcclient/testutils"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/resell/v2/subnets"
+	"github.com/selectel/go-selvpcclient/v5/selvpcclient/testutils"
 )
 
 func TestGetSubnet(t *testing.T) {
@@ -256,7 +256,7 @@ func TestListSubnetsUnmarshalError(t *testing.T) {
 	}
 }
 
-func TestCreateSubnets(t *testing.T) {
+func TestCreateSubnet(t *testing.T) {
 	endpointCalled := false
 
 	testEnv := testutils.SetupTestEnv()
